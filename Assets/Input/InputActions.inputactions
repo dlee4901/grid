@@ -9,7 +9,7 @@
                     "name": "Select",
                     "type": "Button",
                     "id": "1ee6919b-f046-41e1-8b50-9f512e232b15",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -18,7 +18,7 @@
                     "name": "MoveCamera",
                     "type": "Button",
                     "id": "f1584420-a0ef-4e29-beb3-87f13df4ede6",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -64,6 +64,34 @@
                     "processors": "",
                     "groups": "",
                     "action": "ZoomCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "2aafcc3c-c040-42d6-ba9f-8e161d75ee88",
+            "actions": [
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "3f7b55b2-7db5-43b4-972b-787803727039",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "38ea8c91-0d9b-4ea3-8bfd-c3a6d1db287e",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

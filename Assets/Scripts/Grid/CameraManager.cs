@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class CameraManager : MonoBehaviour
 {
@@ -37,6 +33,7 @@ public class CameraManager : MonoBehaviour
 
     public void OnDrag(InputAction.CallbackContext ctx)
     {
+        Debug.Log("ondrag");
         if (ctx.started) _origin = GetMousePosition;
         _tileClicked = (ctx.started || _tileClicked) && _grid._tileHovered != -1;
         _isDragging = ctx.started || ctx.performed;
@@ -44,6 +41,7 @@ public class CameraManager : MonoBehaviour
 
     public void OnZoom(InputAction.CallbackContext ctx)
     {
+        Debug.Log("onzoom");
         if (ctx.started) _origin = GetMousePosition;
         _scrollAmount = ctx.ReadValue<float>();
         _isZooming = ctx.started || ctx.performed;

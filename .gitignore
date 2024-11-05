@@ -73,5 +73,7 @@ crashlytics-build.properties
 
 # ADDED
 .DS_Store
+/[Aa]ssets/[Ss]amples.meta
+/[Aa]ssets/[Ss]amples/
 /[Aa]ssets/[Ss]prites/[Ii]mported/
 /[Aa]ssets/[Tt]extMesh [Pp]ro/
