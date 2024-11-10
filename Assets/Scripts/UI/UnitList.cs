@@ -1,16 +1,43 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class UnitList : MonoBehaviour
+public class UnitList : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    // Start is called before the first frame update
+    public Canvas canvas;
+    public GridLayoutGroup list;
+    public List<Unit> units;
+
     void Start()
     {
-        
+        foreach (Unit unit in units)
+        {
+            GameObject obj = new GameObject(unit.name);
+            obj.AddComponent<UnitHandler>();
+            Image image = obj.AddComponent<Image>();
+            image.sprite = unit.sprite;
+            obj.GetComponent<RectTransform>().SetParent(list.transform);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPointerDown(PointerEventData eventData)
     {
-        
+        Debug.Log("list OnPointerDown");
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        Debug.Log("list OnDrag");
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        Debug.Log("list OnBeginDrag");
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Debug.Log("list OnEndDrag");
     }
 }

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51d5f1f2a8d084986bdd048590681d93, type: 3}
-  m_Name: Queen
+  m_Name: Khoa
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 6a08ec4b334ea1c46b8171679417a74f, type: 3}
-  title: queen
-  movement: {fileID: 11400000, guid: 308255448b1854dc29079f00079dda5b, type: 2}
+  sprite: {fileID: 21300000, guid: 279ff480381111b40b99a9cb298a5fd3, type: 3}
+  title: Khoa
+  movement: {fileID: 11400000, guid: be2fdf929e2cc9349be73717888a69de, type: 2}
   cost: 0
   playerOwner: 0
-  maxHealth: 1
-  currentHealth: 1
+  maxHealth: 0
+  currentHealth: 0
   facing: 0

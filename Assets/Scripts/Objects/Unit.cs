@@ -1,13 +1,15 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [CreateAssetMenu(menuName = "Unit")]
 public class Unit : ScriptableObject
 {
+    public Sprite sprite;
     public string title;
     public UnitMovement movement;
-    public int playerOwner;
-
     public int cost;
+
+    public int playerOwner;
     public int maxHealth;
     public int currentHealth;
     public DirectionFacing facing;

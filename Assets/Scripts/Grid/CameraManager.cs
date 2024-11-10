@@ -1,7 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class CameraManager : MonoBehaviour
 {
@@ -45,8 +44,6 @@ public class CameraManager : MonoBehaviour
 
     public void OnDrag(InputAction.CallbackContext ctx)
     {
-        Debug.Log(Mouse.current.position);
-        Debug.Log(GetMousePosition);
         if (ctx.started) _origin = GetMousePosition;
         _tileClicked = (ctx.started || _tileClicked) && _tileHovered != -1;
         _isDragging = ctx.started || ctx.performed;

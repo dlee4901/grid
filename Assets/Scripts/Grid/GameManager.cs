@@ -5,6 +5,8 @@ public class GameManager : MonoBehaviour
 {
     public GridManager grid;
     public CameraManager camera;
+    public List<Unit> units;    
+
     List<Player> players;
     List<float> times;
     int turn;
