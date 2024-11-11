@@ -5,18 +5,17 @@ using UnityEngine.InputSystem;
 public class CameraManager : MonoBehaviour
 {
     public CinemachineCamera cinemachineCamera;
+
+    float _minX = 0f;
+    float _maxX = 70f;
+    float _minY = 0f;
+    float _maxY = 70f;
+    float _zoomMultiplier = 5f;
+    float _minZoom = 10f;
+    float _maxZoom = 100f;
+
     bool _isDragging;
-    bool _isZooming;
     bool _tileClicked;
-
-    public float _minX = 0f;
-    public float _maxX = 70f;
-    public float _minY = 0f;
-    public float _maxY = 70f;
-    public float _zoomMultiplier = 5f;
-    public float _minZoom = 10f;
-    public float _maxZoom = 100f;
-
     float _zoom;
     float _scrollAmount;
     Vector3 _origin;
@@ -42,6 +41,17 @@ public class CameraManager : MonoBehaviour
         _tileHovered = id;
     }
 
+    public void Init(int x, int y)
+    {
+        _minX = 0;
+        _minY = 0;
+        _maxX = 10 * (x - 1);
+        _maxY = 10 * (y - 1);
+        _minZoom = 10f;
+        _maxZoom = Mathf.Max(x, y) * 10f;
+        _zoomMultiplier = (_maxZoom / _minZoom) / 2f;
+    }
+
     public void OnDrag(InputAction.CallbackContext ctx)
     {
         if (ctx.started) _origin = GetMousePosition;
@@ -53,7 +63,6 @@ public class CameraManager : MonoBehaviour
     {
         if (ctx.started) _origin = GetMousePosition;
         _scrollAmount = ctx.ReadValue<float>();
-        _isZooming = ctx.started || ctx.performed;
     }
 
     void HandleCameraMovement()

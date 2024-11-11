@@ -34,13 +34,13 @@ public class Tile : MonoBehaviour
     {
         Hovered = true;
         _sprite.material.color = new Color(0.5f, 0.5f, 0.5f);
-        EventManager.Singleton.StartTileEvent(Id);
+        EventManager.Singleton.StartTileHoverEvent(Id);
     }
 
     void OnMouseExit()
     {
         Hovered = false;
         _sprite.material.color = new Color(1.0f, 1.0f, 1.0f);
-        EventManager.Singleton.StartTileEvent(-1);
+        EventManager.Singleton.StartTileHoverEvent(-1);
     }
 }

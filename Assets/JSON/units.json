@@ -1,0 +1,13 @@
+{
+    "units":
+    [
+        {
+            "id": 1,
+            "name": "soldier"
+        },
+        {
+            "id": 2,
+            "name": "queen"
+        }
+    ]
+}

@@ -3,30 +3,38 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Singleton;
+
     public GridManager grid;
-    public CameraManager camera;
-    public List<Unit> units;    
+    public CameraManager cam;
 
-    List<Player> players;
-    List<float> times;
-    int turn;
-    int timeControl;
+    List<Player> _players;
+    List<float> _times;
+    int _turn;
+    int _timeControl;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        camera._minX = 0;
-        camera._minY = 0;
-        camera._maxX = 10 * (grid._x - 1);
-        camera._maxY = 10 * (grid._y - 1);
-        camera._minZoom = 10f;
-        camera._maxZoom = Mathf.Max(grid._x, grid._y) * 10f;
-        camera._zoomMultiplier = (camera._maxZoom / camera._minZoom) / 2f;
+        if (Singleton == null)
+        {
+            Singleton = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
+        Init();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void Init()
+    {
+        cam.Init(grid._x, grid._y);
     }
 }

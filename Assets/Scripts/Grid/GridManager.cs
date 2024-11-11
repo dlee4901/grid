@@ -5,19 +5,17 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    //[SerializeField] GridProperties gridProperties;
-
     public int _x;
     public int _y;
     public float _tileScale;
     public int _unitCap;
     public int _numPlayers;
-    List<Tile> _tiles;
+    public int _numSpawnRows;
+    public Tile _tile;
+
     List<Unit> _units;
-
-    [SerializeField] Tile _tile;
-
-    public int _tileHovered;
+    List<Tile> _tiles;
+    int _tileHovered;
 
     // Start is called before the first frame update
     void Start()
@@ -108,7 +106,7 @@ public class GridManager : MonoBehaviour
     {
         List<Vector2Int> validMoves = new();
         List<Vector2Int> unitVectors = GetUnitVectors(unit);
-        int distance = unit.movement.distance;
+        int distance = unit._movement._distance;
         if (distance == -1) distance = Math.Max(_x, _y);
         if (step)
         {
@@ -154,8 +152,8 @@ public class GridManager : MonoBehaviour
     List<bool> GetAbsoluteDirections(Unit unit)
     {
         List<bool> absoluteDirections = new List<bool>{false, false, false, false, false, false, false, false};
-        var movement = unit.movement;
-        switch (movement.direction)
+        var movement = unit._movement;
+        switch (movement._direction)
         {
             case Direction.stride: case Direction.line:
                 for (int i = 0; i < 8; i++) absoluteDirections[i] = true;
@@ -202,10 +200,10 @@ public class GridManager : MonoBehaviour
                 Debug.LogError("unit movement is invalid");
                 return absoluteDirections;
         }
-        if (movement.relativeFacing)
+        if (movement._relativeFacing)
         {
             int shift = 0;
-            switch (unit.facing)
+            switch (unit._facing)
             {
                 case DirectionFacing.E:
                     shift = 6;

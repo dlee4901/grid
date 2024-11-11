@@ -3,21 +3,24 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UnitList : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class UnitListDisplay : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    public Canvas canvas;
-    public GridLayoutGroup list;
-    public List<Unit> units;
+    public GridLayoutGroup container;
 
     void Start()
     {
-        foreach (Unit unit in units)
+        EventManager.Singleton.UnitDragEvent += UnitDrag;
+    }
+
+    public void Init()
+    {
+        foreach (Unit unit in UnitList.Singleton.units)
         {
             GameObject obj = new GameObject(unit.name);
-            obj.AddComponent<UnitHandler>();
+            UnitHandler unitHandler = obj.AddComponent<UnitHandler>();
             Image image = obj.AddComponent<Image>();
-            image.sprite = unit.sprite;
-            obj.GetComponent<RectTransform>().SetParent(list.transform);
+            image.sprite = unit._sprite;
+            obj.GetComponent<RectTransform>().SetParent(container.transform);
         }
     }
 
@@ -39,5 +42,11 @@ public class UnitList : MonoBehaviour, IPointerDownHandler, IDragHandler, IBegin
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log("list OnEndDrag");
+    }
+
+    void UnitDrag(Unit unit)
+    {
+        //GameObject obj = new GameObject(id);
+
     }
 }
