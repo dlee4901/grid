@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3683fbc074e6645a8b1f675c345a5d51, type: 3}
   m_Name: QueenMovement
   m_EditorClassIdentifier: 
-  direction: 2
+  direction: 10
   distance: -1
   exact: 0
+  relativeFacing: 0
   chain: {fileID: 0}

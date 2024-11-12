@@ -27,6 +27,7 @@ public class CameraManager : MonoBehaviour
     {
         EventManager.Singleton.TileHoverEvent += TileHover;
         _tileHovered = -1;
+        cinemachineCamera.Lens.OrthographicSize = Mathf.Min(cinemachineCamera.Lens.OrthographicSize, _maxZoom);
         _zoom = cinemachineCamera.Lens.OrthographicSize;
     }
 
@@ -54,14 +55,14 @@ public class CameraManager : MonoBehaviour
 
     public void OnDrag(InputAction.CallbackContext ctx)
     {
-        if (ctx.started) _origin = GetMousePosition;
+        if (ctx.started) _origin = Util.GetMousePosition();
         _tileClicked = (ctx.started || _tileClicked) && _tileHovered != -1;
         _isDragging = ctx.started || ctx.performed;
     }
 
     public void OnZoom(InputAction.CallbackContext ctx)
     {
-        if (ctx.started) _origin = GetMousePosition;
+        if (ctx.started) _origin = Util.GetMousePosition();
         _scrollAmount = ctx.ReadValue<float>();
     }
 
@@ -69,7 +70,7 @@ public class CameraManager : MonoBehaviour
     {
         if (_isDragging && _tileClicked)
         {
-            _difference = GetMousePosition - transform.position;
+            _difference = Util.GetMousePosition() - transform.position;
             Vector3 newPos = _origin - _difference;
             newPos.x = Mathf.Clamp(newPos.x, _minX, _maxX);
             newPos.y = Mathf.Clamp(newPos.y, _minY, _maxY);
@@ -92,6 +93,4 @@ public class CameraManager : MonoBehaviour
             cinemachineCamera.Lens.OrthographicSize = Mathf.Lerp(cinemachineCamera.Lens.OrthographicSize, _zoom, Time.deltaTime * 10f);
         }
     }
-
-    Vector3 GetMousePosition => Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 }

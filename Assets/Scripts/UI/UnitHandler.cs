@@ -5,31 +5,30 @@ using UnityEngine.UI;
 
 public class UnitHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
+    public Unit unit;
+
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("OnPointerDown");
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("OnPointerUp");
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("OnBeginDrag");
-        EventManager.Singleton.StartUnitDragEvent(gameObject.GetComponent<Unit>());
+        GameObject obj = new GameObject(unit.properties.title);
+        UnitManager unitManager = obj.AddComponent<UnitManager>();
+        unitManager.unit = unit;
+        unitManager.isDragging = true;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("OnEndDrag");
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("OnDrag");
+        //gameObject.GetComponent<RectTransform>().anchoredPosition += eventData.delta;
     }
-
-    Vector3 GetMousePosition => Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 }

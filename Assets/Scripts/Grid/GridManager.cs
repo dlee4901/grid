@@ -1,19 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public int _x;
-    public int _y;
-    public float _tileScale;
-    public int _unitCap;
-    public int _numPlayers;
-    public int _numSpawnRows;
-    public Tile _tile;
+    public int x;
+    public int y;
+    public float tileScale;
+    public int unitCap;
+    public int numPlayers;
+    public int numSpawnRows;
+    public Tile tile;
 
-    List<Unit> _units;
+    List<GameObject> _units;
     List<Tile> _tiles;
     int _tileHovered;
 
@@ -22,6 +23,7 @@ public class GridManager : MonoBehaviour
     {
         InitGrid();
         EventManager.Singleton.TileHoverEvent += TileHover;
+        EventManager.Singleton.UnitPlaceEvent += UnitPlace;
     }
 
     // Update is called once per frame
@@ -35,23 +37,24 @@ public class GridManager : MonoBehaviour
         _tileHovered = id;
     }
 
+    void UnitPlace(GameObject unit)
+    {
+        AddUnit(Unflatten(_tileHovered), unit);
+    }
+
     void InitGrid()
     {
         _tiles = new();
         _units = new();
-        for (int j = 0; j < _y; j++)
+        for (int j = 0; j < y; j++)
         {
-            for (int i = 0; i < _x; i++)
+            for (int i = 0; i < x; i++)
             {
-                float x = i * _tileScale / 0.1f;
-                float y = j * _tileScale / 0.1f;
-                var tile_ = Instantiate(_tile, new Vector3(x, y, 0), Quaternion.identity, this.transform);
-                tile_.transform.localScale = new Vector3(_tileScale, _tileScale, transform.localScale.z);
-                tile_.Id = Flatten(i, j);
-                _tiles.Add(tile_);
+                var newTile = Instantiate(tile, GetWorldPos(new Vector2Int(i, j)), Quaternion.identity, this.transform);
+                newTile.transform.localScale = new Vector3(tileScale, tileScale, transform.localScale.z);
+                newTile.Id = Flatten(i, j);
+                _tiles.Add(newTile);
                 _units.Add(null);
-                //Debug.Log(i + " " + j + " " + Flatten(i, j) + " " + Unflatten(Flatten(i, j)));
-                //Debug.Log(_tiles[Flatten(i, j)].Id);
             }
         }
         //TestGrid();
@@ -96,8 +99,10 @@ public class GridManager : MonoBehaviour
     HashSet<Vector2Int> GetMovePositions(Vector2Int position)
     {
         HashSet<Vector2Int> movePositions = new();
-        Unit unit = GetUnit(position);
-        if (!IsValidPosition(position) || unit == null) return movePositions;
+        GameObject unitGameObject = GetUnitGameObject(position);
+        if (!IsValidPosition(position) || unitGameObject == null) return movePositions;
+        UnitManager unitManager = unitGameObject.GetComponent<UnitManager>();
+        Unit unit = unitManager.unit;
         movePositions = GetValidMoves(position, unit);
         return movePositions;
     }
@@ -106,8 +111,8 @@ public class GridManager : MonoBehaviour
     {
         List<Vector2Int> validMoves = new();
         List<Vector2Int> unitVectors = GetUnitVectors(unit);
-        int distance = unit._movement._distance;
-        if (distance == -1) distance = Math.Max(_x, _y);
+        int distance = unit.movement.distance;
+        if (distance == -1) distance = Math.Max(x, y);
         if (step)
         {
 
@@ -121,7 +126,7 @@ public class GridManager : MonoBehaviour
                     Vector2Int startPosition = initialPosition;
                     if (i > 0) startPosition = validMoves[8 * (i - 1) + j];
                     Vector2Int targetPosition = startPosition + unitVectors[j];
-                    if (IsValidPosition(targetPosition) && GetUnit(targetPosition) != null) validMoves.Add(targetPosition);
+                    if (IsValidPosition(targetPosition) && GetUnitGameObject(targetPosition) != null) validMoves.Add(targetPosition);
                     else validMoves.Add(startPosition);
                 }
             }
@@ -135,16 +140,16 @@ public class GridManager : MonoBehaviour
         List<bool> absoluteDirections = GetAbsoluteDirections(unit);
         for (int i = 0; i < 8; i++)
         {
-            int x = 0;
-            int y = 0;
+            int xOffset = 0;
+            int yOffset = 0;
             if (absoluteDirections[i])
             {
-                if (i > 4)               x = -1;
-                else if (i > 0 && i < 4) x = 1;
-                if (i > 2 && i < 6)      y = 1;
-                else if (i < 2 || i > 6) y = -1;
+                if (i > 4)               xOffset = -1;
+                else if (i > 0 && i < 4) xOffset = 1;
+                if (i > 2 && i < 6)      yOffset = 1;
+                else if (i < 2 || i > 6) yOffset = -1;
             }
-            unitVectors.Add(new Vector2Int(x, y));
+            unitVectors.Add(new Vector2Int(xOffset, yOffset));
         }
         return unitVectors;
     }
@@ -152,8 +157,8 @@ public class GridManager : MonoBehaviour
     List<bool> GetAbsoluteDirections(Unit unit)
     {
         List<bool> absoluteDirections = new List<bool>{false, false, false, false, false, false, false, false};
-        var movement = unit._movement;
-        switch (movement._direction)
+        var movement = unit.movement;
+        switch (movement.direction)
         {
             case Direction.stride: case Direction.line:
                 for (int i = 0; i < 8; i++) absoluteDirections[i] = true;
@@ -200,10 +205,10 @@ public class GridManager : MonoBehaviour
                 Debug.LogError("unit movement is invalid");
                 return absoluteDirections;
         }
-        if (movement._relativeFacing)
+        if (movement.relativeFacing)
         {
             int shift = 0;
-            switch (unit._facing)
+            switch (unit.properties.facing)
             {
                 case DirectionFacing.E:
                     shift = 6;
@@ -224,16 +229,19 @@ public class GridManager : MonoBehaviour
     }
 
     // Helper Methods
-    void AddUnit(Vector2Int position, Unit unit)
+    void AddUnit(Vector2Int position, GameObject unitGameObject)
     {
         if (!IsValidPosition(position))
         {
             Debug.LogError("getting invalid position");
+            Destroy(unitGameObject);
         }
         else
         {
-            Debug.Log(Flatten(position));
-            _units.Insert(Flatten(position), unit);
+            _units.Insert(Flatten(position), unitGameObject);
+            GameObject unit = _units[Flatten(position)];
+            unit.transform.position = GetWorldPos(position);
+            unit.GetComponent<SpriteRenderer>().sortingLayerName = "Unit";
         }
     }
 
@@ -245,7 +253,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    Unit GetUnit(Vector2Int position)
+    GameObject GetUnitGameObject(Vector2Int position)
     {
         if (!IsValidPosition(position))
         {
@@ -255,9 +263,16 @@ public class GridManager : MonoBehaviour
         return _units[Flatten(position)];
     }
 
+    Vector3 GetWorldPos(Vector2Int position)
+    {
+        float xPos = position.x * tileScale / 0.1f;
+        float yPos = position.y * tileScale / 0.1f;
+        return new Vector3(xPos, yPos, 0);
+    }
+
     bool IsValidPosition(Vector2Int position)
     {
-        return position.x >= 0 && position.y >= 0 && position.x < _x && position.y < _y;
+        return position.x >= 0 && position.y >= 0 && position.x < x && position.y < y;
     }
 
     int Flatten(Vector2Int position)
@@ -265,13 +280,13 @@ public class GridManager : MonoBehaviour
         return Flatten(position.x, position.y);
     }
 
-    int Flatten(int x, int y)
+    int Flatten(int xPos, int yPos)
     {
-        return y * _x + x;
+        return yPos * x + xPos;
     }
 
     Vector2Int Unflatten(int position)
     {
-        return new Vector2Int(position % _x, position / _x);
+        return new Vector2Int(position % x, position / x);
     }
 }

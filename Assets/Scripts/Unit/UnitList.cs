@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UnitList : MonoBehaviour
@@ -11,6 +12,7 @@ public class UnitList : MonoBehaviour
     
     void Awake()
     {
+        units = new List<Unit>();
         if (Singleton == null)
         {
             Singleton = this;
@@ -25,7 +27,10 @@ public class UnitList : MonoBehaviour
 
     void InitFromSerializable()
     {
-        units = tempSerializable;
+        foreach (Unit unit in tempSerializable)
+        {
+            units.Add(unit);
+        }
     }
 
     void InitFromJson()

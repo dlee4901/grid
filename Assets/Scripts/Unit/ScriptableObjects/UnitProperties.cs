@@ -1,24 +1,23 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
-[CreateAssetMenu(menuName = "Unit")]
-public class Unit : ScriptableObject
+[CreateAssetMenu(menuName = "Unit Properties")]
+public class UnitProperties : ScriptableObject
 {
     [Header("Identifiers")]
-    public int _id;
-    public string _name;
-    public Sprite _sprite;
+    public int id;
+    public string title;
+    public Sprite sprite;
 
     [Header("Attributes")]
-    public UnitMovement _movement;
-    public int _cost;
-    public int _maxHealth;
-    public int _owner;
+    public int cost;
+    public int maxHealth;
+    public int owner;
 
     [Header("State")]
-    public int _health;
-    public int _shield;
-    public DirectionFacing _facing;
+    public int health;
+    public int shield;
+    public DirectionFacing facing;
 
     // void Init(string _title, UnitMovement _movement, int _playerOwner=0, int _cost=0, int _maxHealth=0, int _currentHealth=0, DirectionFacing _facing=DirectionFacing.N)
     // {

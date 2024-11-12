@@ -7,6 +7,7 @@ public class EventManager : MonoBehaviour
 
     public event Action<int> TileHoverEvent;
     public event Action<Unit> UnitDragEvent;
+    public event Action<GameObject> UnitPlaceEvent;
 
     private void Awake()
     {
@@ -29,5 +30,10 @@ public class EventManager : MonoBehaviour
     public void StartUnitDragEvent(Unit unit)
     {
         UnitDragEvent?.Invoke(unit);
+    }
+
+    public void StartUnitPlaceEvent(GameObject unit)
+    {
+        UnitPlaceEvent?.Invoke(unit);
     }
 }

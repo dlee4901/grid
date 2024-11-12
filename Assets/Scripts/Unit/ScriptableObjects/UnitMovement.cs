@@ -6,11 +6,11 @@ public enum DirectionFacing {N = Direction.N, E = Direction.E, S = Direction.S, 
 [CreateAssetMenu(menuName = "Unit Movement")]
 public class UnitMovement : ScriptableObject
 {
-    public Direction _direction;
-    public int _distance;
-    public bool _exact;
-    public bool _relativeFacing;
-    public UnitMovement _chain;
+    public Direction direction;
+    public int distance;
+    public bool exact;
+    public bool relativeFacing;
+    public UnitMovement chain;
 
     // public void ResetMovement()
     // {

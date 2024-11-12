@@ -35,6 +35,6 @@ public class GameManager : MonoBehaviour
 
     void Init()
     {
-        cam.Init(grid._x, grid._y);
+        cam.Init(grid.x, grid.y);
     }
 }
