@@ -232,7 +232,7 @@ public class GridManager : MonoBehaviour
     {
         if (!IsValidPosition(position))
         {
-            Debug.LogError("getting invalid position");
+            Debug.Log("AddUnit - invalid position");
             Destroy(unit.gameObject);
         }
         else

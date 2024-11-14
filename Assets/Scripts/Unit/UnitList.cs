@@ -13,7 +13,6 @@ public class UnitList : MonoBehaviour
     void Awake()
     {
         units = new List<Unit>();
-        Debug.Log(units);
         EventManager.Singleton.UnitDragEvent += UnitDrag;
 
         if (Singleton == null)
@@ -37,6 +36,7 @@ public class UnitList : MonoBehaviour
             Unit unit = unitGO.AddComponent<Unit>();
             unit.properties = unitProperties;
             unit.Init();
+            unit.gameObject.SetActive(false);
             units.Add(unit);
         }
     }
@@ -46,6 +46,7 @@ public class UnitList : MonoBehaviour
         if (id < units.Count)
         {
             Unit unit = Instantiate(units[id]);
+            unit.gameObject.SetActive(true);
             unit.isDragging = true;
         }
     }
