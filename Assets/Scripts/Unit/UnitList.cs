@@ -8,11 +8,14 @@ public class UnitList : MonoBehaviour
 
     public List<Unit> units;
 
-    public List<Unit> tempSerializable;
+    public List<UnitProperties> tempSerializable;
     
     void Awake()
     {
         units = new List<Unit>();
+        Debug.Log(units);
+        EventManager.Singleton.UnitDragEvent += UnitDrag;
+
         if (Singleton == null)
         {
             Singleton = this;
@@ -22,20 +25,29 @@ public class UnitList : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
-        InitFromSerializable();
+        InitFromTempSerializable();
     }
 
-    void InitFromSerializable()
+    void InitFromTempSerializable()
     {
-        foreach (Unit unit in tempSerializable)
+        foreach (UnitProperties unitProperties in tempSerializable)
         {
+            GameObject unitGO = new GameObject(unitProperties.title);
+            unitGO.transform.parent = transform;
+            Unit unit = unitGO.AddComponent<Unit>();
+            unit.properties = unitProperties;
+            unit.Init();
             units.Add(unit);
         }
     }
 
-    void InitFromJson()
+    void UnitDrag(int id)
     {
-
+        if (id < units.Count)
+        {
+            Unit unit = Instantiate(units[id]);
+            unit.isDragging = true;
+        }
     }
 
     Unit getUnitById(int id)

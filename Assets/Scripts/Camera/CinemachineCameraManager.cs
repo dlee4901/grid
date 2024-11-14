@@ -2,7 +2,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraManager : MonoBehaviour
+public class CinemachineCameraManager : MonoBehaviour
 {
     public CinemachineCamera cinemachineCamera;
 

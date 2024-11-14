@@ -6,8 +6,8 @@ public class EventManager : MonoBehaviour
     public static EventManager Singleton;
 
     public event Action<int> TileHoverEvent;
-    public event Action<Unit> UnitDragEvent;
-    public event Action<GameObject> UnitPlaceEvent;
+    public event Action<int> UnitDragEvent;
+    public event Action<Unit> UnitPlaceEvent;
 
     private void Awake()
     {
@@ -27,12 +27,12 @@ public class EventManager : MonoBehaviour
         TileHoverEvent?.Invoke(id);
     }
 
-    public void StartUnitDragEvent(Unit unit)
+    public void StartUnitDragEvent(int id)
     {
-        UnitDragEvent?.Invoke(unit);
+        UnitDragEvent?.Invoke(id);
     }
 
-    public void StartUnitPlaceEvent(GameObject unit)
+    public void StartUnitPlaceEvent(Unit unit)
     {
         UnitPlaceEvent?.Invoke(unit);
     }

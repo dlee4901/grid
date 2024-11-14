@@ -10,6 +10,7 @@ public class UnitProperties : ScriptableObject
     public Sprite sprite;
 
     [Header("Attributes")]
+    public UnitMovement movement;
     public int cost;
     public int maxHealth;
     public int owner;

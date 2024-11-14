@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Singleton;
 
     public GridManager grid;
-    public CameraManager cam;
+    public CinemachineCameraManager cam;
 
     List<Player> _players;
     List<float> _times;

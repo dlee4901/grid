@@ -1,19 +1,19 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-public class UnitManager : MonoBehaviour
+public class Unit : MonoBehaviour
 {
-    public Unit unit;
+    public UnitProperties properties;
+
     public bool isDragging;
 
     SpriteRenderer _spriteRenderer;
     InputAction _selectAction;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
-        _spriteRenderer.sprite = unit.properties.sprite;
-        _spriteRenderer.sortingLayerName = "Unit";
         _selectAction = InputSystem.actions.FindAction("Player/Select");
     }
 
@@ -23,16 +23,23 @@ public class UnitManager : MonoBehaviour
         HandleDrag();
     }
 
+    public void Init()
+    {
+        name = properties.title;
+        _spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+        _spriteRenderer.sprite = properties.sprite;
+        _spriteRenderer.sortingLayerName = "Unit";
+    }
+
     void HandleDrag()
     {
         if (isDragging)
         {
-            gameObject.transform.localPosition = Util.GetMousePosition(true);
-            gameObject.transform.localScale = new Vector3(10f, 10f, 0f);
+            transform.localPosition = Util.GetMousePosition(true);
+            transform.localScale = new Vector3(10f, 10f, 0f);
             if (_selectAction.WasPerformedThisFrame())
             {
-                Debug.Log("SelectAction");
-                EventManager.Singleton.StartUnitPlaceEvent(gameObject);
+                EventManager.Singleton.StartUnitPlaceEvent(this);
                 isDragging = false;
             }
         }

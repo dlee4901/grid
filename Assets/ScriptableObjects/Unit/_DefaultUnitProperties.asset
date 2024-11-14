@@ -9,8 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37efe2ff1fa458e4cb21c2c7f048fead, type: 3}
-  m_Name: Queen
+  m_Script: {fileID: 11500000, guid: 51d5f1f2a8d084986bdd048590681d93, type: 3}
+  m_Name: _DefaultUnitProperties
   m_EditorClassIdentifier: 
-  properties: {fileID: 11400000, guid: 03a6c1fbafa5948339ec813100105415, type: 2}
-  movement: {fileID: 11400000, guid: 308255448b1854dc29079f00079dda5b, type: 2}
+  id: 0
+  title: 0
+  sprite: {fileID: 0}
+  movement: {fileID: 0}
+  cost: 0
+  maxHealth: 0
+  owner: 0
+  health: 0
+  shield: 0
+  facing: 0
