@@ -37,9 +37,12 @@ public class GridManager : MonoBehaviour
         _tileHovered = id;
     }
 
-    void UnitPlace(Unit unit)
+    void UnitPlace(Unit unit, int listUIPosition)
     {
-        AddUnit(Unflatten(_tileHovered), unit);
+        if (AddUnit(Unflatten(_tileHovered), unit))
+        {
+            EventManager.Singleton.StartUnitUIDragEvent(unit.properties.controller, listUIPosition, true);
+        }
     }
 
     void InitGrid()
@@ -228,20 +231,19 @@ public class GridManager : MonoBehaviour
     }
 
     // Helper Methods
-    void AddUnit(Vector2Int position, Unit unit)
+    bool AddUnit(Vector2Int position, Unit unit)
     {
         if (!IsValidPosition(position))
         {
             Debug.Log("AddUnit - invalid position");
             Destroy(unit.gameObject);
+            return false;
         }
-        else
-        {
-            _units.Insert(Flatten(position), unit);
-            Unit curUnit = _units[Flatten(position)];
-            curUnit.transform.position = GetWorldPos(position);
-            curUnit.GetComponent<SpriteRenderer>().sortingLayerName = "Unit";
-        }
+        _units.Insert(Flatten(position), unit);
+        Unit curUnit = _units[Flatten(position)];
+        curUnit.transform.position = GetWorldPos(position);
+        curUnit.GetComponent<SpriteRenderer>().sortingLayerName = "Unit";
+        return true;
     }
 
     void MoveUnit(int src, int dst)

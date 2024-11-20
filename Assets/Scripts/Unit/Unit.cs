@@ -4,12 +4,13 @@ using UnityEngine.UI;
 
 public class Unit : MonoBehaviour
 {
-    public UnitProperties properties;
-
-    public bool isDragging;
-
     SpriteRenderer _spriteRenderer;
     InputAction _selectAction;
+
+    public UnitProperties properties;
+
+    public int listUIPosition;
+    public bool isDragging;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,7 +40,7 @@ public class Unit : MonoBehaviour
             transform.localScale = new Vector3(10f, 10f, 0f);
             if (_selectAction.WasPerformedThisFrame())
             {
-                EventManager.Singleton.StartUnitPlaceEvent(this);
+                EventManager.Singleton.StartUnitPlaceEvent(this, listUIPosition);
                 isDragging = false;
             }
         }

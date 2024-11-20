@@ -6,10 +6,10 @@ public class EventManager : MonoBehaviour
     public static EventManager Singleton;
 
     public event Action<int> TileHoverEvent;
-    public event Action<int> UnitDragEvent;
-    public event Action<Unit> UnitPlaceEvent;
+    public event Action<Unit, int> UnitPlaceEvent;
+    public event Action<int, int, bool> UnitUIUpdateEvent;
 
-    private void Awake()
+    void Awake()
     {
         if (Singleton == null)
         {
@@ -27,13 +27,13 @@ public class EventManager : MonoBehaviour
         TileHoverEvent?.Invoke(id);
     }
 
-    public void StartUnitDragEvent(int id)
+    public void StartUnitPlaceEvent(Unit unit, int listUIPosition)
     {
-        UnitDragEvent?.Invoke(id);
+        UnitPlaceEvent?.Invoke(unit, listUIPosition);
     }
 
-    public void StartUnitPlaceEvent(Unit unit)
+    public void StartUnitUIDragEvent(int playerController, int listUIPosition, bool placed)
     {
-        UnitPlaceEvent?.Invoke(unit);
+        UnitUIUpdateEvent?.Invoke(playerController, listUIPosition, placed);
     }
 }

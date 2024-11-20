@@ -10,49 +10,61 @@ public class UnitListDisplay : MonoBehaviour
     public GridLayoutGroup container;
 
     List<GridLayoutGroup> _containers;
+    List<List<UnitUIManager>> _unitsList;
+    // List<bool[]> _unitsPlaced;
     int _activePlayerList;
 
     void Start()
     {
+        EventManager.Singleton.UnitUIUpdateEvent += UnitUIUpdate;
         InitPlayers(2);
-        SetActivePlayerList(1);
     }
 
     void InitPlayers(int numPlayers)
     {
         _containers = new List<GridLayoutGroup>{container};
-        _activePlayerList = 0;
+        _unitsList = new List<List<UnitUIManager>>();
         for (int player = 1; player <= numPlayers; player++)
         {
+            List<UnitUIManager> unitManagerList = new List<UnitUIManager>();
+            _unitsList.Add(unitManagerList);
             GridLayoutGroup obj = Instantiate(container, scrollView.transform);
             _containers.Add(obj);
             InitPlayerContainer(player);
         }
     }
 
-    void InitPlayerContainer(int player)
+    void InitPlayerContainer(int playerController)
     {
+        int listUIPosition = 0;
         foreach (Unit unit in UnitList.Singleton.units)
         {
             if (unit.properties.id > 0)
             {
-                GameObject imageManagerGO = new GameObject();
-                imageManagerGO.tag = "UI Unit";
-                ImageManager imageManager = imageManagerGO.AddComponent<ImageManager>();
-                imageManager.Init(unit.properties.title, unit.properties.sprite, _containers[player].transform, unit.properties.id);
+                GameObject unitManagerObj = new GameObject();
+                unitManagerObj.tag = "UI Unit";
+                UnitUIManager unitManager = unitManagerObj.AddComponent<UnitUIManager>();
+                unitManager.Init(unit.properties.title, unit.properties.sprite, _containers[playerController].transform, unit.properties.id, playerController, listUIPosition);
+                _unitsList[playerController-1].Add(unitManager);
+                listUIPosition += 1;
             }
         }
-        _containers[player].gameObject.SetActive(false);
+        _containers[playerController].gameObject.SetActive(false);
     }
 
-    public void SetActivePlayerList(int player)
+    public void SetActivePlayerList(int playerController)
     {
-        if (player < _containers.Count)
+        if (playerController < _containers.Count)
         {
             _containers[_activePlayerList].gameObject.SetActive(false);
-            scrollView.content = _containers[player].GetComponent<RectTransform>();
-            _containers[player].gameObject.SetActive(true);
-            _activePlayerList = player;
+            scrollView.content = _containers[playerController].GetComponent<RectTransform>();
+            _containers[playerController].gameObject.SetActive(true);
+            _activePlayerList = playerController;
         }
+    }
+
+    void UnitUIUpdate(int playerController, int listUIPosition, bool placed)
+    {
+        _unitsList[playerController-1][listUIPosition].IsPlaced = placed;
     }
 }

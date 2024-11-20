@@ -1,9 +1,16 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class EventHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class InputEventHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    public int id;
+    int _unitID;
+    int _playerController;
+
+    public void InitUIUnit(int unitID, int playerController, int listUIPosition)
+    {
+        _unitID = unitID;
+        _playerController = playerController;
+    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -17,7 +24,11 @@ public class EventHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
     {
         if (gameObject.tag == "UI Unit")
         {
-            EventManager.Singleton.StartUnitDragEvent(id);
+            UnitUIManager unitUIManagerObj = gameObject.GetComponent<UnitUIManager>();
+            if (!unitUIManagerObj.IsPlaced)
+            {
+                unitUIManagerObj.UnitUIDrag();
+            }
         }
     }
 

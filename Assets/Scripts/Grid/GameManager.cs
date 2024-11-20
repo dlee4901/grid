@@ -31,12 +31,16 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         StartTurn();
-        
     }
 
     void Init()
     {
         cam.Init(grid.x, grid.y);
+    }
+
+    void PlaceUnits()
+    {
+        
     }
 
     void StartTurn()

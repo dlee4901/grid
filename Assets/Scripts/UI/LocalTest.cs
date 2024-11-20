@@ -11,14 +11,14 @@ public class LocalTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // player1.onClick.AddListener(() => {
-        //     Debug.Log("Player 1 Clicked");
-        //     unitListDisplay.Display(1);
-        // });
-        // player2.onClick.AddListener(() => {
-        //     Debug.Log("Player 2 Clicked");
-        //     unitListDisplay.Display(2);
-        // });
+        player1.onClick.AddListener(() => {
+            Debug.Log("Player 1 Clicked");
+            unitListDisplay.SetActivePlayerList(1);
+        });
+        player2.onClick.AddListener(() => {
+            Debug.Log("Player 2 Clicked");
+            unitListDisplay.SetActivePlayerList(2);
+        });
     }
 
     // Update is called once per frame

@@ -11,9 +11,9 @@ public class UnitProperties : ScriptableObject
 
     [Header("Attributes")]
     public UnitMovement movement;
+    public int controller;
     public int cost;
     public int maxHealth;
-    public int owner;
 
     [Header("State")]
     public int health;

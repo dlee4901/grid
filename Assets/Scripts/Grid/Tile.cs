@@ -31,7 +31,7 @@ public class Tile : MonoBehaviour
     {
         if (ctx.started && _hovered)
         {
-            gameObject.GetComponent<SpriteRenderer>().material.color = new Color(0.2f, 0.2f, 0.2f);
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 0.2f);
         }
     }
     

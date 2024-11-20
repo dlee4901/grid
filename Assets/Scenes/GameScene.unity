@@ -2116,6 +2116,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431892731}
   m_CullTransparentMesh: 1
+--- !u!114 &1479022280 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8216833222215767595, guid: 72cff95855cb52a4f9b7168a81e83c4e, type: 3}
+  m_PrefabInstance: {fileID: 4318546753621941581}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ae82281bbbfafb40aa23996f4544506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1514206340
 GameObject:
   m_ObjectHideFlags: 0
@@ -2302,7 +2313,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99fe5fbbb22fc3943b35c8ff547fa74c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
 --- !u!114 &1556932000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2587,6 +2597,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1907368032}
+  - component: {fileID: 1907368033}
   m_Layer: 5
   m_Name: LocalTest
   m_TagString: Untagged
@@ -2614,6 +2625,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1907368033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907368031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3acafcf5cbbb764c9021706174c9ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startGame: {fileID: 1692876471}
+  player1: {fileID: 103575369}
+  player2: {fileID: 1431892733}
+  unitListDisplay: {fileID: 1479022280}
 --- !u!1 &1948898111
 GameObject:
   m_ObjectHideFlags: 0

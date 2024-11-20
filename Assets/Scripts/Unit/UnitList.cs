@@ -12,8 +12,9 @@ public class UnitList : MonoBehaviour
     
     void Awake()
     {
+        //EventManager.Singleton.UnitUIDragEvent += UnitUIDrag;
+
         units = new List<Unit>();
-        EventManager.Singleton.UnitDragEvent += UnitDrag;
 
         if (Singleton == null)
         {
@@ -41,18 +42,15 @@ public class UnitList : MonoBehaviour
         }
     }
 
-    void UnitDrag(int id)
-    {
-        if (id < units.Count)
-        {
-            Unit unit = Instantiate(units[id]);
-            unit.gameObject.SetActive(true);
-            unit.isDragging = true;
-        }
-    }
-
-    Unit getUnitById(int id)
-    {
-        return units[id-1];
-    }
+    // void UnitUIDrag(int unitID, int playerController, int listUIPosition)
+    // {
+    //     if (unitID < units.Count)
+    //     {
+    //         Unit unit = Instantiate(units[unitID]);
+    //         unit.properties.controller = playerController;
+    //         unit.gameObject.SetActive(true);
+    //         unit.listUIPosition = listUIPosition;
+    //         unit.isDragging = true;
+    //     }
+    // }
 }

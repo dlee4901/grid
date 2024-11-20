@@ -7,7 +7,7 @@ public class NetcodeTest : MonoBehaviour
     [SerializeField] private Button startHostButton;
     [SerializeField] private Button startClientButton;
 
-    private void Awake()
+    void Awake()
     {
         startHostButton.onClick.AddListener(() =>
         {
@@ -23,7 +23,7 @@ public class NetcodeTest : MonoBehaviour
         });
     }
 
-    private void Hide()
+    void Hide()
     {
         gameObject.SetActive(false);
     }
