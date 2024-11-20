@@ -16,17 +16,12 @@ public class UnitUIManager : MonoBehaviour
         set { _isPlaced = value; OnPropertyChanged("IsPlaced"); }
     }
 
-    void Awake()
-    {
-        //EventManager.Singleton.UnitUIDragEvent += UnitUIDrag;
-    }
-
     public void Init(string name, Sprite sprite, Transform parent, int unitID, int playerController, int listUIPosition)
     {
+        tag = "UI Unit";
+        _inputEventHandler = gameObject.AddComponent<InputEventHandler>();
         _imageManager = gameObject.AddComponent<ImageManager>();
         _imageManager.Init(name, sprite, parent);
-        _inputEventHandler = gameObject.AddComponent<InputEventHandler>();
-        //_inputEventHandler.InitUIUnit(unitID, playerController, listUIPosition);
         _unitID = unitID;
         _playerController = playerController;
         _listUIPosition = listUIPosition;
@@ -38,15 +33,11 @@ public class UnitUIManager : MonoBehaviour
         {
             if (_isPlaced)
             {
-                Debug.Log("IsPlaced true");
-                Debug.Log(_imageManager.image);
-                gameObject.GetComponent<Image>().color = new Color(0f, 0f, 0f);
+                _imageManager.image.color = new Color(0f, 0f, 0f);
             }
             else
             {
-                Debug.Log("IsPlaced false");
-                Debug.Log(_imageManager.image);
-                gameObject.GetComponent<Image>().color = new Color(1f, 1f, 1f);
+                _imageManager.image.color = new Color(1f, 1f, 1f);
             }
         }
     }

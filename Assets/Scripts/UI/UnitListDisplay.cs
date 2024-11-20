@@ -11,7 +11,6 @@ public class UnitListDisplay : MonoBehaviour
 
     List<GridLayoutGroup> _containers;
     List<List<UnitUIManager>> _unitsList;
-    // List<bool[]> _unitsPlaced;
     int _activePlayerList;
 
     void Start()
@@ -41,11 +40,9 @@ public class UnitListDisplay : MonoBehaviour
         {
             if (unit.properties.id > 0)
             {
-                GameObject unitManagerObj = new GameObject();
-                unitManagerObj.tag = "UI Unit";
-                UnitUIManager unitManager = unitManagerObj.AddComponent<UnitUIManager>();
-                unitManager.Init(unit.properties.title, unit.properties.sprite, _containers[playerController].transform, unit.properties.id, playerController, listUIPosition);
-                _unitsList[playerController-1].Add(unitManager);
+                UnitUIManager unitUIManager = Util.CreateGameObject<UnitUIManager>();
+                unitUIManager.Init(unit.properties.title, unit.properties.sprite, _containers[playerController].transform, unit.properties.id, playerController, listUIPosition);
+                _unitsList[playerController-1].Add(unitUIManager);
                 listUIPosition += 1;
             }
         }

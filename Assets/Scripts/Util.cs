@@ -9,4 +9,11 @@ public static class Util
         if (zeroed) mousePosition.z = 0f;
         return mousePosition;
     }
+
+    public static T CreateGameObject<T>() where T : MonoBehaviour
+    {
+        GameObject go = new GameObject();
+        T t = go.AddComponent<T>();
+        return t;
+    }
 }

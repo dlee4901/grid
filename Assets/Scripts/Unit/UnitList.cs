@@ -12,8 +12,6 @@ public class UnitList : MonoBehaviour
     
     void Awake()
     {
-        //EventManager.Singleton.UnitUIDragEvent += UnitUIDrag;
-
         units = new List<Unit>();
 
         if (Singleton == null)
@@ -32,25 +30,9 @@ public class UnitList : MonoBehaviour
     {
         foreach (UnitProperties unitProperties in tempSerializable)
         {
-            GameObject unitGO = new GameObject(unitProperties.title);
-            unitGO.transform.parent = transform;
-            Unit unit = unitGO.AddComponent<Unit>();
-            unit.properties = unitProperties;
-            unit.Init();
-            unit.gameObject.SetActive(false);
+            Unit unit = Util.CreateGameObject<Unit>();
+            unit.Init(unitProperties, transform);
             units.Add(unit);
         }
     }
-
-    // void UnitUIDrag(int unitID, int playerController, int listUIPosition)
-    // {
-    //     if (unitID < units.Count)
-    //     {
-    //         Unit unit = Instantiate(units[unitID]);
-    //         unit.properties.controller = playerController;
-    //         unit.gameObject.SetActive(true);
-    //         unit.listUIPosition = listUIPosition;
-    //         unit.isDragging = true;
-    //     }
-    // }
 }

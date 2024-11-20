@@ -3,15 +3,6 @@ using UnityEngine.EventSystems;
 
 public class InputEventHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    int _unitID;
-    int _playerController;
-
-    public void InitUIUnit(int unitID, int playerController, int listUIPosition)
-    {
-        _unitID = unitID;
-        _playerController = playerController;
-    }
-
     public void OnPointerDown(PointerEventData eventData)
     {
     }

@@ -1,35 +1,56 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GridManager : MonoBehaviour
 {
+    List<Tile> _tiles;
+    List<Unit> _units;
+    int _tileHovered;
+
     public int x;
     public int y;
     public float tileScale;
     public int unitCap;
     public int numPlayers;
     public int numSpawnRows;
-    public Tile tile;
-
-    List<Unit> _units;
-    List<Tile> _tiles;
-    int _tileHovered;
+    public Sprite tileSprite;
 
     // Start is called before the first frame update
     void Start()
     {
-        InitGrid();
         EventManager.Singleton.TileHoverEvent += TileHover;
         EventManager.Singleton.UnitPlaceEvent += UnitPlace;
+        InitGrid();
     }
 
     // Update is called once per frame
     void Update()
     {
         //Debug.Log(_tileHovered);
+    }
+
+    void InitGrid()
+    {
+        Tile tile_ = Util.CreateGameObject<Tile>();
+        _tiles = new();
+        _units = new();
+        for (int j = 0; j < y; j++)
+        {
+            for (int i = 0; i < x; i++)
+            {
+                Tile tile = Instantiate(tile_, GetWorldPos(new Vector2Int(i, j)), Quaternion.identity, transform);
+                tile.Init(tileSprite);
+                tile.transform.localScale = new Vector3(tileScale, tileScale, transform.localScale.z);
+                tile.Id = Flatten(i, j);
+                _tiles.Add(tile);
+                _units.Add(null);
+            }
+        }
+        _tileHovered = -1;
+        //TestGrid();
     }
 
     void TileHover(int id)
@@ -45,23 +66,35 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void InitGrid()
+    public void OnSelect(InputAction.CallbackContext ctx) 
     {
-        _tiles = new();
-        _units = new();
-        for (int j = 0; j < y; j++)
+        if (ctx.started && _tileHovered > -1 && _tiles[_tileHovered].Available)
         {
-            for (int i = 0; i < x; i++)
-            {
-                var newTile = Instantiate(tile, GetWorldPos(new Vector2Int(i, j)), Quaternion.identity, transform);
-                newTile.transform.localScale = new Vector3(tileScale, tileScale, transform.localScale.z);
-                newTile.Id = Flatten(i, j);
-                _tiles.Add(newTile);
-                _units.Add(null);
-            }
+            Debug.Log("OnSelect");
+            Debug.Log(_tileHovered);
         }
-        _tileHovered = -1;
-        //TestGrid();
+    }
+
+    public void SetInitialUnitSpawns(int player)
+    {
+        List<int> availableTiles = new List<int>();
+        int start = -1;
+        int end = -1;
+        if (player == 1)
+        {
+            start = 0;
+            end = x * numSpawnRows;
+        }
+        else if (player == 2)
+        {
+            end = x * y;
+            start = end - (x * numSpawnRows);
+        }
+        for (int i = start; i < end; i++)
+        {
+            availableTiles.Add(i);
+        }
+        SetAvailableTiles(availableTiles, true);
     }
 
     // void TestGrid()
@@ -231,11 +264,34 @@ public class GridManager : MonoBehaviour
     }
 
     // Helper Methods
+    void SetAvailableTiles(List<int> tiles, bool available)
+    {
+        tiles.Sort();
+        for (int i = 0; i < _tiles.Count; i++)
+        {
+            if (tiles.Count > 0 && tiles[0] < x * y && i == tiles[0])
+            {
+                _tiles[i].Available = available;
+                tiles.RemoveAt(0);
+            }
+            else
+            {
+                _tiles[i].Available = !available;
+            }
+        }
+    }
+
     bool AddUnit(Vector2Int position, Unit unit)
     {
         if (!IsValidPosition(position))
         {
             Debug.Log("AddUnit - invalid position");
+            Destroy(unit.gameObject);
+            return false;
+        }
+        if (!_tiles[Flatten(position)].Available)
+        {
+            Debug.Log("AddUnit - tile not available");
             Destroy(unit.gameObject);
             return false;
         }

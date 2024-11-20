@@ -27,10 +27,10 @@ public class GameManager : MonoBehaviour
         Init();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        StartTurn();
+        // PlaceUnits();
+        // StartTurn();
     }
 
     void Init()
@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
         cam.Init(grid.x, grid.y);
     }
 
-    void PlaceUnits()
+    void PlaceUnits(int player)
     {
         
     }

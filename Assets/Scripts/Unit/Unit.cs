@@ -24,9 +24,13 @@ public class Unit : MonoBehaviour
         HandleDrag();
     }
 
-    public void Init()
+    public void Init(UnitProperties properties_, Transform parent=null)
     {
+        properties = properties_;
+        if (parent) transform.parent = parent;
         name = properties.title;
+        gameObject.SetActive(false);
+
         _spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         _spriteRenderer.sprite = properties.sprite;
         _spriteRenderer.sortingLayerName = "Unit";
