@@ -47,7 +47,7 @@ public class UnitUIManager : MonoBehaviour
         if (_unitID < UnitList.Singleton.units.Count)
         {
             Unit unit = Instantiate(UnitList.Singleton.units[_unitID]);
-            unit.properties.controller = _playerController;
+            unit.stats.controller = _playerController;
             unit.gameObject.SetActive(true);
             unit.listUIPosition = _listUIPosition;
             unit.isDragging = true;

@@ -70,7 +70,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""b4b2f109-6b8a-4927-9fbe-9303a4245180"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

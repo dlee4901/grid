@@ -10,15 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51d5f1f2a8d084986bdd048590681d93, type: 3}
-  m_Name: KhoaProperties
+  m_Name: _Unit0Properties
   m_EditorClassIdentifier: 
-  id: 1
-  title: khoa
-  sprite: {fileID: 21300000, guid: 279ff480381111b40b99a9cb298a5fd3, type: 3}
-  movement: {fileID: 11400000, guid: 3a0103c2fdba1ac4f84dcf6a3612718d, type: 2}
+  id: 0
+  title: unit0
+  sprite: {fileID: 0}
   cost: 0
-  maxHealth: 0
-  owner: 0
-  health: 0
-  shield: 0
-  facing: 0
+  startingHealth: 0

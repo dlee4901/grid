@@ -5,8 +5,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton;
 
-    public GridManager grid;
     public CinemachineCameraManager cam;
+    public GridManager grid;
+    public UnitListDisplay unitListDisplay;
 
     List<Player> _players;
     List<float> _times;
@@ -38,20 +39,15 @@ public class GameManager : MonoBehaviour
         cam.Init(grid.x, grid.y);
     }
 
-    void PlaceUnits(int player)
+    public void StartPlacement(int playerController)
     {
-        
+        unitListDisplay.SetActivePlayerList(playerController);
+        grid.SetAvailableTilesPlacement(playerController);
     }
 
-    void StartTurn()
+    public void StartGame()
     {
-        if (_turn == 0 || _turn >= grid.numPlayers)
-        {
-            _turn = 1;
-        }
-        else
-        {
-            _turn += 1;
-        }
+        unitListDisplay.gameObject.SetActive(false);
+        grid.StartGame();
     }
 }

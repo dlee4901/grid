@@ -8,7 +8,7 @@ public class UnitList : MonoBehaviour
 
     public List<Unit> units;
 
-    public List<UnitProperties> tempSerializable;
+    public List<Unit> tempSerializable;
     
     void Awake()
     {
@@ -28,11 +28,11 @@ public class UnitList : MonoBehaviour
 
     void InitFromTempSerializable()
     {
-        foreach (UnitProperties unitProperties in tempSerializable)
+        foreach (Unit unit in tempSerializable)
         {
-            Unit unit = Util.CreateGameObject<Unit>();
-            unit.Init(unitProperties, transform);
-            units.Add(unit);
+            Unit unitCopy = Instantiate(unit);
+            unitCopy.Init();
+            units.Add(unitCopy);
         }
     }
 }

@@ -13,18 +13,13 @@ public class NetcodeTest : MonoBehaviour
         {
             Debug.Log("Host started");
             NetworkManager.Singleton.StartHost();
-            Hide();
+            gameObject.SetActive(false);
         });
         startClientButton.onClick.AddListener(() =>
         {
             Debug.Log("Client started");
             NetworkManager.Singleton.StartClient();
-            Hide();
+            gameObject.SetActive(false);
         });
-    }
-
-    void Hide()
-    {
-        gameObject.SetActive(false);
     }
 }

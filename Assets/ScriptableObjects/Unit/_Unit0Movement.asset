@@ -9,16 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51d5f1f2a8d084986bdd048590681d93, type: 3}
-  m_Name: _DefaultUnitProperties
+  m_Script: {fileID: 11500000, guid: 3683fbc074e6645a8b1f675c345a5d51, type: 3}
+  m_Name: _Unit0Movement
   m_EditorClassIdentifier: 
-  id: 0
-  title: 0
-  sprite: {fileID: 0}
-  movement: {fileID: 0}
-  cost: 0
-  maxHealth: 0
-  owner: 0
-  health: 0
-  shield: 0
-  facing: 0
+  direction: 0
+  distance: 0
+  exact: 0
+  relativeFacing: 0
+  chain: {fileID: 0}

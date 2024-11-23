@@ -10,15 +10,8 @@ public class UnitProperties : ScriptableObject
     public Sprite sprite;
 
     [Header("Attributes")]
-    public UnitMovement movement;
-    public int controller;
     public int cost;
-    public int maxHealth;
-
-    [Header("State")]
-    public int health;
-    public int shield;
-    public DirectionFacing facing;
+    public int startingHealth;
 
     // void Init(string _title, UnitMovement _movement, int _playerOwner=0, int _cost=0, int _maxHealth=0, int _currentHealth=0, DirectionFacing _facing=DirectionFacing.N)
     // {

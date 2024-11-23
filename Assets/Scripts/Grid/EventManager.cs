@@ -32,7 +32,7 @@ public class EventManager : MonoBehaviour
         UnitPlaceEvent?.Invoke(unit, listUIPosition);
     }
 
-    public void StartUnitUIDragEvent(int playerController, int listUIPosition, bool placed)
+    public void StartUnitUIUpdateEvent(int playerController, int listUIPosition, bool placed)
     {
         UnitUIUpdateEvent?.Invoke(playerController, listUIPosition, placed);
     }

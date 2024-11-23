@@ -4,11 +4,15 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum GridPhase {Placement, Battle}
+
 public class GridManager : MonoBehaviour
 {
     List<Tile> _tiles;
     List<Unit> _units;
     int _tileHovered;
+    GridPhase _gridPhase;
+    int _turn;
 
     public int x;
     public int y;
@@ -37,6 +41,8 @@ public class GridManager : MonoBehaviour
         Tile tile_ = Util.CreateGameObject<Tile>();
         _tiles = new();
         _units = new();
+        _gridPhase = GridPhase.Placement;
+        _turn = 0;
         for (int j = 0; j < y; j++)
         {
             for (int i = 0; i < x; i++)
@@ -60,10 +66,7 @@ public class GridManager : MonoBehaviour
 
     void UnitPlace(Unit unit, int listUIPosition)
     {
-        if (AddUnit(Unflatten(_tileHovered), unit))
-        {
-            EventManager.Singleton.StartUnitUIDragEvent(unit.properties.controller, listUIPosition, true);
-        }
+        EventManager.Singleton.StartUnitUIUpdateEvent(unit.stats.controller, listUIPosition, AddUnit(Unflatten(_tileHovered), unit));
     }
 
     public void OnSelect(InputAction.CallbackContext ctx) 
@@ -72,10 +75,30 @@ public class GridManager : MonoBehaviour
         {
             Debug.Log("OnSelect");
             Debug.Log(_tileHovered);
+            HandleTileSelect();
         }
     }
 
-    public void SetInitialUnitSpawns(int player)
+    public void StartGame()
+    {
+        _gridPhase = GridPhase.Battle;
+        SetAvailableTilesAll(true);
+        StartTurn();
+    }
+
+    void StartTurn()
+    {
+        if (_turn == 0 || _turn >= numPlayers)
+        {
+            _turn = 1;
+        }
+        else
+        {
+            _turn += 1;
+        }
+    }
+
+    public void SetAvailableTilesPlacement(int player)
     {
         List<int> availableTiles = new List<int>();
         int start = -1;
@@ -95,6 +118,19 @@ public class GridManager : MonoBehaviour
             availableTiles.Add(i);
         }
         SetAvailableTiles(availableTiles, true);
+    }
+
+    void HandleTileSelect()
+    {
+        if (_gridPhase == GridPhase.Placement)
+        {
+            Unit unit = _units[_tileHovered];
+            if (unit != null)
+            {
+                _units[_tileHovered] = null;
+                unit.isDragging = true;
+            }
+        }
     }
 
     // void TestGrid()
@@ -146,7 +182,7 @@ public class GridManager : MonoBehaviour
     {
         List<Vector2Int> validMoves = new();
         List<Vector2Int> unitVectors = GetUnitVectors(unit);
-        int distance = unit.properties.movement.distance;
+        int distance = unit.movement.distance;
         if (distance == -1) distance = Math.Max(x, y);
         if (step)
         {
@@ -192,7 +228,7 @@ public class GridManager : MonoBehaviour
     List<bool> GetAbsoluteDirections(Unit unit)
     {
         List<bool> absoluteDirections = new List<bool>{false, false, false, false, false, false, false, false};
-        var movement = unit.properties.movement;
+        var movement = unit.movement;
         switch (movement.direction)
         {
             case Direction.stride: case Direction.line:
@@ -243,7 +279,7 @@ public class GridManager : MonoBehaviour
         if (movement.relativeFacing)
         {
             int shift = 0;
-            switch (unit.properties.facing)
+            switch (unit.stats.facing)
             {
                 case DirectionFacing.E:
                     shift = 6;
@@ -281,6 +317,14 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    void SetAvailableTilesAll(bool available)
+    {
+        for (int i = 0; i < _tiles.Count; i++)
+        {
+            _tiles[i].Available = available;
+        }
+    }
+
     bool AddUnit(Vector2Int position, Unit unit)
     {
         if (!IsValidPosition(position))
@@ -295,7 +339,7 @@ public class GridManager : MonoBehaviour
             Destroy(unit.gameObject);
             return false;
         }
-        _units.Insert(Flatten(position), unit);
+        _units[Flatten(position)] = unit;
         Unit curUnit = _units[Flatten(position)];
         curUnit.transform.position = GetWorldPos(position);
         curUnit.GetComponent<SpriteRenderer>().sortingLayerName = "Unit";

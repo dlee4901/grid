@@ -1,16 +1,28 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
+
+[Serializable]
+public struct UnitStats
+{
+    public int controller;
+    public int health;
+    public int shield;
+    public DirectionFacing facing;
+}
 
 public class Unit : MonoBehaviour
 {
-    SpriteRenderer _spriteRenderer;
-    InputAction _selectAction;
-
+    public UnitMovement movement;
     public UnitProperties properties;
+    public UnitStats stats;
 
     public int listUIPosition;
     public bool isDragging;
+
+    SpriteRenderer _spriteRenderer;
+    InputAction _selectAction;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,9 +36,8 @@ public class Unit : MonoBehaviour
         HandleDrag();
     }
 
-    public void Init(UnitProperties properties_, Transform parent=null)
+    public void Init(Transform parent=null)
     {
-        properties = properties_;
         if (parent) transform.parent = parent;
         name = properties.title;
         gameObject.SetActive(false);
@@ -42,8 +53,9 @@ public class Unit : MonoBehaviour
         {
             transform.localPosition = Util.GetMousePosition(true);
             transform.localScale = new Vector3(10f, 10f, 0f);
-            if (_selectAction.WasPerformedThisFrame())
+            if (_selectAction.WasReleasedThisFrame())
             {
+                Debug.Log("selectAction performed");
                 EventManager.Singleton.StartUnitPlaceEvent(this, listUIPosition);
                 isDragging = false;
             }
