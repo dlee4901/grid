@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class UnitUIManager : MonoBehaviour
 {
     ImageManager _imageManager;
-    InputEventHandler _inputEventHandler;
+    EventSystemHandler _eventSystemHandler;
     int _unitID;
     int _playerController;
     int _listUIPosition;
@@ -19,7 +19,7 @@ public class UnitUIManager : MonoBehaviour
     public void Init(string name, Sprite sprite, Transform parent, int unitID, int playerController, int listUIPosition)
     {
         tag = "UI Unit";
-        _inputEventHandler = gameObject.AddComponent<InputEventHandler>();
+        _eventSystemHandler = gameObject.AddComponent<EventSystemHandler>();
         _imageManager = gameObject.AddComponent<ImageManager>();
         _imageManager.Init(name, sprite, parent);
         _unitID = unitID;

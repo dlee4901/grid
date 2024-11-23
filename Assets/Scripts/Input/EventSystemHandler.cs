@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InputEventHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
+// Handles inputs for UI
+public class EventSystemHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     public void OnPointerDown(PointerEventData eventData)
     {

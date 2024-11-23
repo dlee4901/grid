@@ -2321,11 +2321,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 8
   y: 8
-  tileScale: 1
-  unitCap: 10
-  numPlayers: 2
-  numSpawnRows: 2
-  tileSprite: {fileID: 21300000, guid: 1949357f414774d1c9f709b9af44f344, type: 3}
+  visual:
+    tileSprite: {fileID: 21300000, guid: 1949357f414774d1c9f709b9af44f344, type: 3}
+    tileScale: 1
+  prep:
+    numPlayers: 2
+    unitSpawnCap: 10
+    numSpawnRows: 2
 --- !u!4 &1836856061
 Transform:
   m_ObjectHideFlags: 0

@@ -23,7 +23,6 @@ public class Unit : MonoBehaviour
     SpriteRenderer _spriteRenderer;
     InputAction _selectAction;
 
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -55,7 +54,7 @@ public class Unit : MonoBehaviour
             transform.localScale = new Vector3(10f, 10f, 0f);
             if (_selectAction.WasReleasedThisFrame())
             {
-                Debug.Log("selectAction performed");
+                Debug.Log("selectAction released");
                 EventManager.Singleton.StartUnitPlaceEvent(this, listUIPosition);
                 isDragging = false;
             }
