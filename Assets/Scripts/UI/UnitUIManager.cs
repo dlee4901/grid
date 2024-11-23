@@ -31,20 +31,14 @@ public class UnitUIManager : MonoBehaviour
     {
         if (property == "IsPlaced")
         {
-            if (_isPlaced)
-            {
-                _imageManager.image.color = new Color(0f, 0f, 0f);
-            }
-            else
-            {
-                _imageManager.image.color = new Color(1f, 1f, 1f);
-            }
+            if (_isPlaced) _imageManager.image.color = new Color(0f, 0f, 0f);
+            else           _imageManager.image.color = new Color(1f, 1f, 1f);
         }
     }
 
     public void UnitUIDrag()
     {
-        if (_unitID < UnitList.Singleton.units.Count)
+        if (UnitList.Singleton.IsValidUnitID(_unitID))
         {
             Unit unit = Instantiate(UnitList.Singleton.units[_unitID]);
             unit.stats.controller = _playerController;

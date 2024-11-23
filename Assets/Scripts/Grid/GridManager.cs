@@ -58,22 +58,19 @@ public class GridManager : MonoBehaviour
         _gridPhase = GridPhase.Placement;
         _position = new Position(x, y);
         
-        Tile tile_ = Util.CreateGameObject<Tile>();
+        Tile tileGO = Util.CreateGameObject<Tile>();
         for (int j = 1; j <= y; j++)
         {
             for (int i = 1; i <= x; i++)
             {
-                Tile tile = Instantiate(tile_, _position.Get2DWorldPos(new Vector3Int(i, j, 1), visual.tileScale), Quaternion.identity, transform);
+                Tile tile = Instantiate(tileGO, _position.Get2DWorldPos(new Vector3Int(i, j, 1), visual.tileScale), Quaternion.identity, transform);
                 tile.Init(visual.tileSprite);
                 tile.transform.localScale = new Vector3(visual.tileScale, visual.tileScale, transform.localScale.z);
                 tile.Id = _position.GetIndex(i, j);
-                Debug.Log(tile.Id);
                 _tiles.Add(tile);
                 _units.Add(null);
-                Debug.Log(_tiles[_position.GetIndex(i, j)]);
             }
         }
-        //TestGrid();
     }
 
     void TileHover(int id)
@@ -150,42 +147,6 @@ public class GridManager : MonoBehaviour
             }
         }
     }
-
-    // void TestGrid()
-    // {
-    //     var rookMove = UnitMovement.Create(Direction.straight, -1, false, false);
-    //     var bishopMove = UnitMovement.Create(Direction.diagonal, -1, false, false);
-
-    //     var rook1 = Unit.Create("rook1", rookMove);
-    //     var bishop1 = Unit.Create("bishop1", bishopMove);
-    //     var rook2 = Unit.Create("rook2", rookMove);
-    //     var bishop2 = Unit.Create("bishop2", bishopMove);
-
-    //     ValidateDeployPositions();
-    //     var deployPositions1 = gridProperties.deployPositions[0];
-    //     var deployPositions2 = gridProperties.deployPositions[1];
-
-    //     AddUnit(deployPositions1.positions[0], rook1);
-    //     AddUnit(deployPositions1.positions[1], bishop1);
-
-    //     AddUnit(deployPositions2.positions[0], rook2);
-    //     AddUnit(deployPositions2.positions[1], bishop2);
-    // }
-
-    // void ValidateDeployPositions()
-    // {
-    //     foreach (var deployPositions in gridProperties.deployPositions)
-    //     {
-    //         for (int i = 0; i < deployPositions.positions.Count; i++)
-    //         {
-    //             if (!IsValidPosition(deployPositions.positions[i]))
-    //             {
-    //                 deployPositions.positions.RemoveAt(i);
-    //                 i--;
-    //             }
-    //         }
-    //     }
-    // }
 
     HashSet<Vector2Int> GetMovePositions(int index)
     {
@@ -344,35 +305,46 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    bool PlaceUnit(Unit unit, int dst)
+    bool PlaceUnit(Unit unit, int idx)
     {
-        if (!_position.IsValidIndex(dst))
+        if (!_position.IsValidIndex(idx))
         {
             Debug.Log("AddUnit - invalid position");
             Destroy(unit.gameObject);
             return false;
         }
-        if (!_tiles[dst].Available)
+        if (!_tiles[idx].Available)
         {
             Debug.Log("AddUnit - tile not available");
+            if (unit.stats.position > 0)
+            {
+                AddUnit(unit, unit.stats.position);
+                return true;
+            }
             Destroy(unit.gameObject);
             return false;
         }
-        Debug.Log(_tiles[dst]);
-        if (_units[dst] != null)
+        Debug.Log(_tiles[idx]);
+        if (_units[idx] != null)
         {
             Debug.Log("AddUnit - tile is occupied");
-            //AddUnit(unit, src);
-            return true;
+            if (unit.stats.position > 0)
+            {
+                AddUnit(unit, unit.stats.position);
+                return true;
+            }
+            Destroy(unit.gameObject);
+            return false;
         }
-        AddUnit(unit, dst);
+        AddUnit(unit, idx);
         return true;
     }
 
     void AddUnit(Unit unit, int index)
     {
         _units[index] = unit;
-        _units[index].transform.position = _position.Get2DWorldPos(_position.GetVector(index), visual.tileScale);
+        unit.stats.position = index;
+        unit.transform.position = _position.Get2DWorldPos(_position.GetVector(index), visual.tileScale);
     }
 
     void MoveUnit(int src, int dst)

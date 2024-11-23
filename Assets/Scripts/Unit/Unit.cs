@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 [Serializable]
 public struct UnitStats
 {
+    public int position;
     public int controller;
     public int health;
     public int shield;

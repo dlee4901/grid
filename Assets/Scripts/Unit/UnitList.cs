@@ -35,4 +35,9 @@ public class UnitList : MonoBehaviour
             units.Add(unitCopy);
         }
     }
+
+    public bool IsValidUnitID(int unitID)
+    {
+        return unitID < units.Count;
+    }
 }
