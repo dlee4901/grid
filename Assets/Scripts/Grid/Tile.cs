@@ -83,6 +83,6 @@ public class Tile : MonoBehaviour
         {
             _spriteRenderer.color = colorAvailable;
         }
-        EventManager.Singleton.StartTileHoverEvent(-1);
+        EventManager.Singleton.StartTileHoverEvent(0);
     }
 }
