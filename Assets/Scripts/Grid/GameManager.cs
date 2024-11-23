@@ -3,11 +3,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Singleton;
-
     public CinemachineCameraManager cam;
     public GridManager grid;
-    public UnitListDisplay unitListDisplay;
+    public UIManager uiManager;
 
     List<Player> _players;
     List<float> _times;
@@ -16,15 +14,6 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (Singleton == null)
-        {
-            Singleton = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
         Init();
     }
 
@@ -41,13 +30,13 @@ public class GameManager : MonoBehaviour
 
     public void StartPlacement(int playerController)
     {
-        unitListDisplay.SetActivePlayerList(playerController);
+        uiManager.StartPlacement(playerController);
         grid.SetAvailableTilesPlacement(playerController);
     }
 
     public void StartGame()
     {
-        unitListDisplay.gameObject.SetActive(false);
+        uiManager.StartGame();
         grid.StartGame();
     }
 }

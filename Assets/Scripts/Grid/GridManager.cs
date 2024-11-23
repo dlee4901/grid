@@ -58,19 +58,7 @@ public class GridManager : MonoBehaviour
         _gridPhase = GridPhase.Placement;
         _position = new Position(x, y);
         
-        Tile tileGO = Util.CreateGameObject<Tile>();
-        for (int j = 1; j <= y; j++)
-        {
-            for (int i = 1; i <= x; i++)
-            {
-                Tile tile = Instantiate(tileGO, _position.Get2DWorldPos(new Vector3Int(i, j, 1), visual.tileScale), Quaternion.identity, transform);
-                tile.Init(visual.tileSprite);
-                tile.transform.localScale = new Vector3(visual.tileScale, visual.tileScale, transform.localScale.z);
-                tile.Id = _position.GetIndex(i, j);
-                _tiles.Add(tile);
-                _units.Add(null);
-            }
-        }
+        CreateTiles();
     }
 
     void TileHover(int id)
@@ -91,6 +79,22 @@ public class GridManager : MonoBehaviour
             Debug.Log(_tileHovered);
             HandleTileSelect();
         }
+    }
+
+    void CreateTiles()
+    {
+        Tile tileGO = Util.CreateGameObject<Tile>();
+        for (int j = 1; j <= y; j++)
+        {
+            for (int i = 1; i <= x; i++)
+            {
+                Tile tile = Instantiate(tileGO, _position.Get2DWorldPos(new Vector3Int(i, j, 1), visual.tileScale), Quaternion.identity, transform);
+                tile.Init(visual.tileSprite, visual.tileScale, _position.GetIndex(i, j));
+                _tiles.Add(tile);
+                _units.Add(null);
+            }
+        }
+        Destroy(tileGO.gameObject);
     }
 
     public void StartGame()

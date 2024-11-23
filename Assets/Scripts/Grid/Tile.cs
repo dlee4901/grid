@@ -29,14 +29,17 @@ public class Tile : MonoBehaviour
 
     }
 
-    public void Init(Sprite sprite)
+    public void Init(Sprite sprite, float tileScale, int positionIdx=0)
     {
         _spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         _boxCollider = gameObject.AddComponent<BoxCollider2D>();
         _spriteRenderer.sortingLayerName = "Grid";
         _spriteRenderer.sprite = sprite;
-        _boxCollider.size = new Vector2(10.24f, 10.24f);
-        Id = -1;
+        _boxCollider.size = new Vector2(10.24f*tileScale, 10.24f*tileScale);
+        
+        name = "Tile " + positionIdx;
+        transform.localScale = new Vector3(tileScale, tileScale, transform.localScale.z);
+        Id = positionIdx;
         Available = true;
     }
 

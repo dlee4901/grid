@@ -36,9 +36,8 @@ public class Unit : MonoBehaviour
         HandleDrag();
     }
 
-    public void Init(Transform parent=null)
+    public void Init()
     {
-        if (parent) transform.parent = parent;
         name = properties.title;
         gameObject.SetActive(false);
 

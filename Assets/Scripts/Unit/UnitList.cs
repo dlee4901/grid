@@ -30,7 +30,7 @@ public class UnitList : MonoBehaviour
     {
         foreach (Unit unit in tempSerializable)
         {
-            Unit unitCopy = Instantiate(unit);
+            Unit unitCopy = Instantiate(unit, transform);
             unitCopy.Init();
             units.Add(unitCopy);
         }
