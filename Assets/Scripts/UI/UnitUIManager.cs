@@ -21,11 +21,11 @@ public class UnitUIManager : MonoBehaviour
     public void Init(string name, Sprite sprite, Transform parent, int unitID, int playerController, int listUIPosition)
     {
         tag = "UI Unit";
-        _inputHandler = new UnitInputHandler(InputSystem.actions.FindAction("Player/Select"));
-        _eventSystemHandler = gameObject.AddComponent<EventSystemHandler>();
         _imageManager = gameObject.AddComponent<ImageManager>();
-        _eventSystemHandler.Init(this);
         _imageManager.Init(name, sprite, parent);
+        _eventSystemHandler = gameObject.AddComponent<EventSystemHandler>();
+        _inputHandler = new UnitInputHandler(InputSystem.actions.FindAction("Player/Select"));
+        _unit = null;
         _unitID = unitID;
         _playerController = playerController;
         _listUIPosition = listUIPosition;
@@ -42,7 +42,7 @@ public class UnitUIManager : MonoBehaviour
 
     public void UnitUICreate()
     {
-        if (UnitList.Singleton.IsValidUnitID(_unitID))
+        if (!IsPlaced && UnitList.Singleton.IsValidUnitID(_unitID))
         {
             _unit = Instantiate(UnitList.Singleton.units[_unitID]);
             _unit.stats.controller = _playerController;
@@ -54,8 +54,8 @@ public class UnitUIManager : MonoBehaviour
     }
 
     public void UnitUIDrag()
-    {
-        if (_unit != null)
+    {   
+        if (!IsPlaced && _unit != null)
         {
             ActionBase action = _inputHandler.HandleInput(_unit);
             if (action != null) action.Execute();

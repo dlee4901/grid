@@ -6,9 +6,12 @@ public class EventSystemHandler : MonoBehaviour, IPointerDownHandler, IBeginDrag
 {
     UnitUIManager _unitUIManager;
 
-    public void Init(UnitUIManager unitUIManager)
+    void Start()
     {
-        _unitUIManager = unitUIManager;
+        if (gameObject.tag == "UI Unit")
+        {
+            _unitUIManager = gameObject.GetComponent<UnitUIManager>();
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -23,20 +26,23 @@ public class EventSystemHandler : MonoBehaviour, IPointerDownHandler, IBeginDrag
     {
         if (gameObject.tag == "UI Unit")
         {
-            if (!_unitUIManager.IsPlaced)
-            {
-                _unitUIManager.UnitUICreate();
-            }
+            _unitUIManager.UnitUICreate();
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        _unitUIManager.UnitUIDrag();
+        if (gameObject.tag == "UI Unit")
+        {
+            _unitUIManager.UnitUIDrag();
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        _unitUIManager.UnitUIDrag();
+        if (gameObject.tag == "UI Unit")
+        {
+            _unitUIManager.UnitUIDrag();
+        }
     }
 }
