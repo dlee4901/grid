@@ -11,7 +11,8 @@ public class PlaceUnitAction : ActionBase
 
     public override void Execute()
     {
-        _unit.PlaceUnit(_positionIdx);
+        //_unit.PlaceUnit(_positionIdx);
+        EventManager.Singleton.StartUnitPlaceEvent(_unit);
     }
 
     public override void Undo()

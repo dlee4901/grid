@@ -4,6 +4,13 @@ using UnityEngine.EventSystems;
 // Handles inputs for UI
 public class EventSystemHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
+    UnitUIManager _unitUIManager;
+
+    public void Init(UnitUIManager unitUIManager)
+    {
+        _unitUIManager = unitUIManager;
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
     }
@@ -16,20 +23,20 @@ public class EventSystemHandler : MonoBehaviour, IPointerDownHandler, IBeginDrag
     {
         if (gameObject.tag == "UI Unit")
         {
-            UnitUIManager unitUIManagerObj = gameObject.GetComponent<UnitUIManager>();
-            if (!unitUIManagerObj.IsPlaced)
+            if (!_unitUIManager.IsPlaced)
             {
-                unitUIManagerObj.UnitUIDrag();
+                _unitUIManager.UnitUICreate();
             }
         }
     }
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
-    }
-
     public void OnDrag(PointerEventData eventData)
     {
-        //gameObject.GetComponent<RectTransform>().anchoredPosition += eventData.delta;
+        _unitUIManager.UnitUIDrag();
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        _unitUIManager.UnitUIDrag();
     }
 }

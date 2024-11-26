@@ -13,7 +13,8 @@ public class HoldUnitAction : ActionBase
 
     public override void Execute()
     {
-        _unit.HoldUnit(_mousePosition);
+        //_unit.HoldUnit(_mousePosition);
+        _unit.transform.localPosition = _mousePosition;
     }
 
     public override void Undo()

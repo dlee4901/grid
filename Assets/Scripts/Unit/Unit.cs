@@ -23,24 +23,6 @@ public class Unit : MonoBehaviour
 
     SpriteRenderer _spriteRenderer;
 
-    UnitInputHandler _inputHandler;
-    InputAction _selectAction;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        //_selectAction = InputSystem.actions.FindAction("Player/Select");
-        _inputHandler = new UnitInputHandler(InputSystem.actions.FindAction("Player/Select"));
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //HandleDrag();
-        ActionBase action = _inputHandler.HandleInput(this);
-        if (action != null) action.Execute();
-    }
-
     public void Init()
     {
         name = properties.title;
@@ -52,16 +34,16 @@ public class Unit : MonoBehaviour
         _spriteRenderer.sortingLayerName = "Unit";
     }
 
-    public void HoldUnit(Vector3 mousePosition)
-    {
-        Debug.Log(mousePosition);
-        transform.localPosition = mousePosition;
-    }
+    // public void HoldUnit(Vector3 mousePosition)
+    // {
+    //     Debug.Log(mousePosition);
+    //     transform.localPosition = mousePosition;
+    // }
 
-    public void PlaceUnit(int positionIdx)
-    {
-        EventManager.Singleton.StartUnitPlaceEvent(this, listUIPosition);
-    }
+    // public void PlaceUnit(int positionIdx)
+    // {
+    //     EventManager.Singleton.StartUnitPlaceEvent(this);
+    // }
 
     // void HandleDrag()
     // {

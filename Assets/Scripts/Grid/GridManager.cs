@@ -29,6 +29,12 @@ public class GridManager : MonoBehaviour
     int _turn;
     GridPhase _gridPhase;
     Position _position;
+    UnitInputHandler _inputHandler;
+
+    // TODO: integrate into state machine
+    bool _tileSelected;
+    bool _unitSelected;
+    Unit _unitDragging;
 
     public int x;
     public int y;
@@ -46,7 +52,7 @@ public class GridManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(_tileHovered);
+        HandleUnitDrag();
     }
 
     void InitGrid()
@@ -57,6 +63,7 @@ public class GridManager : MonoBehaviour
         _turn = 0;
         _gridPhase = GridPhase.Placement;
         _position = new Position(x, y);
+        _inputHandler = new UnitInputHandler(InputSystem.actions.FindAction("Player/Select"));
         
         CreateTiles();
     }
@@ -66,9 +73,10 @@ public class GridManager : MonoBehaviour
         _tileHovered = id;
     }
 
-    void UnitPlace(Unit unit, int listUIPosition)
+    void UnitPlace(Unit unit)
     {
-        EventManager.Singleton.StartUnitUIUpdateEvent(unit.stats.controller, listUIPosition, PlaceUnit(unit, _tileHovered));
+        _unitDragging = null;
+        EventManager.Singleton.StartUnitUIUpdateEvent(unit.stats.controller, unit.listUIPosition, PlaceUnit(unit, _tileHovered));
     }
 
     public void OnSelect(InputAction.CallbackContext ctx) 
@@ -139,6 +147,15 @@ public class GridManager : MonoBehaviour
         SetAvailableTiles(availableTiles, true);
     }
 
+    void HandleUnitDrag()
+    {
+        if (_unitDragging != null)
+        {
+            ActionBase action = _inputHandler.HandleInput(_unitDragging);
+            if (action != null) action.Execute();
+        }
+    }
+
     void HandleTileSelect()
     {
         if (_gridPhase == GridPhase.Placement)
@@ -147,7 +164,8 @@ public class GridManager : MonoBehaviour
             if (unit != null)
             {
                 _units[_tileHovered] = null;
-                unit.isDragging = true;
+                _unitDragging = unit;
+                //unit.isDragging = true;
             }
         }
     }

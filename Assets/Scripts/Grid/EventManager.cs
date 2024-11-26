@@ -6,7 +6,7 @@ public class EventManager : MonoBehaviour
     public static EventManager Singleton;
 
     public event Action<int> TileHoverEvent;
-    public event Action<Unit, int> UnitPlaceEvent;
+    public event Action<Unit> UnitPlaceEvent;
     public event Action<int, int, bool> UnitUIUpdateEvent;
 
     void Awake()
@@ -27,9 +27,9 @@ public class EventManager : MonoBehaviour
         TileHoverEvent?.Invoke(id);
     }
 
-    public void StartUnitPlaceEvent(Unit unit, int listUIPosition)
+    public void StartUnitPlaceEvent(Unit unit)
     {
-        UnitPlaceEvent?.Invoke(unit, listUIPosition);
+        UnitPlaceEvent?.Invoke(unit);
     }
 
     public void StartUnitUIUpdateEvent(int playerController, int listUIPosition, bool placed)
