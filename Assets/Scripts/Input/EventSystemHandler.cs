@@ -26,7 +26,7 @@ public class EventSystemHandler : MonoBehaviour, IPointerDownHandler, IBeginDrag
     {
         if (gameObject.tag == "UI Unit")
         {
-            _unitUIManager.UnitUICreate();
+            _unitUIManager.UnitCreate();
         }
     }
 
@@ -34,7 +34,7 @@ public class EventSystemHandler : MonoBehaviour, IPointerDownHandler, IBeginDrag
     {
         if (gameObject.tag == "UI Unit")
         {
-            _unitUIManager.UnitUIDrag();
+            _unitUIManager.UnitDrag();
         }
     }
 
@@ -42,7 +42,7 @@ public class EventSystemHandler : MonoBehaviour, IPointerDownHandler, IBeginDrag
     {
         if (gameObject.tag == "UI Unit")
         {
-            _unitUIManager.UnitUIDrag();
+            _unitUIManager.UnitDrag();
         }
     }
 }

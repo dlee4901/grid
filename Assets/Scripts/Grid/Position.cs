@@ -1,33 +1,23 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // 1-based index
-public class Position
+public class Position<T>
 {
+    List<T> _list;
     int _x;
     int _y;
     int _z;
 
     public Position(int x, int y, int z=1)
     {
+        _list = new() {default};
         SetBounds(x, y, z);
     }
 
-    public bool TestPosition(int x, int y, int z=1)
+    public int Size()
     {
-        SetBounds(x, y, z);
-        for (int i = GetMinIndex()-1; i < GetMaxIndex()+1; i++)
-        {
-            Vector3Int vector = GetVector(i);
-            int index = GetIndex(vector);
-            if (index != i) 
-            {
-                Debug.Log(i);
-                Debug.Log(index);
-                Debug.Log(vector);
-                return false;
-            }
-        }
-        return true;
+        return _list.Count;
     }
 
     public void SetBounds(int x, int y, int z=1)
@@ -37,9 +27,44 @@ public class Position
         _z = z;
     }
 
-    public int GetIndex(int x, int y, int z=1)
+    public void AddValue(T val)
     {
-        return GetIndex(new Vector3Int(x, y, z));
+        _list.Add(val);
+    }
+
+    public void SetValue(int idx, T val)
+    {
+        if (IsValidIndex(idx))
+        {
+            _list[idx] = val;
+        }
+    }
+
+    public void SetValue(Vector3Int vec, T val)
+    {
+        if (IsValidVector(vec))
+        {
+            SetValue(GetIndex(vec), val);
+        }
+    }
+
+    public T GetValue(int idx)
+    {
+        if (!IsValidIndex(idx))
+        {
+            return default;
+        }
+        return _list[idx];
+    }
+
+    public T GetValue(Vector3Int vec)
+    {
+        return GetValue(GetIndex(vec));
+    }
+
+    public T GetValue(Vector2Int vec)
+    {
+        return GetValue(GetIndex(vec));
     }
 
     public int GetIndex(Vector2Int vec)
@@ -62,13 +87,6 @@ public class Position
         return new Vector3Int(x, y, z);
     }
 
-    public Vector3 Get2DWorldPos(Vector3Int vec, float tileScale)
-    {
-        float x = vec.x * tileScale / 0.1f;
-        float y = vec.y * tileScale / 0.1f;
-        return new Vector3(x, y, 1);
-    }
- 
     public Vector3Int GetMinVector()
     {
         return new Vector3Int(1, 1, 1);
@@ -104,6 +122,23 @@ public class Position
     public bool IsValidIndex(int idx)
     {
         return idx >= GetMinIndex() && idx <= GetMaxIndex();
+    }
+
+    public bool TestPosition()
+    {
+        for (int i = GetMinIndex()-1; i < GetMaxIndex()+1; i++)
+        {
+            Vector3Int vector = GetVector(i);
+            int index = GetIndex(vector);
+            if (index != i) 
+            {
+                Debug.Log(i);
+                Debug.Log(index);
+                Debug.Log(vector);
+                return false;
+            }
+        }
+        return true;
     }
 }
 

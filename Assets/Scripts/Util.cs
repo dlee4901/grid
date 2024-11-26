@@ -10,6 +10,13 @@ public static class Util
         return mousePosition;
     }
 
+    public static Vector3 Get2DWorldPos(Vector3Int vec, float scale)
+    {
+        float x = vec.x * scale / 0.1f;
+        float y = vec.y * scale / 0.1f;
+        return new Vector3(x, y, 0);
+    }
+
     public static T CreateGameObject<T>() where T : MonoBehaviour
     {
         GameObject go = new GameObject();

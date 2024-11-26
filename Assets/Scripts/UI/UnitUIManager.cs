@@ -40,7 +40,7 @@ public class UnitUIManager : MonoBehaviour
         }
     }
 
-    public void UnitUICreate()
+    public void UnitCreate()
     {
         if (!IsPlaced && UnitList.Singleton.IsValidUnitID(_unitID))
         {
@@ -48,12 +48,10 @@ public class UnitUIManager : MonoBehaviour
             _unit.stats.controller = _playerController;
             _unit.gameObject.SetActive(true);
             _unit.listUIPosition = _listUIPosition;
-            //unit.isDragging = true;
-            
         }
     }
 
-    public void UnitUIDrag()
+    public void UnitDrag()
     {   
         if (!IsPlaced && _unit != null)
         {

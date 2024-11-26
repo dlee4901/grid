@@ -34,29 +34,9 @@ public class Unit : MonoBehaviour
         _spriteRenderer.sortingLayerName = "Unit";
     }
 
-    // public void HoldUnit(Vector3 mousePosition)
-    // {
-    //     Debug.Log(mousePosition);
-    //     transform.localPosition = mousePosition;
-    // }
-
-    // public void PlaceUnit(int positionIdx)
-    // {
-    //     EventManager.Singleton.StartUnitPlaceEvent(this);
-    // }
-
-    // void HandleDrag()
-    // {
-    //     if (isDragging)
-    //     {
-    //         transform.localPosition = Util.GetMousePosition();
-    //         transform.localScale = new Vector3(10f, 10f, 0f);
-    //         if (_selectAction.WasReleasedThisFrame())
-    //         {
-    //             Debug.Log("selectAction released");
-    //             EventManager.Singleton.StartUnitPlaceEvent(this, listUIPosition);
-    //             isDragging = false;
-    //         }
-    //     }
-    // }
+    public void SetPosition(int idx, Vector3Int vec, float tileScale)
+    {
+        stats.position = idx;
+        transform.position = Util.Get2DWorldPos(vec, tileScale);
+    }
 }

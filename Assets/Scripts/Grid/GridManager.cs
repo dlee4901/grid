@@ -23,12 +23,11 @@ public struct GridPrep
 
 public class GridManager : MonoBehaviour
 {
-    List<Tile> _tiles;
-    List<Unit> _units;
+    Position<Tile> _tiles;
+    Position<Unit> _units;
     int _tileHovered;
     int _turn;
     GridPhase _gridPhase;
-    Position _position;
     UnitInputHandler _inputHandler;
 
     // TODO: integrate into state machine
@@ -57,12 +56,11 @@ public class GridManager : MonoBehaviour
 
     void InitGrid()
     {
-        _tiles = new() {null};
-        _units = new() {null};
+        _tiles = new Position<Tile>(x, y);
+        _units = new Position<Unit>(x, y);
         _tileHovered = 0;
         _turn = 0;
         _gridPhase = GridPhase.Placement;
-        _position = new Position(x, y);
         _inputHandler = new UnitInputHandler(InputSystem.actions.FindAction("Player/Select"));
         
         CreateTiles();
@@ -81,7 +79,7 @@ public class GridManager : MonoBehaviour
 
     public void OnSelect(InputAction.CallbackContext ctx) 
     {
-        if (ctx.started && _tileHovered > 0 && _tiles[_tileHovered].Available)
+        if (ctx.started && _tileHovered > 0 && _tiles.GetValue(_tileHovered).Available)
         {
             Debug.Log("OnSelect");
             Debug.Log(_tileHovered);
@@ -96,10 +94,10 @@ public class GridManager : MonoBehaviour
         {
             for (int i = 1; i <= x; i++)
             {
-                Tile tile = Instantiate(tileGO, _position.Get2DWorldPos(new Vector3Int(i, j, 1), visual.tileScale), Quaternion.identity, transform);
-                tile.Init(visual.tileSprite, visual.tileScale, _position.GetIndex(i, j));
-                _tiles.Add(tile);
-                _units.Add(null);
+                Tile tile = Instantiate(tileGO, Util.Get2DWorldPos(new Vector3Int(i, j, 0), visual.tileScale), Quaternion.identity, transform);
+                tile.Init(visual.tileSprite, visual.tileScale, _tiles.GetIndex(new Vector2Int(i, j)));
+                _tiles.AddValue(tile);
+                _units.AddValue(null);
             }
         }
         Destroy(tileGO.gameObject);
@@ -160,10 +158,10 @@ public class GridManager : MonoBehaviour
     {
         if (_gridPhase == GridPhase.Placement)
         {
-            Unit unit = _units[_tileHovered];
+            Unit unit = _units.GetValue(_tileHovered);
             if (unit != null)
             {
-                _units[_tileHovered] = null;
+                _units.SetValue(_tileHovered, null);
                 _unitDragging = unit;
                 //unit.isDragging = true;
             }
@@ -173,9 +171,9 @@ public class GridManager : MonoBehaviour
     HashSet<Vector2Int> GetMovePositions(int index)
     {
         HashSet<Vector2Int> movePositions = new();
-        Unit unit = GetUnit(index);
-        if (!_position.IsValidIndex(index) || unit == null) return movePositions;
-        Vector2Int initialPosition = (Vector2Int)_position.GetVector(index);
+        Unit unit = _units.GetValue(index);
+        if (unit == null) return movePositions;
+        Vector2Int initialPosition = (Vector2Int)_units.GetVector(index);
         movePositions = GetValidMoves(initialPosition, unit);
         return movePositions;
     }
@@ -199,7 +197,7 @@ public class GridManager : MonoBehaviour
                     Vector2Int startPosition = initialPosition;
                     if (i > 0) startPosition = validMoves[8 * (i - 1) + j];
                     Vector2Int targetPosition = startPosition + unitVectors[j];
-                    if (_position.IsValidVector(targetPosition) && GetUnit(_position.GetIndex(targetPosition)) != null) validMoves.Add(targetPosition);
+                    if (_units.GetValue(targetPosition) != null) validMoves.Add(targetPosition);
                     else validMoves.Add(startPosition);
                 }
             }
@@ -305,112 +303,73 @@ public class GridManager : MonoBehaviour
     void SetAvailableTiles(List<int> tiles, bool available)
     {
         tiles.Sort();
-        for (int i = 1; i < _tiles.Count; i++)
+        for (int i = 1; i < _tiles.Size(); i++)
         {
             if (tiles.Count > 0 && tiles[0] >= 1 && tiles[0] <= x * y && i == tiles[0])
             {
-                _tiles[i].Available = available;
+                _tiles.GetValue(i).Available = available;
                 tiles.RemoveAt(0);
             }
             else
             {
-                _tiles[i].Available = !available;
+                _tiles.GetValue(i).Available = !available;
             }
         }
     }
 
     void SetAvailableTilesAll(bool available)
     {
-        for (int i = 1; i < _tiles.Count; i++)
+        for (int i = 1; i < _tiles.Size(); i++)
         {
-            _tiles[i].Available = available;
+            _tiles.GetValue(i).Available = available;
         }
     }
 
     bool PlaceUnit(Unit unit, int idx)
     {
-        if (!_position.IsValidIndex(idx))
+        if (!_tiles.IsValidIndex(idx))
         {
             Debug.Log("AddUnit - invalid position");
             Destroy(unit.gameObject);
             return false;
         }
-        if (!_tiles[idx].Available)
+        if (!_tiles.GetValue(idx).Available)
         {
             Debug.Log("AddUnit - tile not available");
             if (unit.stats.position > 0)
             {
-                AddUnit(unit, unit.stats.position);
+                AddUnitToGrid(unit, unit.stats.position);
                 return true;
             }
             Destroy(unit.gameObject);
             return false;
         }
-        Debug.Log(_tiles[idx]);
-        if (_units[idx] != null)
+        if (_units.GetValue(idx) != null)
         {
             Debug.Log("AddUnit - tile is occupied");
             if (unit.stats.position > 0)
             {
-                AddUnit(unit, unit.stats.position);
+                AddUnitToGrid(unit, unit.stats.position);
                 return true;
             }
             Destroy(unit.gameObject);
             return false;
         }
-        AddUnit(unit, idx);
+        AddUnitToGrid(unit, idx);
         return true;
     }
 
-    void AddUnit(Unit unit, int index)
+    void AddUnitToGrid(Unit unit, int idx)
     {
-        _units[index] = unit;
-        unit.stats.position = index;
-        unit.transform.position = _position.Get2DWorldPos(_position.GetVector(index), visual.tileScale);
+        _units.SetValue(idx, unit);
+        unit.SetPosition(idx, _units.GetVector(idx), visual.tileScale);
     }
 
-    void MoveUnit(int src, int dst)
-    {
-        if (_units[src] != null) {
-            _units[dst] = _units[src];
-            _units[src] = null;
-        }
-    }
-
-    Unit GetUnit(int index)
-    {
-        if (_position.IsValidIndex(index))
-        {
-            Debug.LogError("getting invalid position");
-            return null;
-        }
-        return _units[index];
-    }
-
-    // Vector3 GetWorldPos(Vector2Int position)
+    // void MoveUnit(int src, int dst)
     // {
-    //     float xPos = position.x * visual.tileScale / 0.1f;
-    //     float yPos = position.y * visual.tileScale / 0.1f;
-    //     return new Vector3(xPos, yPos, 0);
-    // }
-
-    // bool IsValidPosition(Vector2Int position)
-    // {
-    //     return position.x >= 0 && position.y >= 0 && position.x < x && position.y < y;
-    // }
-
-    // int Flatten(Vector2Int position)
-    // {
-    //     return Flatten(position.x, position.y);
-    // }
-
-    // int Flatten(int xPos, int yPos)
-    // {
-    //     return yPos * x + xPos;
-    // }
-
-    // Vector2Int Unflatten(int position)
-    // {
-    //     return new Vector2Int(position % x, position / x);
+    //     if (_units[src] != null) {
+    //         _units[dst] = _units[src];
+    //         _units[src] = null;
+    //     }
     // }
 }
