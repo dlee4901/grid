@@ -39,10 +39,12 @@ public class GridManager : MonoBehaviour
     public int y;
     public GridVisual visual;
     public GridPrep prep;
+    public GameInfoDisplay gameInfoDisplay;
 
     // Start is called before the first frame update
     void Start()
     {
+        EventManager.Singleton.EndTurnEvent += EndTurn;
         EventManager.Singleton.TileHoverEvent += TileHover;
         EventManager.Singleton.UnitPlaceEvent += UnitPlace;
         InitGrid();
@@ -107,10 +109,15 @@ public class GridManager : MonoBehaviour
     {
         _gridPhase = GridPhase.Battle;
         SetAvailableTilesAll(true);
-        StartTurn();
+        NextTurn();
     }
 
-    void StartTurn()
+    public void EndTurn()
+    {
+        NextTurn();
+    }
+
+    void NextTurn()
     {
         if (_turn == 0 || _turn >= prep.numPlayers)
         {
@@ -120,6 +127,7 @@ public class GridManager : MonoBehaviour
         {
             _turn += 1;
         }
+        gameInfoDisplay.SetPlayerTurn(_turn);
     }
 
     public void SetAvailableTilesPlacement(int player)
@@ -163,7 +171,6 @@ public class GridManager : MonoBehaviour
             {
                 _units.SetValue(_tileHovered, null);
                 _unitDragging = unit;
-                //unit.isDragging = true;
             }
         }
     }

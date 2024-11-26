@@ -5,6 +5,7 @@ public class EventManager : MonoBehaviour
 {
     public static EventManager Singleton;
 
+    public event Action EndTurnEvent;
     public event Action<int> TileHoverEvent;
     public event Action<Unit> UnitPlaceEvent;
     public event Action<int, int, bool> UnitUIUpdateEvent;
@@ -20,6 +21,11 @@ public class EventManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void StartEndTurnEvent()
+    {
+        EndTurnEvent?.Invoke();
     }
 
     public void StartTileHoverEvent(int id)
