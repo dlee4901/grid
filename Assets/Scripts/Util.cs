@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,5 +23,21 @@ public static class Util
         GameObject go = new GameObject();
         T t = go.AddComponent<T>();
         return t;
+    }
+
+    public static void PrintList<T>(HashSet<T> set)
+    {
+        foreach (T item in set)
+        {
+            Debug.Log(item);
+        }
+    }
+
+    public static void PrintList<T>(List<T> set)
+    {
+        foreach (T item in set)
+        {
+            Debug.Log(item);
+        }
     }
 }

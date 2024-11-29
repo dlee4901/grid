@@ -44,8 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37efe2ff1fa458e4cb21c2c7f048fead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 11400000, guid: f78b5599482f97a45ab65437299caafc, type: 2}
   properties: {fileID: 11400000, guid: 9e1abc6a18031344fa8e6f169bf6da43, type: 2}
+  movement:
+  - {fileID: 11400000, guid: f78b5599482f97a45ab65437299caafc, type: 2}
   stats:
     position: 0
     controller: 0

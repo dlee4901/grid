@@ -81,7 +81,7 @@ public class GridManager : MonoBehaviour
 
     public void OnSelect(InputAction.CallbackContext ctx) 
     {
-        if (ctx.started && _tileHovered > 0 && _tiles.GetValue(_tileHovered).Available)
+        if (ctx.started && _tileHovered > 0 && (_gridPhase == GridPhase.Battle || _tiles.GetValue(_tileHovered).Available))
         {
             Debug.Log("OnSelect");
             Debug.Log(_tileHovered);
@@ -132,7 +132,7 @@ public class GridManager : MonoBehaviour
 
     public void SetAvailableTilesPlacement(int player)
     {
-        List<int> availableTiles = new List<int>();
+        HashSet<int> availableTiles = new();
         int start = 0;
         int end = 0;
         if (player == 1)
@@ -148,7 +148,6 @@ public class GridManager : MonoBehaviour
         for (int i = start; i <= end; i++)
         {
             availableTiles.Add(i);
-            Debug.Log(i);
         }
         SetAvailableTiles(availableTiles, true);
     }
@@ -158,7 +157,7 @@ public class GridManager : MonoBehaviour
         if (_unitDragging != null)
         {
             ActionBase action = _inputHandler.HandleInput(_unitDragging);
-            if (action != null) action.Execute();
+            action?.Execute();
         }
     }
 
@@ -171,6 +170,18 @@ public class GridManager : MonoBehaviour
             {
                 _units.SetValue(_tileHovered, null);
                 _unitDragging = unit;
+            }
+        }
+        else if (_gridPhase == GridPhase.Battle)
+        {
+            Unit unit = _units.GetValue(_tileHovered);
+            if (unit != null)
+            {
+                SetAvailableTiles(_tiles.GetIndices(GetMovePositions(_tileHovered)), true);
+            }
+            else
+            {
+                SetAvailableTilesAll(true);
             }
         }
     }
@@ -187,35 +198,48 @@ public class GridManager : MonoBehaviour
 
     HashSet<Vector2Int> GetValidMoves(Vector2Int initialPosition, Unit unit, bool step = false)
     {
-        List<Vector2Int> validMoves = new();
-        List<Vector2Int> unitVectors = GetUnitVectors(unit);
-        int distance = unit.movement.distance;
-        if (distance == -1) distance = Math.Max(x, y);
-        if (step)
+        List<List<Vector2Int>> res = new();
+        foreach (UnitMovement movement in unit.movement)
         {
-
-        }
-        else
-        {
-            for (int i = 0; i < distance; i++)
+            List<Vector2Int> validMoves = new();
+            List<Vector2Int> unitVectors = GetUnitVectors(unit, movement);
+            int distance = movement.distance;
+            if (distance == -1) distance = Math.Max(x, y);
+            if (step)
             {
-                for (int j = 0; j < 8; j++)
+
+            }
+            else
+            {
+                for (int i = 0; i < distance; i++)
                 {
-                    Vector2Int startPosition = initialPosition;
-                    if (i > 0) startPosition = validMoves[8 * (i - 1) + j];
-                    Vector2Int targetPosition = startPosition + unitVectors[j];
-                    if (_units.GetValue(targetPosition) != null) validMoves.Add(targetPosition);
-                    else validMoves.Add(startPosition);
+                    for (int j = 0; j < 8; j++)
+                    {
+                        Vector2Int startPosition = initialPosition;
+                        if (i > 0) startPosition = validMoves[8 * (i - 1) + j];
+                        Vector2Int targetPosition = startPosition + unitVectors[j];
+                        if (_tiles.GetValue(targetPosition) != null) validMoves.Add(targetPosition);
+                        else validMoves.Add(startPosition);
+                    }
                 }
             }
+            res.Add(validMoves);
+            Debug.Log("GetValidMoves");
+            Util.PrintList(new HashSet<Vector2Int>(validMoves));
         }
-        return new HashSet<Vector2Int>(validMoves);
+
+        List<Vector2Int> combined = new();
+        foreach (List<Vector2Int> moves in res)
+        {
+            combined = combined.Concat(moves).ToList();
+        }
+        return new HashSet<Vector2Int>(combined);
     }
 
-    List<Vector2Int> GetUnitVectors(Unit unit)
+    List<Vector2Int> GetUnitVectors(Unit unit, UnitMovement movement)
     {
         List<Vector2Int> unitVectors = new();
-        List<bool> absoluteDirections = GetAbsoluteDirections(unit);
+        List<bool> absoluteDirections = GetAbsoluteDirections(unit, movement);
         for (int i = 0; i < 8; i++)
         {
             int xOffset = 0;
@@ -229,13 +253,16 @@ public class GridManager : MonoBehaviour
             }
             unitVectors.Add(new Vector2Int(xOffset, yOffset));
         }
+        Debug.Log("GetUnitVectors");
+        Util.PrintList(unitVectors);
         return unitVectors;
     }
 
-    List<bool> GetAbsoluteDirections(Unit unit)
+    List<bool> GetAbsoluteDirections(Unit unit, UnitMovement movement)
     {
+        Debug.Log("GetAbsoluteDirections");
+        Debug.Log(movement.direction);
         List<bool> absoluteDirections = new List<bool>{false, false, false, false, false, false, false, false};
-        var movement = unit.movement;
         switch (movement.direction)
         {
             case Direction.stride: case Direction.line:
@@ -303,24 +330,17 @@ public class GridManager : MonoBehaviour
             }
             return (List<bool>)absoluteDirections.Skip(shift).Concat(absoluteDirections.Take(shift));
         }
+        Util.PrintList(absoluteDirections);
         return absoluteDirections;
     }
 
     // Helper Methods
-    void SetAvailableTiles(List<int> tiles, bool available)
+    void SetAvailableTiles(HashSet<int> tiles, bool available)
     {
-        tiles.Sort();
         for (int i = 1; i < _tiles.Size(); i++)
         {
-            if (tiles.Count > 0 && tiles[0] >= 1 && tiles[0] <= x * y && i == tiles[0])
-            {
-                _tiles.GetValue(i).Available = available;
-                tiles.RemoveAt(0);
-            }
-            else
-            {
-                _tiles.GetValue(i).Available = !available;
-            }
+            if (tiles.Contains(i)) _tiles.GetValue(i).Available = available;
+            else                   _tiles.GetValue(i).Available = !available;
         }
     }
 
@@ -368,8 +388,7 @@ public class GridManager : MonoBehaviour
 
     void AddUnitToGrid(Unit unit, int idx)
     {
-        _units.SetValue(idx, unit);
-        unit.SetPosition(idx, _units.GetVector(idx), visual.tileScale);
+        if (_units.SetValue(idx, unit)) unit.SetPosition(idx, _units.GetVector(idx), visual.tileScale);
     }
 
     // void MoveUnit(int src, int dst)

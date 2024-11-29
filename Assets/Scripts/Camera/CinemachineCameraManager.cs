@@ -26,7 +26,7 @@ public class CinemachineCameraManager : MonoBehaviour
     void Start()
     {
         EventManager.Singleton.TileHoverEvent += TileHover;
-        _tileHovered = -1;
+        _tileHovered = 0;
         cinemachineCamera.Lens.OrthographicSize = Mathf.Min(cinemachineCamera.Lens.OrthographicSize, _maxZoom);
         _zoom = cinemachineCamera.Lens.OrthographicSize;
     }
@@ -53,10 +53,10 @@ public class CinemachineCameraManager : MonoBehaviour
         _zoomMultiplier = (_maxZoom / _minZoom) / 2f;
     }
 
-    public void OnDrag(InputAction.CallbackContext ctx)
+    public void OnSelect(InputAction.CallbackContext ctx)
     {
         if (ctx.started) _origin = Util.GetMousePosition();
-        _tileClicked = (ctx.started || _tileClicked) && _tileHovered != -1;
+        _tileClicked = (ctx.started || _tileClicked) && _tileHovered != 0;
         _isDragging = ctx.started || ctx.performed;
     }
 
@@ -86,7 +86,7 @@ public class CinemachineCameraManager : MonoBehaviour
 
     void HandleCameraZoom()
     {
-        if (_tileHovered != -1)
+        if (_tileHovered != 0)
         {
             _zoom -= _scrollAmount * _zoomMultiplier;
             _zoom = Mathf.Clamp(_zoom, _minZoom, _maxZoom);

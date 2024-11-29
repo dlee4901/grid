@@ -32,20 +32,23 @@ public class Position<T>
         _list.Add(val);
     }
 
-    public void SetValue(int idx, T val)
+    public bool SetValue(int idx, T val)
     {
         if (IsValidIndex(idx))
         {
             _list[idx] = val;
+            return true;
         }
+        return false;
     }
 
-    public void SetValue(Vector3Int vec, T val)
+    public bool SetValue(Vector3Int vec, T val)
     {
         if (IsValidVector(vec))
         {
-            SetValue(GetIndex(vec), val);
+            return SetValue(GetIndex(vec), val);
         }
+        return false;
     }
 
     public T GetValue(int idx)
@@ -75,7 +78,17 @@ public class Position<T>
     public int GetIndex(Vector3Int vec)
     {
         if (!IsValidVector(vec)) return 0;
-        return (vec.z-1) * _y * _x + (vec.y-1) * _x + (vec.x-1) + 1;
+        return (vec.z - 1) * _y * _x + (vec.y - 1) * _x + (vec.x - 1) + 1;
+    }
+
+    public HashSet<int> GetIndices(HashSet<Vector2Int> vectors)
+    {
+        HashSet<int> indices = new();
+        foreach (Vector2Int vec in vectors)
+        {
+            indices.Add(GetIndex(vec));
+        }
+        return indices;
     }
 
     public Vector3Int GetVector(int idx)

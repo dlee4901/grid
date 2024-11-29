@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,8 +15,8 @@ public struct UnitStats
 
 public class Unit : MonoBehaviour
 {
-    public UnitMovement movement;
     public UnitProperties properties;
+    public List<UnitMovement> movement;
     public UnitStats stats;
 
     public int listUIPosition;
