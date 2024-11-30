@@ -1,3 +1,4 @@
-public class StateBase<TStateId>
+public class StateBase
 {
+    
 }

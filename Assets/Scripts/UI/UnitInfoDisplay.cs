@@ -8,6 +8,7 @@ public class UnitInfoDisplay : MonoBehaviour
 
     public void DisplayUnitInfo(Unit unit)
     {
+        
         // dynamically display movement, actions with images & descriptions
     }
 
