@@ -5,7 +5,7 @@ public class UnitUIManager : MonoBehaviour
 {
     ImageManager _imageManager;
     EventSystemHandler _eventSystemHandler;
-    UnitInputHandler _inputHandler;
+    DragDropInputHandler _inputHandler;
     Unit _unit;
     int _unitID;
     int _playerController;
@@ -24,7 +24,7 @@ public class UnitUIManager : MonoBehaviour
         _imageManager = gameObject.AddComponent<ImageManager>();
         _imageManager.Init(name, sprite, parent);
         _eventSystemHandler = gameObject.AddComponent<EventSystemHandler>();
-        _inputHandler = new UnitInputHandler(InputSystem.actions.FindAction("Player/Select"));
+        _inputHandler = new DragDropInputHandler();
         _unit = null;
         _unitID = unitID;
         _playerController = playerController;
@@ -55,8 +55,8 @@ public class UnitUIManager : MonoBehaviour
     {   
         if (!IsPlaced && _unit != null)
         {
-            ActionBase action = _inputHandler.HandleInput(_unit);
-            if (action != null) action.Execute();
+            ActionBase action = _inputHandler.HandleInput();
+            if (action != null) action.Execute(_unit.gameObject);
         }
     }
 }

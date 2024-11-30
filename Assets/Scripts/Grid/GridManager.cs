@@ -28,7 +28,7 @@ public class GridManager : MonoBehaviour
     int _tileHovered;
     int _turn;
     GridPhase _gridPhase;
-    UnitInputHandler _inputHandler;
+    DragDropInputHandler _inputHandler;
 
     // TODO: integrate into state machine
     bool _tileSelected;
@@ -63,7 +63,7 @@ public class GridManager : MonoBehaviour
         _tileHovered = 0;
         _turn = 0;
         _gridPhase = GridPhase.Placement;
-        _inputHandler = new UnitInputHandler(InputSystem.actions.FindAction("Player/Select"));
+        _inputHandler = new DragDropInputHandler();
         
         CreateTiles();
     }
@@ -156,8 +156,9 @@ public class GridManager : MonoBehaviour
     {
         if (_unitDragging != null)
         {
-            ActionBase action = _inputHandler.HandleInput(_unitDragging);
-            action?.Execute();
+            Debug.Log("HandleUnitDrag");
+            ActionBase action = _inputHandler.HandleInput();
+            action?.Execute(_unitDragging.gameObject);
         }
     }
 
@@ -356,13 +357,13 @@ public class GridManager : MonoBehaviour
     {
         if (!_tiles.IsValidIndex(idx))
         {
-            Debug.Log("AddUnit - invalid position");
+            Debug.Log("PlaceUnit - invalid position");
             Destroy(unit.gameObject);
             return false;
         }
         if (!_tiles.GetValue(idx).Available)
         {
-            Debug.Log("AddUnit - tile not available");
+            Debug.Log("PlaceUnit - tile not available");
             if (unit.stats.position > 0)
             {
                 AddUnitToGrid(unit, unit.stats.position);
@@ -373,7 +374,7 @@ public class GridManager : MonoBehaviour
         }
         if (_units.GetValue(idx) != null)
         {
-            Debug.Log("AddUnit - tile is occupied");
+            Debug.Log("PlaceUnit - tile is occupied");
             if (unit.stats.position > 0)
             {
                 AddUnitToGrid(unit, unit.stats.position);
@@ -382,6 +383,8 @@ public class GridManager : MonoBehaviour
             Destroy(unit.gameObject);
             return false;
         }
+        Debug.Log("PlaceUnit - unit placed");
+        Debug.Log(unit);
         AddUnitToGrid(unit, idx);
         return true;
     }

@@ -7,6 +7,7 @@ public class EventManager : MonoBehaviour
 
     public event Action EndTurnEvent;
     public event Action<int> TileHoverEvent;
+    public event Action<Unit> UnitDragEvent;
     public event Action<Unit> UnitPlaceEvent;
     public event Action<int, int, bool> UnitUIUpdateEvent;
 
@@ -31,6 +32,11 @@ public class EventManager : MonoBehaviour
     public void StartTileHoverEvent(int id)
     {
         TileHoverEvent?.Invoke(id);
+    }
+
+    public void StartUnitDragPlacement(Unit unit)
+    {
+        UnitDragEvent?.Invoke(unit);
     }
 
     public void StartUnitPlaceEvent(Unit unit)
