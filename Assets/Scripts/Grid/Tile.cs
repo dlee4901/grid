@@ -12,10 +12,9 @@ public class Tile : MonoBehaviour
     BoxCollider2D _boxCollider;
     //TileTerrain _terrain;
 
-    Color colorHovered = new Color(0.5f, 0.5f, 0.5f);
-    Color colorAvailable = new Color(1.0f, 1.0f, 1.0f);
-    Color colorUnavailable = new Color(0.2f, 0.2f, 0.2f);
-    bool _hovered;
+    Color _colorHovered = new Color(0.5f, 0.5f, 0.5f);
+    Color _colorAvailable = new Color(1.0f, 1.0f, 1.0f);
+    Color _colorUnavailable = new Color(0.2f, 0.2f, 0.2f);
     bool _available;
     public bool Available
     {
@@ -49,11 +48,11 @@ public class Tile : MonoBehaviour
         {
             if (_available)
             {
-                _spriteRenderer.color = colorAvailable;
+                _spriteRenderer.color = _colorAvailable;
             }
             else
             {
-                _spriteRenderer.color = colorUnavailable;
+                _spriteRenderer.color = _colorUnavailable;
             }
         }
     }
@@ -68,20 +67,18 @@ public class Tile : MonoBehaviour
     
     void OnMouseEnter()
     {
-        _hovered = true;
         if (Available)
         {
-            _spriteRenderer.color = colorHovered;
+            _spriteRenderer.color = _colorHovered;
         }
         EventManager.Singleton.StartTileHoverEvent(Id);
     }
 
     void OnMouseExit()
     {
-        _hovered = false;
         if (Available)
         {
-            _spriteRenderer.color = colorAvailable;
+            _spriteRenderer.color = _colorAvailable;
         }
         EventManager.Singleton.StartTileHoverEvent(0);
     }

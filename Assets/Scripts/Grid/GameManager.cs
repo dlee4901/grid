@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public CinemachineCameraManager cam;
-    public GridManager grid;
-    public UIManager uiManager;
+    public CinemachineCameraManager Cam;
+    public GridManager Grid;
+    public UIManager UiManager;
 
     List<Player> _players;
     List<float> _times;
@@ -25,18 +25,18 @@ public class GameManager : MonoBehaviour
 
     void Init()
     {
-        cam.Init(grid.x, grid.y);
+        Cam.Init(Grid.X, Grid.Y);
     }
 
     public void StartPlacement(int playerController)
     {
-        uiManager.StartPlacement(playerController);
-        grid.SetAvailableTilesPlacement(playerController);
+        UiManager.StartPlacement(playerController);
+        Grid.SetAvailableTilesPlacement(playerController);
     }
 
     public void StartGame()
     {
-        uiManager.StartGame();
-        grid.StartGame();
+        UiManager.StartGame();
+        Grid.StartGame();
     }
 }

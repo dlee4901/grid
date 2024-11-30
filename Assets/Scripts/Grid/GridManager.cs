@@ -9,42 +9,43 @@ public enum GridPhase {Placement, Battle}
 [Serializable]
 public struct GridVisual
 {
-    public Sprite tileSprite;
-    public float tileScale;
+    public Sprite TileSprite;
+    public float TileScale;
 }
 
 [Serializable]
 public struct GridPrep
 {
-    public int numPlayers;
-    public int unitSpawnCap;
-    public int numSpawnRows;
+    public int NumPlayers;
+    public int UnitSpawnCap;
+    public int NumSpawnRows;
 }
 
 public class GridManager : MonoBehaviour
 {
     Position<Tile> _tiles;
     Position<Unit> _units;
+    GridPhase _gridPhase;
     int _tileHovered;
     int _turn;
-    GridPhase _gridPhase;
+    Unit _unitDragging;
+    int _tileSelected;
+    public int TileSelected { get { return _tileSelected; } }
+
     DragDropInputHandler _inputHandler;
 
-    // TODO: integrate into state machine
-    bool _tileSelected;
-    bool _unitSelected;
-    Unit _unitDragging;
+    public int X;
+    public int Y;
+    //public int TileSelected;
 
-    public int x;
-    public int y;
-    public GridVisual visual;
-    public GridPrep prep;
-    public GameInfoDisplay gameInfoDisplay;
+    public GridVisual Visual;
+    public GridPrep Prep;
+    public GameInfoDisplay GameInfoDisplay;
+    public UnitInfoDisplay UnitInfoDisplay;
 
     // Start is called before the first frame update
     void Start()
     {
-        EventManager.Singleton.EndTurnEvent += EndTurn;
         EventManager.Singleton.TileHoverEvent += TileHover;
         EventManager.Singleton.UnitPlaceEvent += UnitPlace;
         InitGrid();
@@ -58,12 +59,14 @@ public class GridManager : MonoBehaviour
 
     void InitGrid()
     {
-        _tiles = new Position<Tile>(x, y);
-        _units = new Position<Unit>(x, y);
+        _tiles = new Position<Tile>(X, Y);
+        _units = new Position<Unit>(X, Y);
+        _gridPhase = GridPhase.Placement;
         _tileHovered = 0;
         _turn = 0;
-        _gridPhase = GridPhase.Placement;
         _inputHandler = new DragDropInputHandler();
+
+        _tileSelected = 0;
         
         CreateTiles();
     }
@@ -81,23 +84,26 @@ public class GridManager : MonoBehaviour
 
     public void OnSelect(InputAction.CallbackContext ctx) 
     {
-        if (ctx.started && _tileHovered > 0 && (_gridPhase == GridPhase.Battle || _tiles.GetValue(_tileHovered).Available))
+        if (_tileHovered != 0 && ctx.started)
         {
-            Debug.Log("OnSelect");
-            Debug.Log(_tileHovered);
+            _tileSelected = _tileHovered;
             HandleTileSelect();
+        }
+        else
+        {
+            _tileSelected = 0;
         }
     }
 
     void CreateTiles()
     {
         Tile tileGO = Util.CreateGameObject<Tile>();
-        for (int j = 1; j <= y; j++)
+        for (int j = 1; j <= Y; j++)
         {
-            for (int i = 1; i <= x; i++)
+            for (int i = 1; i <= X; i++)
             {
-                Tile tile = Instantiate(tileGO, Util.Get2DWorldPos(new Vector3Int(i, j, 0), visual.tileScale), Quaternion.identity, transform);
-                tile.Init(visual.tileSprite, visual.tileScale, _tiles.GetIndex(new Vector2Int(i, j)));
+                Tile tile = Instantiate(tileGO, Util.Get2DWorldPos(new Vector3Int(i, j, 0), Visual.TileScale), Quaternion.identity, transform);
+                tile.Init(Visual.TileSprite, Visual.TileScale, _tiles.GetIndex(new Vector2Int(i, j)));
                 _tiles.AddValue(tile);
                 _units.AddValue(null);
             }
@@ -112,14 +118,9 @@ public class GridManager : MonoBehaviour
         NextTurn();
     }
 
-    public void EndTurn()
+    public void NextTurn()
     {
-        NextTurn();
-    }
-
-    void NextTurn()
-    {
-        if (_turn == 0 || _turn >= prep.numPlayers)
+        if (_turn == 0 || _turn >= Prep.NumPlayers)
         {
             _turn = 1;
         }
@@ -127,7 +128,12 @@ public class GridManager : MonoBehaviour
         {
             _turn += 1;
         }
-        gameInfoDisplay.SetPlayerTurn(_turn);
+        GameInfoDisplay.SetPlayerTurn(_turn);
+    }
+
+    public void SetAvailableTilesSelectedMove()
+    {
+        SetAvailableTiles(_tiles.GetIndices(GetMovePositions(TileSelected)), true);
     }
 
     public void SetAvailableTilesPlacement(int player)
@@ -138,12 +144,12 @@ public class GridManager : MonoBehaviour
         if (player == 1)
         {
             start = 1;
-            end = x * prep.numSpawnRows;
+            end = X * Prep.NumSpawnRows;
         }
         else if (player == 2)
         {
-            end = x * y;
-            start = end - (x * prep.numSpawnRows) + 1;
+            end = X * Y;
+            start = end - (X * Prep.NumSpawnRows) + 1;
         }
         for (int i = start; i <= end; i++)
         {
@@ -167,7 +173,7 @@ public class GridManager : MonoBehaviour
         if (_gridPhase == GridPhase.Placement)
         {
             Unit unit = _units.GetValue(_tileHovered);
-            if (unit != null)
+            if (unit != null && _tiles.GetValue(_tileHovered).Available)
             {
                 _units.SetValue(_tileHovered, null);
                 _unitDragging = unit;
@@ -176,14 +182,17 @@ public class GridManager : MonoBehaviour
         else if (_gridPhase == GridPhase.Battle)
         {
             Unit unit = _units.GetValue(_tileHovered);
-            if (unit != null)
-            {
-                SetAvailableTiles(_tiles.GetIndices(GetMovePositions(_tileHovered)), true);
-            }
-            else
-            {
-                SetAvailableTilesAll(true);
-            }
+            UnitInfoDisplay.Refresh();
+            // if (unit != null)
+            // {
+            //     EventManager.Singleton.StartUnitSelectEvent(unit);
+            //     // SetAvailableTiles(_tiles.GetIndices(GetMovePositions(_tileHovered)), true);
+            // }
+            // else
+            // {
+            //     EventManager.Singleton.StartUnitSelectEvent(null);
+            //     SetAvailableTilesAll(true);
+            // }
         }
     }
 
@@ -205,7 +214,7 @@ public class GridManager : MonoBehaviour
             List<Vector2Int> validMoves = new();
             List<Vector2Int> unitVectors = GetUnitVectors(unit, movement);
             int distance = movement.distance;
-            if (distance == -1) distance = Math.Max(x, y);
+            if (distance == -1) distance = Math.Max(X, Y);
             if (step)
             {
 
@@ -391,7 +400,7 @@ public class GridManager : MonoBehaviour
 
     void AddUnitToGrid(Unit unit, int idx)
     {
-        if (_units.SetValue(idx, unit)) unit.SetPosition(idx, _units.GetVector(idx), visual.tileScale);
+        if (_units.SetValue(idx, unit)) unit.SetPosition(idx, _units.GetVector(idx), Visual.TileScale);
     }
 
     // void MoveUnit(int src, int dst)

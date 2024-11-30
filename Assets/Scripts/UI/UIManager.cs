@@ -2,30 +2,30 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public LocalTest localTest;
-    public UnitListDisplay unitListDisplay;
+    public LocalTest LocalTest;
+    public UnitListDisplay UnitListDisplay;
     
-    public GameInfoDisplay gameInfoDisplay;
-    public UnitInfoDisplay unitInfoDisplay;
+    public GameInfoDisplay GameInfoDisplay;
+    public UnitInfoDisplay UnitInfoDisplay;
 
     void Awake()
     {
-        localTest.gameObject.SetActive(true);
-        unitListDisplay.gameObject.SetActive(true);
-        gameInfoDisplay.gameObject.SetActive(false);
-        unitInfoDisplay.gameObject.SetActive(false);
+        LocalTest.gameObject.SetActive(true);
+        UnitListDisplay.gameObject.SetActive(true);
+        GameInfoDisplay.gameObject.SetActive(false);
+        UnitInfoDisplay.gameObject.SetActive(false);
     }
 
     public void StartPlacement(int playerController)
     {
-        unitListDisplay.SetActivePlayerList(playerController);
+        UnitListDisplay.SetActivePlayerList(playerController);
     }
 
     public void StartGame()
     {
-        localTest.gameObject.SetActive(false);
-        unitListDisplay.gameObject.SetActive(false);
-        gameInfoDisplay.gameObject.SetActive(true);
-        unitInfoDisplay.gameObject.SetActive(true);
+        LocalTest.gameObject.SetActive(false);
+        UnitListDisplay.gameObject.SetActive(false);
+        GameInfoDisplay.gameObject.SetActive(true);
+        UnitInfoDisplay.gameObject.SetActive(true);
     }
 }

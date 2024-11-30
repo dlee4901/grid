@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class CinemachineCameraManager : MonoBehaviour
 {
-    public CinemachineCamera cinemachineCamera;
+    public CinemachineCamera CinemachineCamera;
 
     float _minX = 0f;
     float _maxX = 70f;
@@ -27,8 +27,8 @@ public class CinemachineCameraManager : MonoBehaviour
     {
         EventManager.Singleton.TileHoverEvent += TileHover;
         _tileHovered = 0;
-        cinemachineCamera.Lens.OrthographicSize = Mathf.Min(cinemachineCamera.Lens.OrthographicSize, _maxZoom);
-        _zoom = cinemachineCamera.Lens.OrthographicSize;
+        CinemachineCamera.Lens.OrthographicSize = Mathf.Min(CinemachineCamera.Lens.OrthographicSize, _maxZoom);
+        _zoom = CinemachineCamera.Lens.OrthographicSize;
     }
 
     void LateUpdate()
@@ -90,7 +90,7 @@ public class CinemachineCameraManager : MonoBehaviour
         {
             _zoom -= _scrollAmount * _zoomMultiplier;
             _zoom = Mathf.Clamp(_zoom, _minZoom, _maxZoom);
-            cinemachineCamera.Lens.OrthographicSize = Mathf.Lerp(cinemachineCamera.Lens.OrthographicSize, _zoom, Time.deltaTime * 10f);
+            CinemachineCamera.Lens.OrthographicSize = Mathf.Lerp(CinemachineCamera.Lens.OrthographicSize, _zoom, Time.deltaTime * 10f);
         }
     }
 }

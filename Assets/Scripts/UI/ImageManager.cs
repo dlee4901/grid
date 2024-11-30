@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 public class ImageManager : MonoBehaviour
 {
-    public Image image;
+    public Image Image;
 
     public void Init(string name, Sprite sprite, Transform parent)
     {
-        image = gameObject.AddComponent<Image>();
+        Image = gameObject.AddComponent<Image>();
         gameObject.name = name;
-        image.sprite = sprite;
+        Image.sprite = sprite;
         gameObject.transform.SetParent(parent);
     }
 }

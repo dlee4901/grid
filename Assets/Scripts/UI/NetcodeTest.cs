@@ -4,18 +4,18 @@ using UnityEngine.UI;
 
 public class NetcodeTest : MonoBehaviour
 {
-    [SerializeField] private Button startHostButton;
-    [SerializeField] private Button startClientButton;
+    [SerializeField] private Button _startHostButton;
+    [SerializeField] private Button _startClientButton;
 
     void Awake()
     {
-        startHostButton.onClick.AddListener(() =>
+        _startHostButton.onClick.AddListener(() =>
         {
             Debug.Log("Host started");
             NetworkManager.Singleton.StartHost();
             gameObject.SetActive(false);
         });
-        startClientButton.onClick.AddListener(() =>
+        _startClientButton.onClick.AddListener(() =>
         {
             Debug.Log("Client started");
             NetworkManager.Singleton.StartClient();
