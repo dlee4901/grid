@@ -26,9 +26,9 @@ public class GridManager : MonoBehaviour
     Position<Tile> _tiles;
     Position<Unit> _units;
     GridPhase _gridPhase;
-    int _tileHovered;
-    int _turn;
     Unit _unitDragging;
+    int _turn;
+    int _tileHovered;
     int _tileSelected;
     public int TileSelected { get { return _tileSelected; } }
 
@@ -36,7 +36,6 @@ public class GridManager : MonoBehaviour
 
     public int X;
     public int Y;
-    //public int TileSelected;
 
     public GridVisual Visual;
     public GridPrep Prep;
@@ -62,11 +61,10 @@ public class GridManager : MonoBehaviour
         _tiles = new Position<Tile>(X, Y);
         _units = new Position<Unit>(X, Y);
         _gridPhase = GridPhase.Placement;
-        _tileHovered = 0;
         _turn = 0;
-        _inputHandler = new DragDropInputHandler();
-
+        _tileHovered = 0;
         _tileSelected = 0;
+        _inputHandler = new DragDropInputHandler();
         
         CreateTiles();
     }
@@ -84,6 +82,8 @@ public class GridManager : MonoBehaviour
 
     public void OnSelect(InputAction.CallbackContext ctx) 
     {
+        Debug.Log(_tileSelected);
+        Debug.Log(_tileHovered);
         if (_tileHovered != 0 && ctx.started)
         {
             _tileSelected = _tileHovered;
@@ -133,7 +133,14 @@ public class GridManager : MonoBehaviour
 
     public void SetAvailableTilesSelectedMove()
     {
-        SetAvailableTiles(_tiles.GetIndices(GetMovePositions(TileSelected)), true);
+        if (GetUnit(_tileSelected) == null)
+        {
+            SetAvailableTilesAll(true);
+        }
+        else
+        {
+            SetAvailableTiles(_tiles.GetIndices(GetMovePositions(_tileSelected)), true);
+        }
     }
 
     public void SetAvailableTilesPlacement(int player)
@@ -156,6 +163,11 @@ public class GridManager : MonoBehaviour
             availableTiles.Add(i);
         }
         SetAvailableTiles(availableTiles, true);
+    }
+
+    public Unit GetUnit(int index)
+    {
+        return _units.GetValue(index);
     }
 
     void HandleUnitDrag()
@@ -362,15 +374,15 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    bool PlaceUnit(Unit unit, int idx)
+    bool PlaceUnit(Unit unit, int index)
     {
-        if (!_tiles.IsValidIndex(idx))
+        if (!_tiles.IsValidIndex(index))
         {
             Debug.Log("PlaceUnit - invalid position");
             Destroy(unit.gameObject);
             return false;
         }
-        if (!_tiles.GetValue(idx).Available)
+        if (!_tiles.GetValue(index).Available)
         {
             Debug.Log("PlaceUnit - tile not available");
             if (unit.stats.position > 0)
@@ -381,7 +393,7 @@ public class GridManager : MonoBehaviour
             Destroy(unit.gameObject);
             return false;
         }
-        if (_units.GetValue(idx) != null)
+        if (_units.GetValue(index) != null)
         {
             Debug.Log("PlaceUnit - tile is occupied");
             if (unit.stats.position > 0)
@@ -394,13 +406,13 @@ public class GridManager : MonoBehaviour
         }
         Debug.Log("PlaceUnit - unit placed");
         Debug.Log(unit);
-        AddUnitToGrid(unit, idx);
+        AddUnitToGrid(unit, index);
         return true;
     }
 
-    void AddUnitToGrid(Unit unit, int idx)
+    void AddUnitToGrid(Unit unit, int index)
     {
-        if (_units.SetValue(idx, unit)) unit.SetPosition(idx, _units.GetVector(idx), Visual.TileScale);
+        if (_units.SetValue(index, unit)) unit.SetPosition(index, _units.GetVector(index), Visual.TileScale);
     }
 
     // void MoveUnit(int src, int dst)

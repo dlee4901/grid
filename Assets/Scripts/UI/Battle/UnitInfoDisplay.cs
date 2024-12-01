@@ -27,6 +27,6 @@ public class UnitInfoDisplay : MonoBehaviour
 
     public void Refresh()
     {
-        Container.gameObject.SetActive(Grid.TileSelected != 0);
+        Container.gameObject.SetActive(Grid.GetUnit(Grid.TileSelected) != null);
     }
 }
