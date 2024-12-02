@@ -58,8 +58,8 @@ public class GridManager : MonoBehaviour
 
     void InitGrid()
     {
-        _tiles = new Position<Tile>(X, Y);
-        _units = new Position<Unit>(X, Y);
+        _tiles ??= new Position<Tile>(X, Y);
+        _units ??= new Position<Unit>(X, Y);
         _gridPhase = GridPhase.Placement;
         _turn = 0;
         _tileHovered = 0;
