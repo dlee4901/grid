@@ -1,4 +1,4 @@
-public interface IStateMachine
-{
-    IStateMachine ParentFsm { get; }
-}
+// public interface IStateMachine
+// {
+//     IStateMachine ParentFsm { get; }
+// }
