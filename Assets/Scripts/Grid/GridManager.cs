@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityHFSM;
 
 public enum GridPhase {Placement, Battle}
 
@@ -33,6 +34,7 @@ public class GridManager : MonoBehaviour
     public int TileSelected { get { return _tileSelected; } }
 
     DragDropInputHandler _inputHandler;
+    StateMachine _stateMachine;
 
     public int X;
     public int Y;
@@ -48,6 +50,7 @@ public class GridManager : MonoBehaviour
         EventManager.Singleton.TileHoverEvent += TileHover;
         EventManager.Singleton.UnitPlaceEvent += UnitPlace;
         InitGrid();
+        InitStateMachine();
     }
 
     // Update is called once per frame
@@ -65,8 +68,35 @@ public class GridManager : MonoBehaviour
         _tileHovered = 0;
         _tileSelected = 0;
         _inputHandler = new DragDropInputHandler();
-        
         CreateTiles();
+    }
+
+    void CreateTiles()
+    {
+        Tile tileGO = Util.CreateGameObject<Tile>();
+        for (int j = 1; j <= Y; j++)
+        {
+            for (int i = 1; i <= X; i++)
+            {
+                Tile tile = Instantiate(tileGO, Util.Get2DWorldPos(new Vector3Int(i, j, 0), Visual.TileScale), Quaternion.identity, transform);
+                tile.Init(Visual.TileSprite, Visual.TileScale, _tiles.GetIndex(new Vector2Int(i, j)));
+                _tiles.AddValue(tile);
+                _units.AddValue(null);
+            }
+        }
+        Destroy(tileGO.gameObject);
+    }
+
+    void InitStateMachine()
+    {
+        _stateMachine = new StateMachine();
+        _stateMachine.AddState("Idle");
+        _stateMachine.AddState("TileSelected");
+        _stateMachine.AddState("ActionSelected");
+        _stateMachine.SetStartState("Idle");
+        _stateMachine.AddTwoWayTransition("Idle", "TileSelected", transition => _tileSelected != 0);
+        _stateMachine.AddTransition("TileSelected", "ActionSelected");
+        _stateMachine.AddTransition("ActionSelected", "Idle");
     }
 
     void TileHover(int id)
@@ -93,22 +123,6 @@ public class GridManager : MonoBehaviour
         {
             _tileSelected = 0;
         }
-    }
-
-    void CreateTiles()
-    {
-        Tile tileGO = Util.CreateGameObject<Tile>();
-        for (int j = 1; j <= Y; j++)
-        {
-            for (int i = 1; i <= X; i++)
-            {
-                Tile tile = Instantiate(tileGO, Util.Get2DWorldPos(new Vector3Int(i, j, 0), Visual.TileScale), Quaternion.identity, transform);
-                tile.Init(Visual.TileSprite, Visual.TileScale, _tiles.GetIndex(new Vector2Int(i, j)));
-                _tiles.AddValue(tile);
-                _units.AddValue(null);
-            }
-        }
-        Destroy(tileGO.gameObject);
     }
 
     public void StartGame()
