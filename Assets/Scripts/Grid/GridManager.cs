@@ -31,7 +31,6 @@ public class GridManager : MonoBehaviour
     int _turn;
     int _tileHovered;
     int _tileSelected;
-    public int TileSelected { get { return _tileSelected; } }
 
     DragDropInputHandler _inputHandler;
     StateMachine _stateMachine;
@@ -97,6 +96,7 @@ public class GridManager : MonoBehaviour
         _stateMachine.AddTwoWayTransition("Idle", "TileSelected", transition => _tileSelected != 0);
         _stateMachine.AddTransition("TileSelected", "ActionSelected");
         _stateMachine.AddTransition("ActionSelected", "Idle");
+        _stateMachine.Init();
     }
 
     void TileHover(int id)
@@ -112,23 +112,25 @@ public class GridManager : MonoBehaviour
 
     public void OnSelect(InputAction.CallbackContext ctx) 
     {
-        Debug.Log(_tileSelected);
-        Debug.Log(_tileHovered);
-        if (_tileHovered != 0 && ctx.started)
+        // On Mouse Press
+        if (ctx.started)
         {
-            _tileSelected = _tileHovered;
-            HandleTileSelect();
-        }
-        else
-        {
-            _tileSelected = 0;
+            if (_gridPhase == GridPhase.Placement)
+            {
+                HandleUnitPlacement();
+            }
+            else if (_gridPhase == GridPhase.Battle)
+            {
+                HandleTileSelect();
+            }
         }
     }
+
 
     public void StartGame()
     {
         _gridPhase = GridPhase.Battle;
-        SetAvailableTilesAll(true);
+        SetSelectableTilesAll(true);
         NextTurn();
     }
 
@@ -145,21 +147,32 @@ public class GridManager : MonoBehaviour
         GameInfoDisplay.SetPlayerTurn(_turn);
     }
 
-    public void SetAvailableTilesSelectedMove()
+    public void DisplayAction(UnitAction action, int index=0)
     {
+        Debug.Log("DisplayAction");
+        Debug.Log(_tileSelected);
+        Debug.Log(GetUnit(_tileSelected));
         if (GetUnit(_tileSelected) == null)
         {
-            SetAvailableTilesAll(true);
+            SetSelectableTilesAll(true);
+            _stateMachine.RequestStateChange("Idle");
+            Debug.Log(_stateMachine.ActiveStateName);
         }
         else
         {
-            SetAvailableTiles(_tiles.GetIndices(GetMovePositions(_tileSelected)), true);
+            if (action == UnitAction.Move)
+            {
+                Debug.Log("display unit move");
+                _stateMachine.RequestStateChange("ActionSelected");
+                Debug.Log(_stateMachine.ActiveStateName);
+                SetSelectableTiles(_tiles.GetIndices(GetMovePositions(_tileSelected)), true);
+            }
         }
     }
 
     public void SetAvailableTilesPlacement(int player)
     {
-        HashSet<int> availableTiles = new();
+        HashSet<int> selectableTiles = new();
         int start = 0;
         int end = 0;
         if (player == 1)
@@ -174,14 +187,47 @@ public class GridManager : MonoBehaviour
         }
         for (int i = start; i <= end; i++)
         {
-            availableTiles.Add(i);
+            selectableTiles.Add(i);
         }
-        SetAvailableTiles(availableTiles, true);
+        SetSelectableTiles(selectableTiles, true);
     }
 
     public Unit GetUnit(int index)
     {
         return _units.GetValue(index);
+    }
+
+    void HandleUnitPlacement()
+    {
+        Unit unit = _units.GetValue(_tileHovered);
+        if (unit != null && _tiles.GetValue(_tileHovered).Selectable)
+        {
+            _units.SetValue(_tileHovered, null);
+            _unitDragging = unit;
+        }
+    }
+
+    void HandleTileSelect()
+    {
+        Tile tile = _tiles.GetValue(_tileHovered);
+        if (tile != null)
+        {
+            if (tile.State == TileState.Selected)
+            {
+                tile.State = TileState.Default;
+                _tileSelected = 0;
+            }
+            else
+            {
+                Tile prevTile = _tiles.GetValue(_tileSelected);
+                if (prevTile != null) prevTile.State = TileState.Default;
+                tile.State = TileState.Selected;
+                _tileSelected = _tileHovered;
+            }
+            UnitInfoDisplay.ShowUnitActions(_units.GetValue(_tileSelected));
+        }
+        Debug.Log("Tile Selected");
+        Debug.Log(_tileSelected);
     }
 
     void HandleUnitDrag()
@@ -191,34 +237,6 @@ public class GridManager : MonoBehaviour
             Debug.Log("HandleUnitDrag");
             ActionBase action = _inputHandler.HandleInput();
             action?.Execute(_unitDragging.gameObject);
-        }
-    }
-
-    void HandleTileSelect()
-    {
-        if (_gridPhase == GridPhase.Placement)
-        {
-            Unit unit = _units.GetValue(_tileHovered);
-            if (unit != null && _tiles.GetValue(_tileHovered).Available)
-            {
-                _units.SetValue(_tileHovered, null);
-                _unitDragging = unit;
-            }
-        }
-        else if (_gridPhase == GridPhase.Battle)
-        {
-            Unit unit = _units.GetValue(_tileHovered);
-            UnitInfoDisplay.Refresh();
-            // if (unit != null)
-            // {
-            //     EventManager.Singleton.StartUnitSelectEvent(unit);
-            //     // SetAvailableTiles(_tiles.GetIndices(GetMovePositions(_tileHovered)), true);
-            // }
-            // else
-            // {
-            //     EventManager.Singleton.StartUnitSelectEvent(null);
-            //     SetAvailableTilesAll(true);
-            // }
         }
     }
 
@@ -371,20 +389,20 @@ public class GridManager : MonoBehaviour
     }
 
     // Helper Methods
-    void SetAvailableTiles(HashSet<int> tiles, bool available)
+    void SetSelectableTiles(HashSet<int> tiles, bool selectable)
     {
         for (int i = 1; i < _tiles.Size(); i++)
         {
-            if (tiles.Contains(i)) _tiles.GetValue(i).Available = available;
-            else                   _tiles.GetValue(i).Available = !available;
+            if (tiles.Contains(i)) _tiles.GetValue(i).Selectable = selectable;
+            else                   _tiles.GetValue(i).Selectable = !selectable;
         }
     }
 
-    void SetAvailableTilesAll(bool available)
+    void SetSelectableTilesAll(bool selectable)
     {
         for (int i = 1; i < _tiles.Size(); i++)
         {
-            _tiles.GetValue(i).Available = available;
+            _tiles.GetValue(i).Selectable = selectable;
         }
     }
 
@@ -396,9 +414,9 @@ public class GridManager : MonoBehaviour
             Destroy(unit.gameObject);
             return false;
         }
-        if (!_tiles.GetValue(index).Available)
+        if (!_tiles.GetValue(index).Selectable)
         {
-            Debug.Log("PlaceUnit - tile not available");
+            Debug.Log("PlaceUnit - tile not selectable");
             if (unit.stats.position > 0)
             {
                 AddUnitToGrid(unit, unit.stats.position);

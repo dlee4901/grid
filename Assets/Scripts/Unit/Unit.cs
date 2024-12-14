@@ -13,6 +13,8 @@ public struct UnitStats
     public DirectionFacing facing;
 }
 
+public enum UnitAction {Move, Skill}
+
 public class Unit : MonoBehaviour
 {
     public UnitProperties properties;

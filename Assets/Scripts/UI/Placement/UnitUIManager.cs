@@ -1,10 +1,9 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class UnitUIManager : MonoBehaviour
 {
     ImageManager _imageManager;
-    EventSystemHandler _eventSystemHandler;
+    UiInputHandler _uiInputHandler;
     DragDropInputHandler _inputHandler;
     Unit _unit;
     int _unitID;
@@ -23,7 +22,7 @@ public class UnitUIManager : MonoBehaviour
         tag = "UI Unit";
         _imageManager = gameObject.AddComponent<ImageManager>();
         _imageManager.Init(name, sprite, parent);
-        _eventSystemHandler = gameObject.AddComponent<EventSystemHandler>();
+        _uiInputHandler = gameObject.AddComponent<UiInputHandler>();
         _inputHandler = new DragDropInputHandler();
         _unit = null;
         _unitID = unitID;

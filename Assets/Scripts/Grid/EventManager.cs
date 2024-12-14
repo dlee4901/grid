@@ -6,7 +6,6 @@ public class EventManager : MonoBehaviour
     public static EventManager Singleton;
 
     public event Action<int> TileHoverEvent;
-    public event Action TileSelectEvent;
     public event Action<Unit> UnitDragEvent;
     public event Action<Unit> UnitPlaceEvent;
     public event Action<int, int, bool> UnitUIUpdateEvent;
@@ -27,11 +26,6 @@ public class EventManager : MonoBehaviour
     public void StartTileHoverEvent(int id)
     {
         TileHoverEvent?.Invoke(id);
-    }
-
-    public void StartTileSelectEvent()
-    {
-        TileSelectEvent?.Invoke();
     }
 
     public void StartUnitDragPlacement(Unit unit)

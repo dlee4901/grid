@@ -1,9 +1,11 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-// Handles inputs for UI
-public class EventSystemHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
+// Handles UI inputs
+public class UiInputHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
+    //public bool IsMouseOver;
+
     UnitUIManager _unitUIManager;
 
     void Start()
@@ -12,6 +14,16 @@ public class EventSystemHandler : MonoBehaviour, IPointerDownHandler, IBeginDrag
         {
             _unitUIManager = gameObject.GetComponent<UnitUIManager>();
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //IsMouseOver = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        //IsMouseOver = false;
     }
 
     public void OnPointerDown(PointerEventData eventData)

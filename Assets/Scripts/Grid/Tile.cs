@@ -1,10 +1,8 @@
 using UnityEngine;
+using UnityHFSM;
 
-public enum TileTerrain
-{ 
-    Default,
-    Void
-}
+public enum TileTerrain { Default, Void }
+public enum TileState { Default, Hovered, Selected }
 
 public class Tile : MonoBehaviour
 {
@@ -12,20 +10,34 @@ public class Tile : MonoBehaviour
     BoxCollider2D _boxCollider;
     //TileTerrain _terrain;
 
+    Color _colorDefault = new Color(1.0f, 1.0f, 1.0f);
     Color _colorHovered = new Color(0.5f, 0.5f, 0.5f);
-    Color _colorAvailable = new Color(1.0f, 1.0f, 1.0f);
-    Color _colorUnavailable = new Color(0.2f, 0.2f, 0.2f);
-    bool _available;
-    public bool Available
+    Color _colorSelected = new Color(0f, 1.0f, 1.0f);
+    Color _colorUnselectable = new Color(0.2f, 0.2f, 0.2f);
+
+    bool _selectable;
+    public bool Selectable
     {
-        get { return _available; }
-        set { _available = value; OnPropertyChanged("Available"); }
+        get { return _selectable; }
+        set { _selectable = value; OnPropertyChanged("Selectable"); }
     }
+
+    TileState _state;
+    public TileState State
+    {
+        get { return _state; }
+        set { _state = value; OnPropertyChanged("State"); }
+    }
+    
     public int Id {get; set;}
 
     void Awake()
     {
 
+    }
+
+    void Update()
+    {
     }
 
     public void Init(Sprite sprite, float tileScale, int positionIdx=0)
@@ -39,47 +51,45 @@ public class Tile : MonoBehaviour
         name = "Tile " + positionIdx;
         transform.localScale = new Vector3(tileScale, tileScale, transform.localScale.z);
         Id = positionIdx;
-        Available = true;
+        Selectable = true;
     }
 
     void OnPropertyChanged(string property)
     {
-        if (property == "Available")
+        if (property == "Selectable")
         {
-            if (_available)
+            if (_selectable)
             {
-                _spriteRenderer.color = _colorAvailable;
+                _spriteRenderer.color = _colorDefault;
             }
             else
             {
-                _spriteRenderer.color = _colorUnavailable;
+                _spriteRenderer.color = _colorUnselectable;
             }
+        }
+        else if (property == "State")
+        {
+            if (_state == TileState.Hovered)       SetColor(_colorHovered);
+            else if (!_selectable)                 SetColor(_colorUnselectable);
+            else if (_state == TileState.Selected) SetColor(_colorSelected);
+            else                                   SetColor(_colorDefault);
         }
     }
 
-    // public void OnSelect(InputAction.CallbackContext ctx) 
-    // {
-    //     if (ctx.started && _hovered && Available)
-    //     {
-    //         Debug.Log("Tile OnSelect");
-    //     }
-    // }
+    void SetColor(Color color)
+    {
+        _spriteRenderer.color = color;
+    }
     
     void OnMouseEnter()
     {
-        if (Available)
-        {
-            _spriteRenderer.color = _colorHovered;
-        }
+        if (Selectable && State != TileState.Selected) State = TileState.Hovered;
         EventManager.Singleton.StartTileHoverEvent(Id);
     }
 
     void OnMouseExit()
     {
-        if (Available)
-        {
-            _spriteRenderer.color = _colorAvailable;
-        }
+        if (Selectable && State != TileState.Selected) State = TileState.Default;
         EventManager.Singleton.StartTileHoverEvent(0);
     }
 }

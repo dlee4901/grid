@@ -3,30 +3,25 @@ using UnityEngine.UI;
 
 public class UnitInfoDisplay : MonoBehaviour
 {
-    public VerticalLayoutGroup Container;
     public Button MoveButton;
     public Button Skill1Button;
     public Button Skill2Button;
-
+    public VerticalLayoutGroup Container;
     public GridManager Grid;
+
+    UiInputHandler _uiInputHandler;
 
     void Start()
     {
         MoveButton.onClick.AddListener(() => {
-            Grid.SetAvailableTilesSelectedMove();
+            Grid.DisplayAction(UnitAction.Move);
         });
-        Skill1Button.onClick.AddListener(() => {
-            
-        });
-        Skill2Button.onClick.AddListener(() => {
-            
-        });
-
         Container.gameObject.SetActive(false);
+        _uiInputHandler = gameObject.AddComponent<UiInputHandler>();
     }
 
-    public void Refresh()
+    public void ShowUnitActions(Unit unit)       
     {
-        Container.gameObject.SetActive(Grid.GetUnit(Grid.TileSelected) != null);
+        Container.gameObject.SetActive(unit != null);
     }
 }
