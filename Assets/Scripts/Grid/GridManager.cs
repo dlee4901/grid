@@ -78,11 +78,12 @@ public class GridManager : MonoBehaviour
     void InitStateMachine()
     {
         _stateMachine = new StateMachine();
-        _stateMachine.AddState("Idle", onEnter => Debug.Log("Idle"));
-        _stateMachine.AddState("TileSelected", onEnter => Debug.Log("TileSelected"));
-        _stateMachine.AddState("ActionSelected", onEnter => Debug.Log("ActionSelected"));
+        _stateMachine.AddState("Idle", onEnter => StateOnEnterIdle());
+        _stateMachine.AddState("TileSelected", onEnter => StateOnEnterTileSelected());
+        _stateMachine.AddState("MoveSelected", onEnter => StateOnEnterMoveSelected());
         _stateMachine.SetStartState("Idle");
         _stateMachine.AddTwoWayTransition("Idle", "TileSelected", transition => _tileSelected != 0);
+        _stateMachine.AddTransition("MoveSelected", "Idle", transition => _tileSelected == 0);
         // _stateMachine.AddTransition("TileSelected", "ActionSelected");
         // _stateMachine.AddTransition("ActionSelected", "Idle");
         _stateMachine.Init();
@@ -117,8 +118,8 @@ public class GridManager : MonoBehaviour
 
     public void OnSelect(InputAction.CallbackContext ctx) 
     {
-        // On Mouse Press
-        if (ctx.started)
+        // On Mouse Press on Grid
+        if (ctx.started && _tileHovered != 0)
         {
             if (_gridPhase == GridPhase.Placement)
             {
@@ -126,7 +127,14 @@ public class GridManager : MonoBehaviour
             }
             else if (_gridPhase == GridPhase.Battle)
             {
-                HandleTileSelect();
+                if (_stateMachine.ActiveStateName == "MoveSelected")
+                {
+                    HandleMoveSelect();
+                }
+                else
+                {
+                    HandleTileSelect();
+                }
             }
         }
     }
@@ -162,8 +170,7 @@ public class GridManager : MonoBehaviour
         {
             if (action == UnitAction.Move)
             {
-                _stateMachine.RequestStateChange("ActionSelected");
-                SetSelectableTiles(_tiles.GetIndices(_movementHandler.GetMovePositions(_tileSelected, _units, _tiles)), true);
+                _stateMachine.RequestStateChange("MoveSelected");
             }
         }
     }
@@ -195,6 +202,23 @@ public class GridManager : MonoBehaviour
         return _units.GetValue(index);
     }
 
+    void StateOnEnterIdle()
+    {
+        Debug.Log("HandleStateIdle");
+        SetSelectableTilesAll(true);
+    }
+
+    void StateOnEnterTileSelected()
+    {
+        Debug.Log("HandleStateTileSelected");
+    }
+
+    void StateOnEnterMoveSelected()
+    {
+        Debug.Log("HandleStateMoveSelected");
+        SetSelectableTiles(_tiles.GetIndices(_movementHandler.GetMovePositions(_tileSelected, _units, _tiles)), true);
+    }
+
     void HandleUnitPlacement()
     {
         Unit unit = _units.GetValue(_tileHovered);
@@ -205,25 +229,36 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    void SetTileSelected(int index)
+    {
+        Tile prevTileSelected = _tiles.GetValue(_tileSelected);
+        if (prevTileSelected != null) prevTileSelected.State = TileState.Default;
+
+        _tileSelected = index;
+        Tile newTileSelected = _tiles.GetValue(_tileSelected);
+        if (newTileSelected != null) newTileSelected.State = TileState.Selected;
+
+        UnitInfoDisplay.ShowUnitActions(_units.GetValue(_tileSelected));
+    }
+
     void HandleTileSelect()
     {
         Tile tile = _tiles.GetValue(_tileHovered);
         if (tile != null)
         {
-            if (tile.State == TileState.Selected)
-            {
-                tile.State = TileState.Default;
-                _tileSelected = 0;
-            }
-            else
-            {
-                Tile prevTile = _tiles.GetValue(_tileSelected);
-                if (prevTile != null) prevTile.State = TileState.Default;
-                tile.State = TileState.Selected;
-                _tileSelected = _tileHovered;
-            }
-            UnitInfoDisplay.ShowUnitActions(_units.GetValue(_tileSelected));
+            if (tile.State == TileState.Selected) SetTileSelected(0);
+            else                                  SetTileSelected(_tileHovered);
         }
+    }
+
+    void HandleMoveSelect()
+    {
+        Tile tile = _tiles.GetValue(_tileHovered);
+        if (tile != null)
+        {
+            if (tile.Selectable) MoveUnit(_tileSelected, _tileHovered);
+        }
+        SetTileSelected(0);
     }
 
     void HandleUnitDrag()
@@ -266,7 +301,7 @@ public class GridManager : MonoBehaviour
             Debug.Log("PlaceUnit - tile not selectable");
             if (unit.stats.position > 0)
             {
-                AddUnitToGrid(unit, unit.stats.position);
+                SetUnitGridPosition(unit, unit.stats.position);
                 return true;
             }
             Destroy(unit.gameObject);
@@ -277,26 +312,27 @@ public class GridManager : MonoBehaviour
             Debug.Log("PlaceUnit - tile is occupied");
             if (unit.stats.position > 0)
             {
-                AddUnitToGrid(unit, unit.stats.position);
+                SetUnitGridPosition(unit, unit.stats.position);
                 return true;
             }
             Destroy(unit.gameObject);
             return false;
         }
-        AddUnitToGrid(unit, index);
+        SetUnitGridPosition(unit, index);
         return true;
     }
 
-    void AddUnitToGrid(Unit unit, int index)
+    void SetUnitGridPosition(Unit unit, int index)
     {
         if (_units.SetValue(index, unit)) unit.SetPosition(index, _units.GetVector(index), Visual.TileScale);
     }
 
-    // void MoveUnit(int src, int dst)
-    // {
-    //     if (_units[src] != null) {
-    //         _units[dst] = _units[src];
-    //         _units[src] = null;
-    //     }
-    // }
+    void MoveUnit(int srcIndex, int dstIndex)
+    {
+        Unit unit = _units.GetValue(srcIndex);
+        if (unit != null) {
+            _units.MoveValue(srcIndex, dstIndex);
+            SetUnitGridPosition(unit, dstIndex);
+        }
+    }
 }

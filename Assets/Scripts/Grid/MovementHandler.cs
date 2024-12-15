@@ -23,6 +23,7 @@ public class MovementHandler
         {
             List<Vector2Int> validMoves = new();
             List<Vector2Int> unitVectors = GetUnitVectors(unit, movement);
+            List<bool> collisions = new List<bool>{false, false, false, false, false, false, false, false};
             int distance = movement.distance;
             var (x, y, z) = tiles.Bounds();
             if (distance == -1) distance = Math.Max(x, y);
@@ -38,8 +39,28 @@ public class MovementHandler
                     {
                         Vector2Int startPosition = initialPosition;
                         if (i > 0) startPosition = validMoves[8 * (i - 1) + j];
+                        if (collisions[j])
+                        {
+                            validMoves.Add(startPosition);
+                            continue;
+                        }
                         Vector2Int targetPosition = startPosition + unitVectors[j];
-                        if (tiles.GetValue(targetPosition) != null) validMoves.Add(targetPosition);
+                        bool targetPositionValid = true;
+                        if (tiles.GetValue(targetPosition) == null) targetPositionValid = false;
+                        else {
+                            Unit unitColliding = units.GetValue(targetPosition);
+                            if (unitColliding != null)
+                            {
+                                if (movement.passthrough == Passthrough.None 
+                                    || (movement.passthrough == Passthrough.Ally && !unitColliding.SameController(unit))
+                                    || (movement.passthrough == Passthrough.Enemy && unitColliding.SameController(unit)))
+                                {
+                                    targetPositionValid = false;
+                                    collisions[j] = true;
+                                }
+                            }
+                        }
+                        if (targetPositionValid) validMoves.Add(targetPosition);
                         else validMoves.Add(startPosition);
                     }
                 }

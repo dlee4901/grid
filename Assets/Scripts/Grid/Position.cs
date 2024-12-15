@@ -56,6 +56,15 @@ public class Position<T>
         return false;
     }
 
+    public bool MoveValue(int srcIndex, int dstIndex)
+    {
+        if (IsValidIndex(srcIndex) && IsValidIndex(dstIndex))
+        {
+            return SetValue(dstIndex, GetValue(srcIndex)) && SetValue(srcIndex, default);
+        }
+        return false;
+    }
+
     public T GetValue(int idx)
     {
         if (!IsValidIndex(idx))

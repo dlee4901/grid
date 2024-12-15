@@ -2,6 +2,7 @@ using UnityEngine;
 
 public enum Direction {N, NE, E, SE, S, SW, W, NW, step, stride, line, diagonal, straight, horizontal, vertical}
 public enum DirectionFacing {N = Direction.N, E = Direction.E, S = Direction.S, W = Direction.W}
+public enum Passthrough {None, Ally, Enemy, All}
 
 [CreateAssetMenu(menuName = "Unit Movement")]
 public class UnitMovement : ScriptableObject
@@ -10,6 +11,7 @@ public class UnitMovement : ScriptableObject
     public int distance;
     public bool exact;
     public bool relativeFacing;
+    public Passthrough passthrough;
     public UnitMovement chain;
 
     // public void ResetMovement()

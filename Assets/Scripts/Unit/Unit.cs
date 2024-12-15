@@ -42,4 +42,9 @@ public class Unit : MonoBehaviour
         stats.position = idx;
         transform.position = Util.Get2DWorldPos(vec, tileScale);
     }
+
+    public bool SameController(Unit unit)
+    {
+        return stats.controller == unit.stats.controller;
+    }
 }

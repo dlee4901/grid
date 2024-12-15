@@ -11,9 +11,9 @@ public class Tile : MonoBehaviour
     //TileTerrain _terrain;
 
     Color _colorDefault = new Color(1.0f, 1.0f, 1.0f);
-    Color _colorHovered = new Color(0.5f, 0.5f, 0.5f);
+    Color _colorHovered = new Color(0.7f, 0.7f, 0.7f);
+    Color _colorUnselectable = new Color(0.4f, 0.4f, 0.4f);
     Color _colorSelected = new Color(0f, 1.0f, 1.0f);
-    Color _colorUnselectable = new Color(0.2f, 0.2f, 0.2f);
 
     bool _selectable;
     public bool Selectable
