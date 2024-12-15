@@ -15,6 +15,11 @@ public class Position<T>
         SetBounds(x, y, z);
     }
 
+    public (int, int, int) Bounds()
+    {
+        return (_x, _y, _z);
+    }
+
     public int Size()
     {
         return _list.Count;

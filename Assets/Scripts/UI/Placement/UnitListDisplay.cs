@@ -60,7 +60,6 @@ public class UnitListDisplay : MonoBehaviour
 
     void UnitUIUpdate(int playerController, int listUIPosition, bool placed)
     {
-        Debug.Log("unit ui update " + playerController);
         _unitsList[playerController-1][listUIPosition].IsPlaced = placed;
     }
 }

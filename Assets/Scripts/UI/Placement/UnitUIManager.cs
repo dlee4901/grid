@@ -4,7 +4,7 @@ public class UnitUIManager : MonoBehaviour
 {
     ImageManager _imageManager;
     UiInputHandler _uiInputHandler;
-    DragDropInputHandler _inputHandler;
+    InputHandler _inputHandlerDragDrop;
     Unit _unit;
     int _unitID;
     int _playerController;
@@ -23,7 +23,7 @@ public class UnitUIManager : MonoBehaviour
         _imageManager = gameObject.AddComponent<ImageManager>();
         _imageManager.Init(name, sprite, parent);
         _uiInputHandler = gameObject.AddComponent<UiInputHandler>();
-        _inputHandler = new DragDropInputHandler();
+        _inputHandlerDragDrop = new InputHandler(InputActionPreset.DragDrop);
         _unit = null;
         _unitID = unitID;
         _playerController = playerController;
@@ -54,7 +54,7 @@ public class UnitUIManager : MonoBehaviour
     {   
         if (!IsPlaced && _unit != null)
         {
-            ActionBase action = _inputHandler.HandleInput();
+            ActionBase action = _inputHandlerDragDrop.HandleInput();
             if (action != null) action.Execute(_unit.gameObject);
         }
     }

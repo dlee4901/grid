@@ -1,0 +1,150 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+public class MovementHandler
+{
+    public HashSet<Vector2Int> GetMovePositions(int index, Position<Unit> units, Position<Tile> tiles)
+    {
+        HashSet<Vector2Int> movePositions = new();
+        Unit unit = units.GetValue(index);
+        if (unit == null) return movePositions;
+        Vector2Int initialPosition = (Vector2Int)units.GetVector(index);
+        movePositions = GetValidMoves(initialPosition, units, tiles);
+        return movePositions;
+    }
+
+    public HashSet<Vector2Int> GetValidMoves(Vector2Int initialPosition, Position<Unit> units, Position<Tile> tiles)
+    {
+        List<List<Vector2Int>> res = new();
+        Unit unit = units.GetValue(initialPosition);
+        foreach (UnitMovement movement in unit.movement)
+        {
+            List<Vector2Int> validMoves = new();
+            List<Vector2Int> unitVectors = GetUnitVectors(unit, movement);
+            int distance = movement.distance;
+            var (x, y, z) = tiles.Bounds();
+            if (distance == -1) distance = Math.Max(x, y);
+            if (movement.direction == Direction.step || movement.direction == Direction.stride)
+            {
+
+            }
+            else
+            {
+                for (int i = 0; i < distance; i++)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        Vector2Int startPosition = initialPosition;
+                        if (i > 0) startPosition = validMoves[8 * (i - 1) + j];
+                        Vector2Int targetPosition = startPosition + unitVectors[j];
+                        if (tiles.GetValue(targetPosition) != null) validMoves.Add(targetPosition);
+                        else validMoves.Add(startPosition);
+                    }
+                }
+            }
+            res.Add(validMoves);
+        }
+
+        List<Vector2Int> combined = new();
+        foreach (List<Vector2Int> moves in res)
+        {
+            combined = combined.Concat(moves).ToList();
+        }
+        return new HashSet<Vector2Int>(combined);
+    }
+
+    public List<Vector2Int> GetUnitVectors(Unit unit, UnitMovement movement)
+    {
+        List<Vector2Int> unitVectors = new();
+        List<bool> absoluteDirections = GetAbsoluteDirections(unit, movement);
+        for (int i = 0; i < 8; i++)
+        {
+            int xOffset = 0;
+            int yOffset = 0;
+            if (absoluteDirections[i])
+            {
+                if (i > 4)               xOffset = -1;
+                else if (i > 0 && i < 4) xOffset = 1;
+                if (i > 2 && i < 6)      yOffset = 1;
+                else if (i < 2 || i > 6) yOffset = -1;
+            }
+            unitVectors.Add(new Vector2Int(xOffset, yOffset));
+        }
+        return unitVectors;
+    }
+
+    public List<bool> GetAbsoluteDirections(Unit unit, UnitMovement movement)
+    {
+        List<bool> absoluteDirections = new List<bool>{false, false, false, false, false, false, false, false};
+        switch (movement.direction)
+        {
+            case Direction.stride: case Direction.line:
+                for (int i = 0; i < 8; i++) absoluteDirections[i] = true;
+                break;
+            case Direction.diagonal:
+                for (int i = 1; i < 8; i += 2) absoluteDirections[i] = true;
+                break;
+            case Direction.step: case Direction.straight:
+                for (int i = 0; i < 8; i += 2) absoluteDirections[i] = true;
+                break;
+            case Direction.horizontal:
+                absoluteDirections[2] = true;
+                absoluteDirections[6] = true;
+                break;
+            case Direction.vertical:
+                absoluteDirections[0] = true;
+                absoluteDirections[4] = true;
+                break;
+            case Direction.N:
+                absoluteDirections[0] = true;
+                break;
+            case Direction.NE:
+                absoluteDirections[1] = true;
+                break;
+            case Direction.E:
+                absoluteDirections[2] = true;
+                break;
+            case Direction.SE:
+                absoluteDirections[3] = true;
+                break;
+            case Direction.S:
+                absoluteDirections[4] = true;
+                break;
+            case Direction.SW:
+                absoluteDirections[5] = true;
+                break;
+            case Direction.W:
+                absoluteDirections[6] = true;
+                break;
+            case Direction.NW:
+                absoluteDirections[7] = true;
+                break;
+            default:
+                Debug.LogError("unit movement is invalid");
+                return absoluteDirections;
+        }
+        if (movement.relativeFacing)
+        {
+            int shift = 0;
+            switch (unit.stats.facing)
+            {
+                case DirectionFacing.E:
+                    shift = 6;
+                    break;
+                case DirectionFacing.S:
+                    shift = 2;
+                    break;
+                case DirectionFacing.W:
+                    shift = 4;
+                    break;
+                default:
+                    Debug.LogError("unit facing is invalid");
+                    return absoluteDirections;
+            }
+            return (List<bool>)absoluteDirections.Skip(shift).Concat(absoluteDirections.Take(shift));
+        }
+        return absoluteDirections;
+    }
+}

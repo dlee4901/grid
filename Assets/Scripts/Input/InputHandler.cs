@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum InputActionPreset {DragDrop}
 public enum InputActionMethod {IsPressed, WasPerformedThisFrame, WasPressedThisFrame, WasReleasedThisFrame}
 
 public class InputHandler
@@ -12,6 +13,15 @@ public class InputHandler
     public InputHandler() 
     {
         InputActionMap = new Dictionary<string, Tuple<InputAction, InputActionMethod, ActionBase>>();
+    }
+
+    public InputHandler(InputActionPreset preset) : this()
+    {
+        if (preset == InputActionPreset.DragDrop)
+        {
+            AddInputAction("drag gameobject", InputSystem.actions.FindAction("Player/Select"), InputActionMethod.IsPressed, new DragGameObjectAction());
+            AddInputAction("drop gameobject", InputSystem.actions.FindAction("Player/Select"), InputActionMethod.WasReleasedThisFrame, new DropGameObjectAction());
+        }
     }
 
     public void AddInputAction(string key, InputAction inputAction, InputActionMethod inputActionMethod, ActionBase action)
@@ -54,7 +64,6 @@ public class InputHandler
         foreach (var (key, value) in InputActionMap)
         {
             ActionBase action = PerformInputAction(value.Item1, value.Item2, value.Item3);
-            Debug.Log(action);
             if (action != null) return action;
         }
         return null;
