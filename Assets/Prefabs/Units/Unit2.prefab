@@ -44,14 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37efe2ff1fa458e4cb21c2c7f048fead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  properties: {fileID: 11400000, guid: 1e574035cff52054390dc65e9e5e4825, type: 2}
-  movement:
+  Properties: {fileID: 11400000, guid: 1e574035cff52054390dc65e9e5e4825, type: 2}
+  Movement:
   - {fileID: 11400000, guid: 3a0103c2fdba1ac4f84dcf6a3612718d, type: 2}
-  stats:
-    position: 0
-    controller: 0
-    health: 0
-    shield: 0
-    facing: 0
-  listUIPosition: 0
-  isDragging: 0
+  Stats:
+    GridPosition: 0
+    PlayerController: 0
+    Health: 0
+    Shield: 0
+    DirectionFacing: 0
+  ListUIPosition: 0

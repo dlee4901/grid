@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class UnitListDisplay : MonoBehaviour
 {
-    public ScrollRect scrollView;
-    public GridLayoutGroup container;
+    public ScrollRect ScrollView;
+    public GridLayoutGroup Container;
 
     List<GridLayoutGroup> _containers;
     List<List<UnitUIManager>> _unitsList;
@@ -19,13 +19,13 @@ public class UnitListDisplay : MonoBehaviour
 
     void InitPlayers(int numPlayers)
     {
-        _containers = new List<GridLayoutGroup>{container};
+        _containers = new List<GridLayoutGroup>{Container};
         _unitsList = new List<List<UnitUIManager>>();
         for (int player = 1; player <= numPlayers; player++)
         {
             List<UnitUIManager> unitManagerList = new List<UnitUIManager>();
             _unitsList.Add(unitManagerList);
-            GridLayoutGroup obj = Instantiate(container, scrollView.transform);
+            GridLayoutGroup obj = Instantiate(Container, ScrollView.transform);
             _containers.Add(obj);
             InitPlayerContainer(player);
         }
@@ -36,10 +36,10 @@ public class UnitListDisplay : MonoBehaviour
         int listUIPosition = 0;
         foreach (Unit unit in UnitList.Singleton.units)
         {
-            if (unit.properties.id > 0)
+            if (unit != null && unit.Properties.Id > 0)
             {
                 UnitUIManager unitUIManager = Util.CreateGameObject<UnitUIManager>();
-                unitUIManager.Init(unit.properties.title, unit.properties.sprite, _containers[playerController].transform, unit.properties.id, playerController, listUIPosition);
+                unitUIManager.Init(unit.Properties.Name, unit.Properties.Sprite, _containers[playerController].transform, unit.Properties.Id, playerController, listUIPosition);
                 _unitsList[playerController-1].Add(unitUIManager);
                 listUIPosition += 1;
             }
@@ -52,7 +52,7 @@ public class UnitListDisplay : MonoBehaviour
         if (playerController < _containers.Count)
         {
             _containers[_activePlayerList].gameObject.SetActive(false);
-            scrollView.content = _containers[playerController].GetComponent<RectTransform>();
+            ScrollView.content = _containers[playerController].GetComponent<RectTransform>();
             _containers[playerController].gameObject.SetActive(true);
             _activePlayerList = playerController;
         }

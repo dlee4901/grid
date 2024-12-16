@@ -7,12 +7,13 @@ public enum Passthrough {None, Ally, Enemy, All}
 [CreateAssetMenu(menuName = "Unit Movement")]
 public class UnitMovement : ScriptableObject
 {
-    public Direction direction;
-    public int distance;
-    public bool exact;
-    public bool relativeFacing;
-    public Passthrough passthrough;
-    public UnitMovement chain;
+    public Direction Direction;
+    public int Distance;
+    public int Cost;
+    public Passthrough Passthrough;
+    public bool Exact;
+    public bool RelativeFacing;
+    public UnitMovement Chain;
 
     // public void ResetMovement()
     // {

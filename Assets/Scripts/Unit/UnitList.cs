@@ -30,6 +30,11 @@ public class UnitList : MonoBehaviour
     {
         foreach (Unit unit in tempSerializable)
         {
+            if (unit == null) 
+            {
+                units.Add(null);
+                continue;
+            }
             Unit unitCopy = Instantiate(unit, transform);
             unitCopy.Init();
             units.Add(unitCopy);
@@ -38,6 +43,6 @@ public class UnitList : MonoBehaviour
 
     public bool IsValidUnitID(int unitID)
     {
-        return unitID < units.Count;
+        return unitID > 0 && unitID < units.Count;
     }
 }

@@ -3,20 +3,13 @@ using Unity.Netcode;
 
 public class Player : NetworkBehaviour
 {
-    int id;
-    int team;
-    int movementPoints;
-    int actionPoints;
-    List<Unit> units;
+    public int Id;
+    public int MovementPoints;
+    public int ActionPoints;
+    public List<Unit> Units;
 
-    // Start is called before the first frame update
-    void Start()
+    public Player(int id)
     {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Id = id;
     }
 }

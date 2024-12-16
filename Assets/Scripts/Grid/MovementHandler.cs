@@ -19,15 +19,15 @@ public class MovementHandler
     {
         List<List<Vector2Int>> res = new();
         Unit unit = units.GetValue(initialPosition);
-        foreach (UnitMovement movement in unit.movement)
+        foreach (UnitMovement movement in unit.Movement)
         {
             List<Vector2Int> validMoves = new();
             List<Vector2Int> unitVectors = GetUnitVectors(unit, movement);
             List<bool> collisions = new List<bool>{false, false, false, false, false, false, false, false};
-            int distance = movement.distance;
+            int distance = movement.Distance;
             var (x, y, z) = tiles.Bounds();
             if (distance == -1) distance = Math.Max(x, y);
-            if (movement.direction == Direction.step || movement.direction == Direction.stride)
+            if (movement.Direction == Direction.step || movement.Direction == Direction.stride)
             {
 
             }
@@ -51,9 +51,9 @@ public class MovementHandler
                             Unit unitColliding = units.GetValue(targetPosition);
                             if (unitColliding != null)
                             {
-                                if (movement.passthrough == Passthrough.None 
-                                    || (movement.passthrough == Passthrough.Ally && !unitColliding.SameController(unit))
-                                    || (movement.passthrough == Passthrough.Enemy && unitColliding.SameController(unit)))
+                                if (movement.Passthrough == Passthrough.None 
+                                    || (movement.Passthrough == Passthrough.Ally && !unitColliding.SameController(unit))
+                                    || (movement.Passthrough == Passthrough.Enemy && unitColliding.SameController(unit)))
                                 {
                                     targetPositionValid = false;
                                     collisions[j] = true;
@@ -99,7 +99,7 @@ public class MovementHandler
     public List<bool> GetAbsoluteDirections(Unit unit, UnitMovement movement)
     {
         List<bool> absoluteDirections = new List<bool>{false, false, false, false, false, false, false, false};
-        switch (movement.direction)
+        switch (movement.Direction)
         {
             case Direction.stride: case Direction.line:
                 for (int i = 0; i < 8; i++) absoluteDirections[i] = true;
@@ -146,10 +146,10 @@ public class MovementHandler
                 Debug.LogError("unit movement is invalid");
                 return absoluteDirections;
         }
-        if (movement.relativeFacing)
+        if (movement.RelativeFacing)
         {
             int shift = 0;
-            switch (unit.stats.facing)
+            switch (unit.Stats.DirectionFacing)
             {
                 case DirectionFacing.E:
                     shift = 6;

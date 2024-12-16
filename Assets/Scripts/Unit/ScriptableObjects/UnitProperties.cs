@@ -5,13 +5,13 @@ using UnityEngine.InputSystem;
 public class UnitProperties : ScriptableObject
 {
     [Header("Identifiers")]
-    public int id;
-    public string title;
-    public Sprite sprite;
+    public int Id;
+    public string Name;
+    public Sprite Sprite;
 
     [Header("Attributes")]
-    public int cost;
-    public int startingHealth;
+    public int Cost;
+    public int StartingHealth;
 
     // void Init(string _title, UnitMovement _movement, int _playerOwner=0, int _cost=0, int _maxHealth=0, int _currentHealth=0, DirectionFacing _facing=DirectionFacing.N)
     // {

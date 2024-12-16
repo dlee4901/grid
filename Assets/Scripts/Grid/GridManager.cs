@@ -17,9 +17,11 @@ public struct GridVisual
 [Serializable]
 public struct GridPrep
 {
-    public int NumPlayers;
-    public int UnitSpawnCap;
-    public int NumSpawnRows;
+    public int NumSpawnRows; // 2
+    public int UnitCostTotal; // 20
+    public int NumPlayers; // 2
+    public int MovementPoints; // 2
+    public int ActionPoints; // 3
 }
 
 public class GridManager : MonoBehaviour
@@ -28,6 +30,7 @@ public class GridManager : MonoBehaviour
     Position<Unit> _units;
     MovementHandler _movementHandler;
     InputHandler _inputHandlerDragDrop;
+    PlayerManager _playerManager;
     StateMachine _stateMachine;
 
     GridPhase _gridPhase;
@@ -64,6 +67,7 @@ public class GridManager : MonoBehaviour
         _units ??= new Position<Unit>(X, Y);
         _movementHandler ??= new MovementHandler();
         _inputHandlerDragDrop ??= new InputHandler(InputActionPreset.DragDrop);
+        _playerManager = new PlayerManager(Prep.NumPlayers, Prep.MovementPoints, Prep.ActionPoints);
         InitStateMachine();
 
         _gridPhase = GridPhase.Placement;
@@ -113,7 +117,7 @@ public class GridManager : MonoBehaviour
     void UnitPlace(Unit unit)
     {
         _unitDragging = null;
-        EventManager.Singleton.StartUnitUIUpdateEvent(unit.stats.controller, unit.listUIPosition, PlaceUnit(unit, _tileHovered));
+        EventManager.Singleton.StartUnitUIUpdateEvent(unit.Stats.PlayerController, unit.ListUIPosition, PlaceUnit(unit, _tileHovered));
     }
 
     public void OnSelect(InputAction.CallbackContext ctx) 
@@ -156,6 +160,7 @@ public class GridManager : MonoBehaviour
         {
             _turn += 1;
         }
+        
         GameInfoDisplay.SetPlayerTurn(_turn);
     }
 
@@ -293,29 +298,29 @@ public class GridManager : MonoBehaviour
         if (!_tiles.IsValidIndex(index))
         {
             Debug.Log("PlaceUnit - invalid position");
-            Destroy(unit.gameObject);
+            DeleteUnit(unit);
             return false;
         }
         if (!_tiles.GetValue(index).Selectable)
         {
             Debug.Log("PlaceUnit - tile not selectable");
-            if (unit.stats.position > 0)
+            if (unit.Stats.GridPosition > 0)
             {
-                SetUnitGridPosition(unit, unit.stats.position);
+                SetUnitGridPosition(unit, unit.Stats.GridPosition);
                 return true;
             }
-            Destroy(unit.gameObject);
+            DeleteUnit(unit);
             return false;
         }
         if (_units.GetValue(index) != null)
         {
             Debug.Log("PlaceUnit - tile is occupied");
-            if (unit.stats.position > 0)
+            if (unit.Stats.GridPosition > 0)
             {
-                SetUnitGridPosition(unit, unit.stats.position);
+                SetUnitGridPosition(unit, unit.Stats.GridPosition);
                 return true;
             }
-            Destroy(unit.gameObject);
+            DeleteUnit(unit);
             return false;
         }
         SetUnitGridPosition(unit, index);
@@ -324,7 +329,26 @@ public class GridManager : MonoBehaviour
 
     void SetUnitGridPosition(Unit unit, int index)
     {
-        if (_units.SetValue(index, unit)) unit.SetPosition(index, _units.GetVector(index), Visual.TileScale);
+        if (_units.SetValue(index, unit)) 
+        {
+            unit.SetPosition(index, _units.GetVector(index), Visual.TileScale);
+            _playerManager.AddPlayerUnit(unit);
+        }
+    }
+
+    void DeleteUnit(int index)
+    {
+        Unit unit = _units.GetValue(index);
+        if (unit != null) 
+        {
+            DeleteUnit(unit);
+        }
+    }
+
+    void DeleteUnit(Unit unit)
+    {
+        _playerManager.DeletePlayerUnit(unit);
+        Destroy(unit.gameObject);
     }
 
     void MoveUnit(int srcIndex, int dstIndex)
