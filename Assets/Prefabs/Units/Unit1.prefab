@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Properties: {fileID: 11400000, guid: 03a6c1fbafa5948339ec813100105415, type: 2}
-  Movement:
+  Moves:
   - {fileID: 11400000, guid: 308255448b1854dc29079f00079dda5b, type: 2}
   Stats:
     GridPosition: 0

@@ -18,7 +18,7 @@ public enum UnitAction {Move, Skill}
 public class Unit : MonoBehaviour
 {
     public UnitProperties Properties;
-    public List<UnitMovement> Movement;
+    public List<UnitMove> Moves;
     public UnitStats Stats;
 
     public int ListUIPosition;

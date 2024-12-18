@@ -4,36 +4,36 @@ public class PlayerManager
 {
     List<Player> _players;
     public int NumPlayers;
-    public int MovementPoints;
-    public int ActionPoints;
+    public int MovePoints;
+    public int SkillPoints;
 
-    public PlayerManager(int numPlayers, int movementPoints, int actionPoints)
+    public PlayerManager(int numPlayers, int movePoints, int skillPoints)
     {
         NumPlayers = numPlayers;
-        MovementPoints = movementPoints;
-        ActionPoints = actionPoints;
+        MovePoints = movePoints;
+        SkillPoints = skillPoints;
         _players = new List<Player>();
         for (int id = 1; id <= numPlayers; id++)
         {
             Player player = new Player(id);
-            player.MovementPoints = movementPoints;
-            player.ActionPoints = actionPoints;
+            player.MovePoints = movePoints;
+            player.SkillPoints = skillPoints;
             _players.Add(player);
         }
     }
 
-    public Player GetPlayer(int playerId)
+    public Player GetPlayer(int playerTurn)
     {
-        if (playerId > 0 && playerId <= NumPlayers)
+        if (playerTurn > 0 && playerTurn <= NumPlayers)
         {
-            return _players[playerId-1];
+            return _players[playerTurn-1];
         }
         return null;
     }
 
-    public int GetPlayerUnitCostTotal(int playerId)
+    public int GetPlayerUnitCostTotal(int playerTurn)
     {
-        Player player = GetPlayer(playerId);
+        Player player = GetPlayer(playerTurn);
         if (player != null)
         {
             int unitCostTotal = 0;
@@ -46,13 +46,13 @@ public class PlayerManager
         return -1;
     }
 
-    public void ResetPlayerPoints(int playerId)
+    public void ResetPlayerPoints(int playerTurn)
     {
-        Player player = GetPlayer(playerId);
+        Player player = GetPlayer(playerTurn);
         if (player != null)
         {
-            player.MovementPoints = MovementPoints;
-            player.ActionPoints = ActionPoints;
+            player.MovePoints = MovePoints;
+            player.SkillPoints = SkillPoints;
         }
     }
 
@@ -79,6 +79,24 @@ public class PlayerManager
             {
                 playerUnits.Remove(unit);
             }
+        }
+    }
+
+    public void UpdatePlayerMovePoints(int playerTurn, int movePoints)
+    {
+        Player player = GetPlayer(playerTurn);
+        if (player != null)
+        {
+            player.MovePoints += movePoints;
+        }
+    }
+
+    public void UpdatePlayerSkillPoints(int playerTurn, int skillPoints)
+    {
+        Player player = GetPlayer(playerTurn);
+        if (player != null)
+        {
+            player.SkillPoints += skillPoints;
         }
     }
 }

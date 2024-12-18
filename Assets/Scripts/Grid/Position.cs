@@ -32,12 +32,12 @@ public class Position<T>
         _z = z;
     }
 
-    public void AddValue(T val)
+    public void Add(T val)
     {
         _list.Add(val);
     }
 
-    public bool SetValue(int idx, T val)
+    public bool Set(int idx, T val)
     {
         if (IsValidIndex(idx))
         {
@@ -47,25 +47,16 @@ public class Position<T>
         return false;
     }
 
-    public bool SetValue(Vector3Int vec, T val)
+    public bool Set(Vector3Int vec, T val)
     {
         if (IsValidVector(vec))
         {
-            return SetValue(GetIndex(vec), val);
+            return Set(GetIndex(vec), val);
         }
         return false;
     }
 
-    public bool MoveValue(int srcIndex, int dstIndex)
-    {
-        if (IsValidIndex(srcIndex) && IsValidIndex(dstIndex))
-        {
-            return SetValue(dstIndex, GetValue(srcIndex)) && SetValue(srcIndex, default);
-        }
-        return false;
-    }
-
-    public T GetValue(int idx)
+    public T Get(int idx)
     {
         if (!IsValidIndex(idx))
         {
@@ -74,14 +65,23 @@ public class Position<T>
         return _list[idx];
     }
 
-    public T GetValue(Vector3Int vec)
+    public T Get(Vector3Int vec)
     {
-        return GetValue(GetIndex(vec));
+        return Get(GetIndex(vec));
     }
 
-    public T GetValue(Vector2Int vec)
+    public T Get(Vector2Int vec)
     {
-        return GetValue(GetIndex(vec));
+        return Get(GetIndex(vec));
+    }
+
+    public bool Move(int srcIndex, int dstIndex)
+    {
+        if (IsValidIndex(srcIndex) && IsValidIndex(dstIndex))
+        {
+            return Set(dstIndex, Get(srcIndex)) && Set(srcIndex, default);
+        }
+        return false;
     }
 
     public int GetIndex(Vector2Int vec)

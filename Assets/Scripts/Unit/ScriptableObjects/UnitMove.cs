@@ -4,8 +4,8 @@ public enum Direction {N, NE, E, SE, S, SW, W, NW, step, stride, line, diagonal,
 public enum DirectionFacing {N = Direction.N, E = Direction.E, S = Direction.S, W = Direction.W}
 public enum Passthrough {None, Ally, Enemy, All}
 
-[CreateAssetMenu(menuName = "Unit Movement")]
-public class UnitMovement : ScriptableObject
+[CreateAssetMenu(menuName = "Unit Move")]
+public class UnitMove : ScriptableObject
 {
     public Direction Direction;
     public int Distance;
@@ -13,7 +13,7 @@ public class UnitMovement : ScriptableObject
     public Passthrough Passthrough;
     public bool Exact;
     public bool RelativeFacing;
-    public UnitMovement Chain;
+    public UnitMove Chain;
 
     // public void ResetMovement()
     // {
