@@ -43,7 +43,7 @@ public class UnitUIManager : MonoBehaviour
     {
         if (!IsPlaced && UnitList.Singleton.IsValidUnitID(_unitID))
         {
-            _unit = Instantiate(UnitList.Singleton.units[_unitID]);
+            _unit = Instantiate(UnitList.Singleton.Units[_unitID]);
             _unit.Stats.PlayerController = _playerController;
             _unit.gameObject.SetActive(true);
             _unit.ListUIPosition = _listUIPosition;

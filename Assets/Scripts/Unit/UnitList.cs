@@ -6,13 +6,15 @@ public class UnitList : MonoBehaviour
 {
     public static UnitList Singleton;
 
-    public List<Unit> units;
+    public List<Unit> Units;
 
-    public List<Unit> tempSerializable;
+    [Header("Unit Prefabs")]
+    public List<Unit> UnitPrefabs1Indexed;
+    public UnitHealthCounter UnitHealthCounterPrefab;
     
     void Awake()
     {
-        units = new List<Unit>();
+        Units = new List<Unit>();
 
         if (Singleton == null)
         {
@@ -23,26 +25,26 @@ public class UnitList : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
-        InitFromTempSerializable();
+        InitFromUnitPrefabs();
     }
 
-    void InitFromTempSerializable()
+    void InitFromUnitPrefabs()
     {
-        foreach (Unit unit in tempSerializable)
+        foreach (Unit unitPrefab in UnitPrefabs1Indexed)
         {
-            if (unit == null) 
+            if (unitPrefab == null) 
             {
-                units.Add(null);
+                Units.Add(null);
                 continue;
             }
-            Unit unitCopy = Instantiate(unit, transform);
-            unitCopy.Init();
-            units.Add(unitCopy);
+            Unit unit = Instantiate(unitPrefab, transform);
+            unit.Init(UnitHealthCounterPrefab);
+            Units.Add(unit);
         }
     }
 
     public bool IsValidUnitID(int unitID)
     {
-        return unitID > 0 && unitID < units.Count;
+        return unitID > 0 && unitID < Units.Count;
     }
 }

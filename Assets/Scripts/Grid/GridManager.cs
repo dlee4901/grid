@@ -162,8 +162,10 @@ public class GridManager : MonoBehaviour
         {
             PlayerTurn += 1;
         }
+        SetTileSelected(0);
         PlayerManager.ResetPlayerPoints(PlayerTurn);
         GameInfoDisplay.UpdateDisplay();
+        UnitInfoDisplay.UpdateDisplay();
     }
 
     public void DisplayAction(UnitAction action, int index=0)
@@ -209,6 +211,11 @@ public class GridManager : MonoBehaviour
         return _units.Get(index);
     }
 
+    public Player GetActivePlayer()
+    {
+        return PlayerManager.GetPlayer(PlayerTurn);
+    }
+
     void StateOnEnterIdle()
     {
         Debug.Log("StateOnEnterIdle");
@@ -245,7 +252,7 @@ public class GridManager : MonoBehaviour
         Tile newTileSelected = _tiles.Get(_tileSelected);
         if (newTileSelected != null) newTileSelected.State = TileState.Selected;
 
-        UnitInfoDisplay.ShowUnitActions(_units.Get(_tileSelected));
+        UnitInfoDisplay.UpdateDisplay(_units.Get(_tileSelected));
     }
 
     void HandleTileSelect()
@@ -282,6 +289,7 @@ public class GridManager : MonoBehaviour
     {
         for (int i = 1; i < _tiles.Size(); i++)
         {
+            if (i == _tileSelected) Debug.Log(i);
             if (tiles.Contains(i)) _tiles.Get(i).Selectable = selectable;
             else                   _tiles.Get(i).Selectable = !selectable;
         }

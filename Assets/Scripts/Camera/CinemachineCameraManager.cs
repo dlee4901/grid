@@ -4,15 +4,18 @@ using UnityEngine.InputSystem;
 
 public class CinemachineCameraManager : MonoBehaviour
 {
-    public CinemachineCamera CinemachineCamera;
+    public CinemachineCamera Cam;
+    int _tileHovered;
 
-    float _minX = 0f;
-    float _maxX = 70f;
-    float _minY = 0f;
-    float _maxY = 70f;
-    float _zoomMultiplier = 5f;
-    float _minZoom = 10f;
-    float _maxZoom = 100f;
+    float _zoomStartMultiplier = 7f;
+
+    float _minX;
+    float _maxX;
+    float _minY;
+    float _maxY;
+    float _minZoom;
+    float _maxZoom;
+    float _zoomMultiplier;
 
     bool _isDragging;
     bool _tileClicked;
@@ -21,14 +24,10 @@ public class CinemachineCameraManager : MonoBehaviour
     Vector3 _origin;
     Vector3 _difference;
 
-    int _tileHovered;
-
     void Start()
     {
         EventManager.Singleton.TileHoverEvent += TileHover;
         _tileHovered = 0;
-        CinemachineCamera.Lens.OrthographicSize = Mathf.Min(CinemachineCamera.Lens.OrthographicSize, _maxZoom);
-        _zoom = CinemachineCamera.Lens.OrthographicSize;
     }
 
     void LateUpdate()
@@ -42,15 +41,19 @@ public class CinemachineCameraManager : MonoBehaviour
         _tileHovered = id;
     }
 
-    public void Init(int x, int y)
+    public void Init(int x, int y, float tileScale)
     {
         _minX = 0;
         _minY = 0;
-        _maxX = 10 * (x - 1);
-        _maxY = 10 * (y - 1);
-        _minZoom = 10f;
-        _maxZoom = Mathf.Max(x, y) * 10f;
-        _zoomMultiplier = (_maxZoom / _minZoom) / 2f;
+        _maxX = 10 * (x - 1) * tileScale;
+        _maxY = 10 * (y - 1) * tileScale;
+        _minZoom = Mathf.Max(x, y) * tileScale;
+        _maxZoom = Mathf.Max(x, y) * tileScale * _zoomStartMultiplier * 2f;
+        _zoomMultiplier = (_maxZoom / _minZoom) * tileScale / 2f;
+        
+        Cam.Lens.OrthographicSize = Mathf.Max(x, y) * tileScale * _zoomStartMultiplier;
+        _zoom = Cam.Lens.OrthographicSize;
+        transform.position = Util.Get2DWorldPos(new Vector3Int(x/2, y/2, 0), tileScale);
     }
 
     public void OnSelect(InputAction.CallbackContext ctx)
@@ -90,7 +93,7 @@ public class CinemachineCameraManager : MonoBehaviour
         {
             _zoom -= _scrollAmount * _zoomMultiplier;
             _zoom = Mathf.Clamp(_zoom, _minZoom, _maxZoom);
-            CinemachineCamera.Lens.OrthographicSize = Mathf.Lerp(CinemachineCamera.Lens.OrthographicSize, _zoom, Time.deltaTime * 10f);
+            Cam.Lens.OrthographicSize = Mathf.Lerp(Cam.Lens.OrthographicSize, _zoom, Time.deltaTime * 10f);
         }
     }
 }

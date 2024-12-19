@@ -22,7 +22,7 @@ public class GameInfoDisplay : MonoBehaviour
     public void UpdateDisplay()
     {
         PlayerTurn.text = "Player " + Grid.PlayerTurn + " Turn";
-        Player player = Grid.PlayerManager.GetPlayer(Grid.PlayerTurn);
+        Player player = Grid.GetActivePlayer();
         int movePoints = player != null ? player.MovePoints : 0;
         int skillPoints = player != null ? player.SkillPoints : 0;
         MovePoints.text = movePoints + "/" + Grid.Prep.MovePoints;

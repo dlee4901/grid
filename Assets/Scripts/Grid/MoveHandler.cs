@@ -12,6 +12,7 @@ public class MoveHandler
         if (unit == null) return movePositions;
         Vector2Int initialPosition = (Vector2Int)units.GetVector(index);
         movePositions = GetValidMoves(initialPosition, units, tiles);
+        movePositions.Remove(initialPosition);
         return movePositions;
     }
 

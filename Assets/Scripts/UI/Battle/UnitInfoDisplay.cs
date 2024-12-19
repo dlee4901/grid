@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class UnitInfoDisplay : MonoBehaviour
 {
+    public Image UnitImage;
     public Button MoveButton;
     public Button Skill1Button;
     public Button Skill2Button;
@@ -20,8 +21,20 @@ public class UnitInfoDisplay : MonoBehaviour
         _uiInputHandler = gameObject.AddComponent<UiInputHandler>();
     }
 
-    public void ShowUnitActions(Unit unit)       
+    public void UpdateDisplay(Unit unit=null)       
     {
-        Container.gameObject.SetActive(unit != null);
+        if (unit == null || unit.Stats.PlayerController != Grid.PlayerTurn) 
+        {
+            Container.gameObject.SetActive(false);
+        }
+        else
+        {
+            UnitImage.sprite = unit.Properties.Sprite;
+            Player player = Grid.GetActivePlayer();
+            MoveButton.interactable = player?.MovePoints > 0;
+            Skill1Button.interactable = player?.SkillPoints > 0;
+            Skill2Button.interactable = player?.SkillPoints > 0;
+            Container.gameObject.SetActive(true);
+        }
     }
 }

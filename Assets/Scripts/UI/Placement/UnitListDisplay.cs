@@ -34,7 +34,7 @@ public class UnitListDisplay : MonoBehaviour
     void InitPlayerContainer(int playerController)
     {
         int listUIPosition = 0;
-        foreach (Unit unit in UnitList.Singleton.units)
+        foreach (Unit unit in UnitList.Singleton.Units)
         {
             if (unit != null && unit.Properties.Id > 0)
             {

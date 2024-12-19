@@ -13,7 +13,9 @@ public class Tile : MonoBehaviour
     Color _colorDefault = new Color(1.0f, 1.0f, 1.0f);
     Color _colorHovered = new Color(0.7f, 0.7f, 0.7f);
     Color _colorUnselectable = new Color(0.4f, 0.4f, 0.4f);
-    Color _colorSelected = new Color(0f, 1.0f, 1.0f);
+    Color _colorSelected = new Color(1.0f, 1.0f, 0f);
+    Color _colorPlayer1 = new Color(1.0f, 0.3f, 0.3f);
+    Color _colorPlayer2 = new Color(0.3f, 0.3f, 1.0f);
 
     bool _selectable;
     public bool Selectable
@@ -46,7 +48,7 @@ public class Tile : MonoBehaviour
         _boxCollider = gameObject.AddComponent<BoxCollider2D>();
         _spriteRenderer.sortingLayerName = "Grid";
         _spriteRenderer.sprite = sprite;
-        _boxCollider.size = new Vector2(10.24f*tileScale, 10.24f*tileScale);
+        _boxCollider.size = new Vector2(10.24f, 10.24f);
         
         name = "Tile " + positionIdx;
         transform.localScale = new Vector3(tileScale, tileScale, transform.localScale.z);
@@ -58,13 +60,16 @@ public class Tile : MonoBehaviour
     {
         if (property == "Selectable")
         {
-            if (_selectable)
+            if (_state != TileState.Selected)
             {
-                _spriteRenderer.color = _colorDefault;
-            }
-            else
-            {
-                _spriteRenderer.color = _colorUnselectable;
+                if (_selectable)
+                {
+                    _spriteRenderer.color = _colorDefault;
+                }
+                else
+                {
+                    _spriteRenderer.color = _colorUnselectable;
+                }
             }
         }
         else if (property == "State")

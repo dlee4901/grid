@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 
     void Init()
     {
-        Cam.Init(Grid.X, Grid.Y);
+        Cam.Init(Grid.X, Grid.Y, Grid.Visual.TileScale);
     }
 
     public void StartPlacement(int playerController)
