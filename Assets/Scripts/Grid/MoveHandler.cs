@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class MoveHandler
 {
+    public TileSelection TileSelection;
+
+    public MoveHandler(TileSelection tileSelection=null)
+    {
+        TileSelection = TileSelection != null ? TileSelection : tileSelection;
+    }
+
     public HashSet<Vector2Int> GetMovePositions(int index, Position<Unit> units, Position<Tile> tiles)
     {
         HashSet<Vector2Int> movePositions = new();

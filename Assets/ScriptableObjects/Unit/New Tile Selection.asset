@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: New Tile Selection
   m_EditorClassIdentifier: 
   Direction: 0
-  Origin: 0
+  Passthrough: 0
   Distance: 0
-  Cost: 0
   Exact: 0
   RelativeFacing: 0
   Chain: {fileID: 0}
