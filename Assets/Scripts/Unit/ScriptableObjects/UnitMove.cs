@@ -14,6 +14,7 @@ public class UnitMove : ScriptableObject
     public bool Exact;
     public bool RelativeFacing;
     public UnitMove Chain;
+    public TileSelection Selection;
 
     // public void ResetMovement()
     // {

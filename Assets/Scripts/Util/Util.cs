@@ -42,6 +42,11 @@ public static class Util
         }
     }
 
+    public static bool BinaryStringContainsEnum(string binaryString, int enumValue)
+    {
+        return binaryString[enumValue] == '1';
+    }
+
     public static string IntToBinaryString(int input)
     {
         return Convert.ToString(input, 2);

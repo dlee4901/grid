@@ -36,6 +36,11 @@ public class Unit : MonoBehaviour
         _spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         _spriteRenderer.sprite = Properties.Sprite;
         _spriteRenderer.sortingLayerName = "Unit";
+        if (unitHealthCounterPrefab != null) InitHealthCounter(unitHealthCounterPrefab);
+    }
+
+    void InitHealthCounter(UnitHealthCounter unitHealthCounterPrefab)
+    {
         _healthCounter = Instantiate(unitHealthCounterPrefab, transform);
         _healthCounter.transform.localPosition = new Vector3(1, 1, 0);
         _healthCounter.gameObject.SetActive(false);
@@ -45,13 +50,13 @@ public class Unit : MonoBehaviour
     {
         Stats.GridPosition = idx;
         transform.position = Util.Get2DWorldPos(vec, tileScale);
-        _healthCounter.gameObject.SetActive(true);
+        //_healthCounter.gameObject.SetActive(true);
     }
 
     public void UpdateHealth(int delta=0)
     {
         Stats.Health += delta;
-        _healthCounter.CounterText.text = Stats.Health.ToString();
+        //_healthCounter.CounterText.text = Stats.Health.ToString();
     }
 
     public bool SameController(Unit unit)
