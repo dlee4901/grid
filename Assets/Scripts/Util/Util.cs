@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -39,5 +40,15 @@ public static class Util
         {
             Debug.Log(item);
         }
+    }
+
+    public static string IntToBinaryString(int input)
+    {
+        return Convert.ToString(input, 2);
+    }
+
+    public static int BinaryStringToInt(string input)
+    {
+        return Convert.ToInt32(input, 2);
     }
 }
