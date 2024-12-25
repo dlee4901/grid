@@ -95,6 +95,32 @@ public class Position<T>
         return (vec.z - 1) * _y * _x + (vec.y - 1) * _x + (vec.x - 1) + 1;
     }
 
+    public HashSet<int> GetOccupiedIndices()
+    {
+        HashSet<int> indices = new();
+        for (int i = 1; i < _list.Capacity; i++)
+        {
+            if (_list[i] != null)
+            {
+                indices.Add(i);
+            }
+        }
+        return indices;
+    }
+
+    public HashSet<Vector2> GetOccupiedVectors2()
+    {
+        HashSet<Vector2> vectors = new();
+        for (int i = 1; i < _list.Capacity; i++)
+        {
+            if (_list[i] != null)
+            {
+                vectors.Add(GetVector2(i));
+            }
+        }
+        return vectors;
+    }
+
     public HashSet<int> GetIndices(HashSet<Vector2Int> vectors)
     {
         HashSet<int> indices = new();
@@ -105,7 +131,13 @@ public class Position<T>
         return indices;
     }
 
-    public Vector3Int GetVector(int idx)
+    public Vector2Int GetVector2(int idx)
+    {
+        Vector3Int vector = GetVector3(idx);
+        return new Vector2Int(vector.x, vector.y);
+    }
+
+    public Vector3Int GetVector3(int idx)
     {
         if (!IsValidIndex(idx)) return Vector3Int.zero;
         int z = (idx-1) / (_y * _x) + 1;
@@ -155,7 +187,7 @@ public class Position<T>
     {
         for (int i = GetMinIndex()-1; i < GetMaxIndex()+1; i++)
         {
-            Vector3Int vector = GetVector(i);
+            Vector3Int vector = GetVector3(i);
             int index = GetIndex(vector);
             if (index != i) 
             {

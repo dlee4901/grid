@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Unit2Properties
   m_EditorClassIdentifier: 
   Id: 2
-  Name: shovel
+  Name: everything
   Sprite: {fileID: 21300000, guid: 279ff480381111b40b99a9cb298a5fd3, type: 3}
   Cost: 2
   StartingHealth: 2

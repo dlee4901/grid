@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Properties: {fileID: 11400000, guid: 1e574035cff52054390dc65e9e5e4825, type: 2}
   Moves:
-  - {fileID: 11400000, guid: 3a0103c2fdba1ac4f84dcf6a3612718d, type: 2}
+  - {fileID: 11400000, guid: 01b1c9ccdf76c4ed586fe55fdb0249d5, type: 2}
   Stats:
     GridPosition: 0
     PlayerController: 0

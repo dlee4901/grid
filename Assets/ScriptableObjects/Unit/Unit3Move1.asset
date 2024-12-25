@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d534193066924e32a2e9cbaeab75d82, type: 3}
-  m_Name: New Tile Selection
+  m_Name: Unit3Move1
   m_EditorClassIdentifier: 
-  Direction: 0
-  Passthrough: 0
-  Distance: 0
+  Direction: 10
+  Passthrough: 2
+  Distance: -1
   Exact: 0
   RelativeFacing: 0
   Chain: {fileID: 0}

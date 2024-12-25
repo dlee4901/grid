@@ -5,17 +5,11 @@ using UnityEngine;
 
 public class TileSelectionHandler
 {
+    public TileSelectionHandler() {}
+
     public HashSet<Vector2Int> GetSelectableTiles(TileSelection tileSelection, Vector2Int origin, Position<Unit> units, Position<Tile> tiles)
     {
         Debug.Log(tileSelection.Passthrough);
-        HashSet<Vector2Int> selectableTiles = new();
-        selectableTiles = GetValidMoves(tileSelection, origin, units, tiles);
-        selectableTiles.Remove(origin);
-        return selectableTiles;
-    }
-
-    public HashSet<Vector2Int> GetValidMoves(TileSelection tileSelection, Vector2Int origin, Position<Unit> units, Position<Tile> tiles)
-    {
         List<List<Vector2Int>> res = new();
         List<Vector2Int> validMoves = new();
         Unit unit = units.Get(origin);

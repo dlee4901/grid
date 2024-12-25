@@ -90,8 +90,6 @@ public class GridManager : MonoBehaviour
         _stateMachine.SetStartState("Idle");
         _stateMachine.AddTwoWayTransition("Idle", "TileSelected", transition => _tileSelected != 0);
         _stateMachine.AddTransition("MoveSelected", "Idle", transition => _tileSelected == 0);
-        // _stateMachine.AddTransition("TileSelected", "ActionSelected");
-        // _stateMachine.AddTransition("ActionSelected", "Idle");
         _stateMachine.Init();
     }
 
@@ -230,7 +228,7 @@ public class GridManager : MonoBehaviour
     void StateOnEnterMoveSelected()
     {
         Debug.Log("StateOnEnterMoveSelected");
-        SetSelectableTiles(_tiles.GetIndices(_moveHandler.GetMovePositions(_tileSelected, _units, _tiles)), true);
+        SetSelectableTiles(_tiles.GetIndices(_moveHandler.GetMoves(_tileSelected, _units, _tiles)), true);
     }
 
     void HandleUnitPlacement()
@@ -341,7 +339,7 @@ public class GridManager : MonoBehaviour
     {
         if (_units.Set(index, unit)) 
         {
-            unit.SetPosition(index, _units.GetVector(index), Visual.TileScale);
+            unit.SetPosition(index, _units.GetVector3(index), Visual.TileScale);
             PlayerManager.AddPlayerUnit(unit);
         }
     }
