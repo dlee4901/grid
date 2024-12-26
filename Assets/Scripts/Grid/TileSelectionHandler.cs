@@ -7,11 +7,10 @@ public class TileSelectionHandler
 {
     public TileSelectionHandler() {}
 
-    public HashSet<Vector2Int> GetSelectableTiles(TileSelection tileSelection, Vector2Int origin, Position<Unit> units, Position<Tile> tiles)
+    public HashSet<int> GetSelectableTiles(TileSelection tileSelection, Vector2Int origin, Position<Unit> units, Position<Tile> tiles)
     {
         Debug.Log(tileSelection.Passthrough);
-        List<List<Vector2Int>> res = new();
-        List<Vector2Int> validMoves = new();
+        List<Vector2Int> selectableTiles = new();
         Unit unit = units.Get(origin);
         List<Vector2Int> unitVectors = GetUnitVectors(tileSelection, unit);
         List<bool> collisions = new List<bool>{false, false, false, false, false, false, false, false};
@@ -29,10 +28,10 @@ public class TileSelectionHandler
                 for (int j = 0; j < 8; j++)
                 {
                     Vector2Int startPosition = origin;
-                    if (i > 0) startPosition = validMoves[8 * (i - 1) + j];
+                    if (i > 0) startPosition = selectableTiles[8 * (i - 1) + j];
                     if (collisions[j])
                     {
-                        validMoves.Add(startPosition);
+                        selectableTiles.Add(startPosition);
                         continue;
                     }
                     Vector2Int targetPosition = startPosition + unitVectors[j];
@@ -50,19 +49,12 @@ public class TileSelectionHandler
                             }
                         }
                     }
-                    if (targetPositionValid) validMoves.Add(targetPosition);
-                    else validMoves.Add(startPosition);
+                    if (targetPositionValid) selectableTiles.Add(targetPosition);
+                    else selectableTiles.Add(startPosition);
                 }
             }
         }
-        res.Add(validMoves);
-
-        List<Vector2Int> combined = new();
-        foreach (List<Vector2Int> moves in res)
-        {
-            combined = combined.Concat(moves).ToList();
-        }
-        return new HashSet<Vector2Int>(combined);
+        return tiles.GetIndices(selectableTiles);
     }
 
     public List<Vector2Int> GetUnitVectors(TileSelection tileSelection, Unit unit)

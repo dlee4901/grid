@@ -14,8 +14,15 @@ public class Tile : MonoBehaviour
     Color _colorHovered = new Color(0.7f, 0.7f, 0.7f);
     Color _colorUnselectable = new Color(0.4f, 0.4f, 0.4f);
     Color _colorSelected = new Color(1.0f, 1.0f, 0f);
-    Color _colorPlayer1 = new Color(1.0f, 0.3f, 0.3f);
-    Color _colorPlayer2 = new Color(0.3f, 0.3f, 1.0f);
+    Color _colorPlayer1 = new Color(1.0f, 0.7f, 0.7f);
+    Color _colorPlayer2 = new Color(0.7f, 0.7f, 1.0f);
+
+    int _id;
+    public int Id
+    {
+        get { return _id; }
+        set { _id = value; }
+    }
 
     bool _selectable;
     public bool Selectable
@@ -24,14 +31,19 @@ public class Tile : MonoBehaviour
         set { _selectable = value; OnPropertyChanged("Selectable"); }
     }
 
+    int _team;
+    public int Team
+    {
+        get { return _team; }
+        set { _team = value; OnPropertyChanged("Team"); }
+    }
+
     TileState _state;
     public TileState State
     {
         get { return _state; }
         set { _state = value; OnPropertyChanged("State"); }
     }
-    
-    public int Id {get; set;}
 
     void Awake()
     {
@@ -54,6 +66,8 @@ public class Tile : MonoBehaviour
         transform.localScale = new Vector3(tileScale, tileScale, transform.localScale.z);
         Id = positionIdx;
         Selectable = true;
+        Team = 0;
+        State = TileState.Default;
     }
 
     void OnPropertyChanged(string property)
@@ -62,28 +76,36 @@ public class Tile : MonoBehaviour
         {
             if (_state != TileState.Selected)
             {
-                if (_selectable)
-                {
-                    _spriteRenderer.color = _colorDefault;
-                }
-                else
-                {
-                    _spriteRenderer.color = _colorUnselectable;
-                }
+                if (_selectable) SetColor(_colorDefault);
+                else             SetColor(_colorUnselectable);
+            }
+        }
+        else if (property == "Team")
+        {
+            if (_selectable)
+            {
+                SetTeamColor(_colorDefault);
             }
         }
         else if (property == "State")
         {
-            if (_state == TileState.Hovered)       SetColor(_colorHovered);
+            if (_state == TileState.Hovered)       SetTeamColor(_colorHovered);
             else if (!_selectable)                 SetColor(_colorUnselectable);
             else if (_state == TileState.Selected) SetColor(_colorSelected);
-            else                                   SetColor(_colorDefault);
+            else                                   SetTeamColor(_colorDefault);
         }
     }
 
     void SetColor(Color color)
     {
         _spriteRenderer.color = color;
+    }
+
+    void SetTeamColor(Color color)
+    {
+        if (_team == 1)      SetColor(_colorPlayer1);
+        else if (_team == 2) SetColor(_colorPlayer2);
+        else                 SetColor(color);
     }
     
     void OnMouseEnter()

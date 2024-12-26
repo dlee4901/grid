@@ -56,4 +56,9 @@ public static class Util
     {
         return Convert.ToInt32(input, 2);
     }
+
+    public static HashSet<T> ListToHashSet<T>(List<T> list)
+    {
+        return new HashSet<T>(list);
+    }
 }

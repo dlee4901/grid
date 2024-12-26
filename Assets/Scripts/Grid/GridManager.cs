@@ -146,7 +146,7 @@ public class GridManager : MonoBehaviour
     public void StartGame()
     {
         _gridPhase = GridPhase.Battle;
-        SetSelectableTilesAll(true);
+        SetSelectableTilesAll();
         NextTurn();
     }
 
@@ -170,12 +170,16 @@ public class GridManager : MonoBehaviour
     {
         if (GetUnit(_tileSelected) == null)
         {
-            SetSelectableTilesAll(true);
+            SetSelectableTilesAll();
             _stateMachine.RequestStateChange("Idle");
         }
         else
         {
-            if (action == UnitAction.Move)
+            if (_stateMachine.ActiveStateName == "MoveSelected")
+            {
+                SetTileSelected(0);
+            }
+            else if (action == UnitAction.Move)
             {
                 _stateMachine.RequestStateChange("MoveSelected");
             }
@@ -201,7 +205,7 @@ public class GridManager : MonoBehaviour
         {
             selectableTiles.Add(i);
         }
-        SetSelectableTiles(selectableTiles, true);
+        SetSelectableTiles(selectableTiles);
     }
 
     public Unit GetUnit(int index)
@@ -217,7 +221,7 @@ public class GridManager : MonoBehaviour
     void StateOnEnterIdle()
     {
         Debug.Log("StateOnEnterIdle");
-        SetSelectableTilesAll(true);
+        SetSelectableTilesAll();
     }
 
     void StateOnEnterTileSelected()
@@ -228,7 +232,7 @@ public class GridManager : MonoBehaviour
     void StateOnEnterMoveSelected()
     {
         Debug.Log("StateOnEnterMoveSelected");
-        SetSelectableTiles(_tiles.GetIndices(_moveHandler.GetMoves(_tileSelected, _units, _tiles)), true);
+        SetSelectableTiles(_moveHandler.GetMoves(_tileSelected, _units, _tiles));
     }
 
     void HandleUnitPlacement()
@@ -283,9 +287,9 @@ public class GridManager : MonoBehaviour
     }
 
     // Helper Methods
-    void SetSelectableTiles(HashSet<int> tiles, bool selectable)
+    void SetSelectableTiles(HashSet<int> tiles, bool selectable=true)
     {
-        for (int i = 1; i < _tiles.Size(); i++)
+        for (int i = 1; i < _tiles.Count(); i++)
         {
             if (i == _tileSelected) Debug.Log(i);
             if (tiles.Contains(i)) _tiles.Get(i).Selectable = selectable;
@@ -293,11 +297,22 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void SetSelectableTilesAll(bool selectable)
+    void SetSelectableTilesAll(bool selectable=true, bool setUnitTiles=true)
     {
-        for (int i = 1; i < _tiles.Size(); i++)
+        for (int i = 1; i < _tiles.Count(); i++)
         {
             _tiles.Get(i).Selectable = selectable;
+        }
+        if (setUnitTiles) SetUnitTiles();
+    }
+
+    void SetUnitTiles()
+    {
+        for (int i = 1; i < _units.Count(); i++)
+        {
+            Unit unit = _units.Get(i);
+            if (unit != null) _tiles.Get(i).Team = unit.Stats.PlayerController;
+            else              _tiles.Get(i).Team = 0;
         }
     }
 
@@ -362,9 +377,11 @@ public class GridManager : MonoBehaviour
     void MoveUnit(int srcIndex, int dstIndex)
     {
         Unit unit = _units.Get(srcIndex);
-        if (unit != null) {
+        if (unit != null)
+        {
             _units.Move(srcIndex, dstIndex);
             SetUnitGridPosition(unit, dstIndex);
+            SetUnitTiles();
             PlayerManager.UpdatePlayerMovePoints(PlayerTurn, -1);
             GameInfoDisplay.UpdateDisplay();
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ public class Position<T>
         return (_x, _y, _z);
     }
 
-    public int Size()
+    public int Count()
     {
         return _list.Count;
     }
@@ -98,7 +99,7 @@ public class Position<T>
     public HashSet<int> GetOccupiedIndices()
     {
         HashSet<int> indices = new();
-        for (int i = 1; i < _list.Capacity; i++)
+        for (int i = 1; i < _list.Count; i++)
         {
             if (_list[i] != null)
             {
@@ -111,7 +112,7 @@ public class Position<T>
     public HashSet<Vector2> GetOccupiedVectors2()
     {
         HashSet<Vector2> vectors = new();
-        for (int i = 1; i < _list.Capacity; i++)
+        for (int i = 1; i < _list.Count; i++)
         {
             if (_list[i] != null)
             {
@@ -122,6 +123,16 @@ public class Position<T>
     }
 
     public HashSet<int> GetIndices(HashSet<Vector2Int> vectors)
+    {
+        HashSet<int> indices = new();
+        foreach (Vector2Int vec in vectors)
+        {
+            indices.Add(GetIndex(vec));
+        }
+        return indices;
+    }
+
+    public HashSet<int> GetIndices(List<Vector2Int> vectors)
     {
         HashSet<int> indices = new();
         foreach (Vector2Int vec in vectors)

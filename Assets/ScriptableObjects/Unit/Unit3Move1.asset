@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Unit3Move1
   m_EditorClassIdentifier: 
   Direction: 10
-  Passthrough: 2
+  Passthrough: 4
   Distance: -1
   Exact: 0
   RelativeFacing: 0
