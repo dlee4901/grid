@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[CreateAssetMenu(menuName = "Unit Properties")]
+[CreateAssetMenu(menuName = "UnitProperties")]
 public class UnitProperties : ScriptableObject
 {
     [Header("Identifiers")]

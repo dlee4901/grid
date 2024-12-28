@@ -7,10 +7,13 @@ using UnityEngine.InputSystem;
 public struct UnitStats
 {
     public int GridPosition;
+    public DirectionFacing DirectionFacing;
     public int PlayerController;
     public int Health;
-    public int Shield;
-    public DirectionFacing DirectionFacing;
+    public int HealthOverflow;
+    
+    public int DamageDelta;
+    public List<int> Counters;
 }
 
 public enum UnitAction {Move, Skill}
