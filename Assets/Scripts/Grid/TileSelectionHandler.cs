@@ -7,7 +7,7 @@ public class TileSelectionHandler
 {
     public TileSelectionHandler() {}
 
-    public HashSet<int> GetSelectableTiles(TileSelection tileSelection, Vector2Int origin, Position<Unit> units, Position<Tile> tiles)
+    public HashSet<int> GetSelectableTiles(TileSelection tileSelection, Vector2Int origin, Position<Tile> tiles, Position<Unit> units)
     {
         Debug.Log(tileSelection.Passthrough);
         List<Vector2Int> selectableTiles = new();

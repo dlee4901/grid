@@ -4,6 +4,5 @@ using UnityEngine;
 public class Individual : TargetBase
 {
     [Header("Individual")]
-    public TileSelection selectionArea;
-    public int Amount;
+    public TileSelection SelectionArea;
 }

@@ -232,7 +232,7 @@ public class GridManager : MonoBehaviour
     void StateOnEnterMoveSelected()
     {
         Debug.Log("StateOnEnterMoveSelected");
-        SetSelectableTiles(_moveHandler.GetMoves(_tileSelected, _units, _tiles));
+        SetSelectableTiles(_moveHandler.GetMoves(_tileSelected, _tiles, _units));
     }
 
     void HandleUnitPlacement()

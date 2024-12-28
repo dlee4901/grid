@@ -4,6 +4,6 @@ using UnityEngine;
 public class AOE : TargetBase
 {
     [Header("AOE")]
-    public TileSelection selectionArea;
-    public TileSelection effectArea;
+    public TileSelection SelectionArea;
+    public TileSelection EffectArea;
 }

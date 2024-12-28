@@ -1,4 +1,4 @@
-public enum Effect {ChangePosition, ChangeHealth, ChangeShield, ChangeDamage, ChangeCounter, }
+public enum Effect {Position, Health, Shield, Damage, Counter}
 public enum Buff {}
 
 public class Skill
@@ -7,4 +7,7 @@ public class Skill
     public int Cooldown;
 
     public TargetBase Target;
+
+    public Effect Effect;
+    public int Delta;
 }

@@ -61,4 +61,17 @@ public static class Util
     {
         return new HashSet<T>(list);
     }
+
+    public static bool IsTarget(Unit source, Unit target, Team team, Entity entity)
+    {
+        int sourceController = source.Stats.PlayerController;
+        int targetController = target.Stats.PlayerController;
+        if (entity == Entity.Unit)
+        {
+            if (team == 0)
+            if (team == Team.Ally && sourceController == targetController) return true;
+            if (team == Team.Enemy && sourceController != targetController) return true;
+        }
+        return false;
+    }
 }
