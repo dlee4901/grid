@@ -3,29 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[Serializable]
-public struct UnitStats
-{
-    public int GridPosition;
-    public DirectionFacing DirectionFacing;
-    public int PlayerController;
-    public int Health;
-    public int HealthOverflow;
-    
-    public int DamageDelta;
-    public List<int> Counters;
-}
-
 public enum UnitAction {Move, Skill}
 
-public class Unit : MonoBehaviour
+public class Unit : Entity
 {
     public UnitProperties Properties;
     public List<TileSelection> Moves;
-    public UnitStats Stats;
-
+    
     public int ListUIPosition;
-    //public bool IsDragging;
 
     SpriteRenderer _spriteRenderer;
     UnitHealthCounter _healthCounter;
@@ -47,23 +32,5 @@ public class Unit : MonoBehaviour
         _healthCounter = Instantiate(unitHealthCounterPrefab, transform);
         _healthCounter.transform.localPosition = new Vector3(1, 1, 0);
         _healthCounter.gameObject.SetActive(false);
-    }
-
-    public void SetPosition(int idx, Vector3Int vec, float tileScale)
-    {
-        Stats.GridPosition = idx;
-        transform.position = Util.Get2DWorldPos(vec, tileScale);
-        //_healthCounter.gameObject.SetActive(true);
-    }
-
-    public void UpdateHealth(int delta=0)
-    {
-        Stats.Health += delta;
-        //_healthCounter.CounterText.text = Stats.Health.ToString();
-    }
-
-    public bool SameController(Unit unit)
-    {
-        return Stats.PlayerController == unit.Stats.PlayerController;
     }
 }

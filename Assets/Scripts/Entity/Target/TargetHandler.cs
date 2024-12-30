@@ -18,7 +18,7 @@ public class TargetHandler
         return targets;
     }
 
-    public HashSet<int> GetTargetsTeamEntity(Team team, Entity entity, Vector2Int origin, Position<Unit> units)
+    public HashSet<int> GetTargetsTeamEntity(Team team, Vector2Int origin, Position<Unit> units)
     {
         HashSet<int> occupiedIndices = units.GetOccupiedIndices();
         foreach (int index in occupiedIndices)

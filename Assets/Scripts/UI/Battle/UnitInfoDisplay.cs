@@ -23,7 +23,7 @@ public class UnitInfoDisplay : MonoBehaviour
 
     public void UpdateDisplay(Unit unit=null)       
     {
-        if (unit == null || unit.Stats.PlayerController != Grid.PlayerTurn) 
+        if (unit == null || unit.PlayerController != Grid.PlayerTurn) 
         {
             Container.gameObject.SetActive(false);
         }

@@ -130,7 +130,7 @@ public class TileSelectionHandler
         if (tileSelection.RelativeFacing && unit != null)
         {
             int shift = 0;
-            switch (unit.Stats.DirectionFacing)
+            switch (unit.DirectionFacing)
             {
                 case DirectionFacing.E:
                     shift = 6;

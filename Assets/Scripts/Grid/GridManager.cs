@@ -117,7 +117,7 @@ public class GridManager : MonoBehaviour
     void UnitPlace(Unit unit)
     {
         _unitDragging = null;
-        EventManager.Singleton.StartUnitUIUpdateEvent(unit.Stats.PlayerController, unit.ListUIPosition, PlaceUnit(unit, _tileHovered));
+        EventManager.Singleton.StartUnitUIUpdateEvent(unit.PlayerController, unit.ListUIPosition, PlaceUnit(unit, _tileHovered));
     }
 
     public void OnSelect(InputAction.CallbackContext ctx) 
@@ -311,7 +311,7 @@ public class GridManager : MonoBehaviour
         for (int i = 1; i < _units.Count(); i++)
         {
             Unit unit = _units.Get(i);
-            if (unit != null) _tiles.Get(i).Team = unit.Stats.PlayerController;
+            if (unit != null) _tiles.Get(i).Team = unit.PlayerController;
             else              _tiles.Get(i).Team = 0;
         }
     }
@@ -327,9 +327,9 @@ public class GridManager : MonoBehaviour
         if (!_tiles.Get(index).Selectable)
         {
             Debug.Log("PlaceUnit - tile not selectable");
-            if (unit.Stats.GridPosition > 0)
+            if (unit.GridPosition > 0)
             {
-                SetUnitGridPosition(unit, unit.Stats.GridPosition);
+                SetUnitGridPosition(unit, unit.GridPosition);
                 return true;
             }
             DeleteUnit(unit);
@@ -338,9 +338,9 @@ public class GridManager : MonoBehaviour
         if (_units.Get(index) != null)
         {
             Debug.Log("PlaceUnit - tile is occupied");
-            if (unit.Stats.GridPosition > 0)
+            if (unit.GridPosition > 0)
             {
-                SetUnitGridPosition(unit, unit.Stats.GridPosition);
+                SetUnitGridPosition(unit, unit.GridPosition);
                 return true;
             }
             DeleteUnit(unit);

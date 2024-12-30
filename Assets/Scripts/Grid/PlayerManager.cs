@@ -58,11 +58,11 @@ public class PlayerManager
 
     public void AddPlayerUnit(Unit unit, int unitCostTotal=0)
     {
-        Player player = GetPlayer(unit.Stats.PlayerController);
+        Player player = GetPlayer(unit.PlayerController);
         if (player != null)
         {
             List<Unit> playerUnits = player.Units;
-            if (playerUnits != null && !playerUnits.Contains(unit) && (unitCostTotal == 0 || GetPlayerUnitCostTotal(unit.Stats.PlayerController) + unit.Properties.Cost <= unitCostTotal))
+            if (playerUnits != null && !playerUnits.Contains(unit) && (unitCostTotal == 0 || GetPlayerUnitCostTotal(unit.PlayerController) + unit.Properties.Cost <= unitCostTotal))
             {
                 playerUnits.Add(unit);
             }
@@ -71,7 +71,7 @@ public class PlayerManager
 
     public void DeletePlayerUnit(Unit unit)
     {
-        Player player = GetPlayer(unit.Stats.PlayerController);
+        Player player = GetPlayer(unit.PlayerController);
         if (player != null)
         {
             List<Unit> playerUnits = player.Units;
