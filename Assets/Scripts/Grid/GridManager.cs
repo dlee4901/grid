@@ -27,7 +27,7 @@ public struct GridPrep
 public class GridManager : MonoBehaviour
 {
     Position<Tile> _tiles;
-    Position<Unit> _units;
+    Position<Entity> _entities;
     MoveHandler _moveHandler;
     InputHandler _inputHandlerDragDrop;
     
@@ -66,7 +66,7 @@ public class GridManager : MonoBehaviour
     void Init()
     {
         _tiles ??= new Position<Tile>(X, Y);
-        _units ??= new Position<Unit>(X, Y);
+        _entities ??= new Position<Entity>(X, Y);
         _moveHandler ??= new MoveHandler();
         _inputHandlerDragDrop ??= new InputHandler(InputActionPreset.DragDrop);
         PlayerManager = new PlayerManager(Prep.NumPlayers, Prep.MovePoints, Prep.SkillPoints);
@@ -103,7 +103,7 @@ public class GridManager : MonoBehaviour
                 Tile tile = Instantiate(tileGO, Util.Get2DWorldPos(new Vector3Int(i, j, 0), Visual.TileScale), Quaternion.identity, transform);
                 tile.Init(Visual.TileSprite, Visual.TileScale, _tiles.GetIndex(new Vector2Int(i, j)));
                 _tiles.Add(tile);
-                _units.Add(null);
+                _entities.Add(null);
             }
         }
         Destroy(tileGO.gameObject);
@@ -117,7 +117,7 @@ public class GridManager : MonoBehaviour
     void UnitPlace(Unit unit)
     {
         _unitDragging = null;
-        EventManager.Singleton.StartUnitUIUpdateEvent(unit.PlayerController, unit.ListUIPosition, PlaceUnit(unit, _tileHovered));
+        EventManager.Singleton.StartUnitUIUpdateEvent(unit.PlayerController, unit.ListUIPosition, PlaceEntity(unit, _tileHovered));
     }
 
     public void OnSelect(InputAction.CallbackContext ctx) 
@@ -168,7 +168,7 @@ public class GridManager : MonoBehaviour
 
     public void DisplayAction(UnitAction action, int index=0)
     {
-        if (GetUnit(_tileSelected) == null)
+        if (GetEntity(_tileSelected) == null)
         {
             SetSelectableTilesAll();
             _stateMachine.RequestStateChange("Idle");
@@ -208,9 +208,9 @@ public class GridManager : MonoBehaviour
         SetSelectableTiles(selectableTiles);
     }
 
-    public Unit GetUnit(int index)
+    public Entity GetEntity(int index)
     {
-        return _units.Get(index);
+        return _entities.Get(index);
     }
 
     public Player GetActivePlayer()
@@ -232,16 +232,17 @@ public class GridManager : MonoBehaviour
     void StateOnEnterMoveSelected()
     {
         Debug.Log("StateOnEnterMoveSelected");
-        SetSelectableTiles(_moveHandler.GetMoves(_tileSelected, _tiles, _units));
+        SetSelectableTiles(_moveHandler.GetMoves(_tileSelected, _tiles, _entities));
     }
 
     void HandleUnitPlacement()
     {
-        Unit unit = _units.Get(_tileHovered);
-        if (unit != null && _tiles.Get(_tileHovered).Selectable)
+        Entity entity = _entities.Get(_tileHovered);
+        Debug.Log("HandleUnitPlacement");
+        if (entity != null && _tiles.Get(_tileHovered).Selectable && entity is Unit)
         {
-            _units.Set(_tileHovered, null);
-            _unitDragging = unit;
+            _entities.Set(_tileHovered, null);
+            _unitDragging = (Unit)entity;
         }
     }
 
@@ -254,7 +255,8 @@ public class GridManager : MonoBehaviour
         Tile newTileSelected = _tiles.Get(_tileSelected);
         if (newTileSelected != null) newTileSelected.State = TileState.Selected;
 
-        UnitInfoDisplay.UpdateDisplay(_units.Get(_tileSelected));
+        Entity entity = _entities.Get(_tileSelected);
+        UnitInfoDisplay.UpdateDisplay(entity);
     }
 
     void HandleTileSelect()
@@ -272,7 +274,7 @@ public class GridManager : MonoBehaviour
         Tile tile = _tiles.Get(_tileHovered);
         if (tile != null)
         {
-            if (tile.Selectable) MoveUnit(_tileSelected, _tileHovered);
+            if (tile.Selectable) MoveEntity(_tileSelected, _tileHovered);
         }
         SetTileSelected(0);
     }
@@ -297,91 +299,93 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void SetSelectableTilesAll(bool selectable=true, bool setUnitTiles=true)
+    void SetSelectableTilesAll(bool selectable=true, bool setEntityTiles=true)
     {
         for (int i = 1; i < _tiles.Count(); i++)
         {
             _tiles.Get(i).Selectable = selectable;
         }
-        if (setUnitTiles) SetUnitTiles();
+        if (setEntityTiles) SetEntityTiles();
     }
 
-    void SetUnitTiles()
+    void SetEntityTiles()
     {
-        for (int i = 1; i < _units.Count(); i++)
+        for (int i = 1; i < _entities.Count(); i++)
         {
-            Unit unit = _units.Get(i);
-            if (unit != null) _tiles.Get(i).Team = unit.PlayerController;
-            else              _tiles.Get(i).Team = 0;
+            Entity entity = _entities.Get(i);
+            if (entity != null) _tiles.Get(i).Team = entity.PlayerController;
+            else                _tiles.Get(i).Team = 0;
         }
     }
 
-    bool PlaceUnit(Unit unit, int index)
+    bool PlaceEntity(Entity entity, int index)
     {
         if (!_tiles.IsValidIndex(index))
         {
-            Debug.Log("PlaceUnit - invalid position");
-            DeleteUnit(unit);
+            Debug.Log("PlaceEntity - invalid position");
+            DeleteEntity(entity);
             return false;
         }
         if (!_tiles.Get(index).Selectable)
         {
-            Debug.Log("PlaceUnit - tile not selectable");
-            if (unit.GridPosition > 0)
+            Debug.Log("PlaceEntity - tile not selectable");
+            if (entity.GridPosition > 0)
             {
-                SetUnitGridPosition(unit, unit.GridPosition);
+                SetEntityGridPosition(entity, entity.GridPosition);
                 return true;
             }
-            DeleteUnit(unit);
+            DeleteEntity(entity);
             return false;
         }
-        if (_units.Get(index) != null)
+        if (_entities.Get(index) != null)
         {
-            Debug.Log("PlaceUnit - tile is occupied");
-            if (unit.GridPosition > 0)
+            Debug.Log("PlaceEntity - tile is occupied");
+            if (entity.GridPosition > 0)
             {
-                SetUnitGridPosition(unit, unit.GridPosition);
+                SetEntityGridPosition(entity, entity.GridPosition);
                 return true;
             }
-            DeleteUnit(unit);
+            DeleteEntity(entity);
             return false;
         }
-        SetUnitGridPosition(unit, index);
+        SetEntityGridPosition(entity, index);
         return true;
     }
 
-    void SetUnitGridPosition(Unit unit, int index)
+    void SetEntityGridPosition(Entity entity, int index)
     {
-        if (_units.Set(index, unit)) 
+        if (_entities.Set(index, entity)) 
         {
-            unit.SetPosition(index, _units.GetVector3(index), Visual.TileScale);
-            PlayerManager.AddPlayerUnit(unit);
+            entity.SetPosition(index, _entities.GetVector3(index), Visual.TileScale);
+            Debug.Log("SetEntityGridPosition");
+            if (entity is Unit) PlayerManager.AddPlayerUnit((Unit)entity);
         }
     }
 
-    void DeleteUnit(int index)
+    void DeleteEntity(int index)
     {
-        Unit unit = _units.Get(index);
-        if (unit != null) 
+        Entity entity = _entities.Get(index);
+        if (entity != null) 
         {
-            DeleteUnit(unit);
+            DeleteEntity(entity);
         }
     }
 
-    void DeleteUnit(Unit unit)
+    void DeleteEntity(Entity entity)
     {
-        PlayerManager.DeletePlayerUnit(unit);
-        Destroy(unit.gameObject);
+        Debug.Log("DeleteEntity");
+        if (entity is Unit) PlayerManager.DeletePlayerUnit((Unit)entity);
+        Destroy(entity.gameObject);
     }
 
-    void MoveUnit(int srcIndex, int dstIndex)
+    void MoveEntity(int srcIndex, int dstIndex)
     {
-        Unit unit = _units.Get(srcIndex);
-        if (unit != null)
+        Entity entity = _entities.Get(srcIndex);
+        if (entity != null)
         {
-            _units.Move(srcIndex, dstIndex);
-            SetUnitGridPosition(unit, dstIndex);
-            SetUnitTiles();
+            _entities.Move(srcIndex, dstIndex);
+            SetEntityGridPosition(entity, dstIndex);
+            SetEntityTiles();
             PlayerManager.UpdatePlayerMovePoints(PlayerTurn, -1);
             GameInfoDisplay.UpdateDisplay();
         }

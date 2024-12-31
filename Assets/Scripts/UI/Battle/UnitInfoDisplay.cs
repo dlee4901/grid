@@ -21,8 +21,10 @@ public class UnitInfoDisplay : MonoBehaviour
         _uiInputHandler = gameObject.AddComponent<UiInputHandler>();
     }
 
-    public void UpdateDisplay(Unit unit=null)       
+    public void UpdateDisplay(Entity entity=null)       
     {
+        Unit unit = null;
+        if (entity is Unit) unit = (Unit)entity;
         if (unit == null || unit.PlayerController != Grid.PlayerTurn) 
         {
             Container.gameObject.SetActive(false);

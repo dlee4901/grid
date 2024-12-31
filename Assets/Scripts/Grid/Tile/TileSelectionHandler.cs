@@ -7,11 +7,11 @@ public class TileSelectionHandler
 {
     public TileSelectionHandler() {}
 
-    public HashSet<int> GetSelectableTiles(TileSelection tileSelection, Vector2Int origin, Position<Tile> tiles, Position<Unit> units)
+    public HashSet<int> GetSelectableTiles(TileSelection tileSelection, Vector2Int origin, Position<Tile> tiles, Position<Entity> entities)
     {
-        Debug.Log(tileSelection.Passthrough);
+        if (!Util.IsValidOriginAndUnit(origin, tiles, entities)) return null;
         List<Vector2Int> selectableTiles = new();
-        Unit unit = units.Get(origin);
+        Unit unit = (Unit)entities.Get(origin);
         List<Vector2Int> unitVectors = GetUnitVectors(tileSelection, unit);
         List<bool> collisions = new List<bool>{false, false, false, false, false, false, false, false};
         int distance = tileSelection.Distance;
@@ -38,12 +38,12 @@ public class TileSelectionHandler
                     bool targetPositionValid = true;
                     if (tiles.Get(targetPosition) == null) targetPositionValid = false;
                     else {
-                        Unit unitColliding = units.Get(targetPosition);
-                        if (unitColliding != null)
+                        Entity entityColliding = entities.Get(targetPosition);
+                        if (entityColliding != null)
                         {
                             if (tileSelection.Passthrough == 0
-                                || (tileSelection.Passthrough == Team.Ally && !unitColliding.SameController(unit))
-                                || (tileSelection.Passthrough == Team.Enemy && unitColliding.SameController(unit)))
+                                || (tileSelection.Passthrough == Team.Ally && !entityColliding.SameController(unit))
+                                || (tileSelection.Passthrough == Team.Enemy && entityColliding.SameController(unit)))
                             {
                                 collisions[j] = true;
                             }

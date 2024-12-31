@@ -61,4 +61,16 @@ public static class Util
     {
         return new HashSet<T>(list);
     }
+
+    public static bool IsValidOriginAndUnit(int origin, Position<Tile> tiles, Position<Entity> entities)
+    {
+        Entity entity = entities.Get(origin);
+        return tiles.IsValidIndex(origin) && entity != null && entity.GetType() == typeof(Unit);
+    }
+    
+    public static bool IsValidOriginAndUnit(Vector2Int origin, Position<Tile> tiles, Position<Entity> entities)
+    {
+        Entity entity = entities.Get(origin);
+        return tiles.IsValidVector(origin) && entity != null && entity.GetType() == typeof(Unit);
+    }
 }
