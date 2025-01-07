@@ -54,8 +54,8 @@ public class UnitUIManager : MonoBehaviour
     {   
         if (!IsPlaced && _unit != null)
         {
-            ActionBase action = _inputHandlerDragDrop.HandleInput();
-            if (action != null) action.Execute(_unit.gameObject);
+            CommandBase command = _inputHandlerDragDrop.HandleInput();
+            if (command != null) command.Execute(_unit.gameObject);
         }
     }
 }

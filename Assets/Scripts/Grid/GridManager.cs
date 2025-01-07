@@ -283,8 +283,8 @@ public class GridManager : MonoBehaviour
     {
         if (_unitDragging != null)
         {
-            ActionBase action = _inputHandlerDragDrop.HandleInput();
-            action?.Execute(_unitDragging.gameObject);
+            CommandBase command = _inputHandlerDragDrop.HandleInput();
+            command?.Execute(_unitDragging.gameObject);
         }
     }
 

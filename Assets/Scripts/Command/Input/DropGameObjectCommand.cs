@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class DropGameObjectAction : ActionBase
+public class DropGameObjectCommand : CommandBase
 {
-    public DropGameObjectAction() {}
+    public DropGameObjectCommand() {}
 
     public override void Execute(GameObject gameObj)
     {

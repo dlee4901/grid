@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class DragGameObjectAction : ActionBase
+public class DragGameObjectCommand : CommandBase
 {
-    public DragGameObjectAction() {}
+    public DragGameObjectCommand() {}
 
     public override void Execute(GameObject gameObj)
     {
