@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3223928049367357312}
   - component: {fileID: 913830896616813737}
+  - component: {fileID: 2831331478143877976}
   m_Layer: 0
   m_Name: Unit2
   m_TagString: Untagged
@@ -44,13 +45,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37efe2ff1fa458e4cb21c2c7f048fead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GridPosition: 0
+  DirectionFacing: 0
+  PlayerController: 0
+  Health: 0
+  HealthOverflow: 0
+  DamageDelta: 0
+  Counters: 
   Properties: {fileID: 11400000, guid: 1e574035cff52054390dc65e9e5e4825, type: 2}
+  Move: {fileID: 2831331478143877976}
+  ListUIPosition: 0
+--- !u!114 &2831331478143877976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290806551086974386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd21d0c745d7443e18d19e0792656e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   Moves:
   - {fileID: 11400000, guid: 01b1c9ccdf76c4ed586fe55fdb0249d5, type: 2}
-  Stats:
-    GridPosition: 0
-    PlayerController: 0
-    Health: 0
-    Shield: 0
-    DirectionFacing: 0
-  ListUIPosition: 0

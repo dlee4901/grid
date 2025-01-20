@@ -7,8 +7,12 @@ public enum UnitAction {Move, Skill}
 
 public class Unit : Entity
 {
+    [Header("Unit")]
     public UnitProperties Properties;
-    public List<TileSelection> Moves;
+    public Move Move;
+    public Skill Skill1;
+    public Skill Skill2;
+    public Passive Passive;
     
     public int ListUIPosition;
 

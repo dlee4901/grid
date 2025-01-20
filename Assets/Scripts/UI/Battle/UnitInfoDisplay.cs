@@ -34,8 +34,8 @@ public class UnitInfoDisplay : MonoBehaviour
             UnitImage.sprite = unit.Properties.Sprite;
             Player player = Grid.GetActivePlayer();
             MoveButton.interactable = player?.MovePoints > 0;
-            Skill1Button.interactable = player?.SkillPoints > 0;
-            Skill2Button.interactable = player?.SkillPoints > 0;
+            Skill1Button.interactable = player?.Mana > 0;
+            Skill2Button.interactable = player?.Mana > 0;
             Container.gameObject.SetActive(true);
         }
     }

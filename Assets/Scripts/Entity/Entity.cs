@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    [Header("Entity")]
     public int GridPosition;
     public DirectionFacing DirectionFacing;
     public int PlayerController;

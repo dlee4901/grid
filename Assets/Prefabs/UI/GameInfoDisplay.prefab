@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8854537859629134999}
   - component: {fileID: 4179215354751423435}
   m_Layer: 5
-  m_Name: Text (TMP) Skill Points
+  m_Name: Text (TMP) Mana
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -404,7 +404,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1673683946136324066}
   m_Layer: 5
-  m_Name: SkillPoints
+  m_Name: Mana
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -829,7 +829,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerTurn: {fileID: 6122899809541025734}
   MovePoints: {fileID: 4898584970288209812}
-  SkillPoints: {fileID: 4179215354751423435}
+  Mana: {fileID: 4179215354751423435}
   EndTurn: {fileID: 6268319221180015963}
   Grid: {fileID: 0}
 --- !u!1 &6059942547559329511
@@ -963,7 +963,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 38d5dde8fb892364296297a3a5c97a20, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ace8a02646afeda4880fc3cb14cad705, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

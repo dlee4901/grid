@@ -1554,7 +1554,7 @@ MonoBehaviour:
     UnitCostTotal: 10
     NumPlayers: 2
     MovePoints: 2
-    SkillPoints: 3
+    Mana: 3
   GameInfoDisplay: {fileID: 6223911044332916321}
   UnitInfoDisplay: {fileID: 8362480757712431635}
 --- !u!4 &1836856061

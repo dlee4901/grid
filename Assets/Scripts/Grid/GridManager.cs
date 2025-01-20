@@ -21,14 +21,13 @@ public struct GridPrep
     public int UnitCostTotal; // 20
     public int NumPlayers; // 2
     public int MovePoints; // 2
-    public int SkillPoints; // 3
+    public int Mana; // 3
 }
 
 public class GridManager : MonoBehaviour
 {
     Position<Tile> _tiles;
     Position<Entity> _entities;
-    MoveHandler _moveHandler;
     InputHandler _inputHandlerDragDrop;
     
     StateMachine _stateMachine;
@@ -67,9 +66,8 @@ public class GridManager : MonoBehaviour
     {
         _tiles ??= new Position<Tile>(X, Y);
         _entities ??= new Position<Entity>(X, Y);
-        _moveHandler ??= new MoveHandler();
         _inputHandlerDragDrop ??= new InputHandler(InputActionPreset.DragDrop);
-        PlayerManager = new PlayerManager(Prep.NumPlayers, Prep.MovePoints, Prep.SkillPoints);
+        PlayerManager = new PlayerManager(Prep.NumPlayers, Prep.MovePoints, Prep.Mana);
         InitStateMachine();
 
         _gridPhase = GridPhase.Placement;
@@ -232,7 +230,19 @@ public class GridManager : MonoBehaviour
     void StateOnEnterMoveSelected()
     {
         Debug.Log("StateOnEnterMoveSelected");
-        SetSelectableTiles(_moveHandler.GetMoves(_tileSelected, _tiles, _entities));
+        Entity entity = _entities.Get(_tileSelected);
+        if (entity != null && entity is Unit)
+        {
+            Unit unit = (Unit)entity;
+            SetSelectableTiles(unit.Move.GetTiles(_tileSelected, _tiles, _entities));
+        }
+        // TEMP
+        var fields = Util.GetFields(entity);
+        foreach (var field in fields)
+        {
+            Debug.Log(field);
+        }
+        //
     }
 
     void HandleUnitPlacement()

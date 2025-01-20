@@ -6,7 +6,7 @@ public class GameInfoDisplay : MonoBehaviour
 {
     public TextMeshProUGUI PlayerTurn;
     public TextMeshProUGUI MovePoints;
-    public TextMeshProUGUI SkillPoints;
+    public TextMeshProUGUI Mana;
     public Button EndTurn;
 
     public GridManager Grid;
@@ -24,8 +24,8 @@ public class GameInfoDisplay : MonoBehaviour
         PlayerTurn.text = "Player " + Grid.PlayerTurn + " Turn";
         Player player = Grid.GetActivePlayer();
         int movePoints = player != null ? player.MovePoints : 0;
-        int skillPoints = player != null ? player.SkillPoints : 0;
+        int mana = player != null ? player.Mana : 0;
         MovePoints.text = movePoints + "/" + Grid.Prep.MovePoints;
-        SkillPoints.text = skillPoints + "/" + Grid.Prep.SkillPoints;
+        Mana.text = mana + "/" + Grid.Prep.Mana;
     }
 }

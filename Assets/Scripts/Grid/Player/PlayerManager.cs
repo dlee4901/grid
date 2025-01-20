@@ -5,19 +5,19 @@ public class PlayerManager
     List<Player> _players;
     public int NumPlayers;
     public int MovePoints;
-    public int SkillPoints;
+    public int Mana;
 
-    public PlayerManager(int numPlayers, int movePoints, int skillPoints)
+    public PlayerManager(int numPlayers, int movePoints, int mana)
     {
         NumPlayers = numPlayers;
         MovePoints = movePoints;
-        SkillPoints = skillPoints;
+        Mana = mana;
         _players = new List<Player>();
         for (int id = 1; id <= numPlayers; id++)
         {
             Player player = new Player(id);
             player.MovePoints = movePoints;
-            player.SkillPoints = skillPoints;
+            player.Mana = mana;
             _players.Add(player);
         }
     }
@@ -52,7 +52,7 @@ public class PlayerManager
         if (player != null)
         {
             player.MovePoints = MovePoints;
-            player.SkillPoints = SkillPoints;
+            player.Mana = Mana;
         }
     }
 
@@ -91,12 +91,12 @@ public class PlayerManager
         }
     }
 
-    public void UpdatePlayerSkillPoints(int playerTurn, int skillPoints)
+    public void UpdatePlayerMana(int playerTurn, int Mana)
     {
         Player player = GetPlayer(playerTurn);
         if (player != null)
         {
-            player.SkillPoints += skillPoints;
+            player.Mana += Mana;
         }
     }
 }

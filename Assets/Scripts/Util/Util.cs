@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -72,5 +73,20 @@ public static class Util
     {
         Entity entity = entities.Get(origin);
         return tiles.IsValidVector(origin) && entity != null && entity.GetType() == typeof(Unit);
+    }
+
+    public static FieldInfo[] GetFields(object src)
+    {
+        return src?.GetType()?.GetFields();
+    }
+
+    public static FieldInfo GetField(object src, string field)
+    {
+        return src?.GetType()?.GetField(field);
+    }
+
+    public static object GetFieldValue(object src, string field)
+    {
+        return GetField(src, field)?.GetValue(src);
     }
 }

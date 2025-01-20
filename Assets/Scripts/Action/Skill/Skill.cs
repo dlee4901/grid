@@ -1,10 +1,13 @@
+using UnityEngine;
+
 public enum Effect {Position, Health, Shield, Damage, Counter}
 public enum Buff {}
 
-public class Skill
+public class Skill : MonoBehaviour
 {
-    public int Prep;
+    public int PrepTurns;
     public int Cooldown;
+    public int Cost;
 
     public TargetBase Target;
 
