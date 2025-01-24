@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class UnitUIManager : MonoBehaviour
 {
-    ImageManager _imageManager;
-    UiInputHandler _uiInputHandler;
-    InputHandler _inputHandlerDragDrop;
-    Unit _unit;
-    int _unitID;
-    int _playerController;
-    int _listUIPosition;
+    private ImageManager _imageManager;
+    private UiInputHandler _uiInputHandler;
+    private InputHandler _inputHandlerDragDrop;
+    private Unit _unit;
+    private int _unitID;
+    private int _playerController;
+    private int _listUIPosition;
 
     bool _isPlaced;
     public bool IsPlaced
@@ -34,8 +34,8 @@ public class UnitUIManager : MonoBehaviour
     {
         if (property == "IsPlaced")
         {
-            if (_isPlaced) _imageManager.Image.color = new Color(0f, 0f, 0f);
-            else           _imageManager.Image.color = new Color(1f, 1f, 1f);
+            if (_isPlaced) _imageManager.SetColor(new Color(0f, 0f, 0f));
+            else           _imageManager.SetColor(new Color(1f, 1f, 1f));
         }
     }
 

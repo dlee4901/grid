@@ -4,11 +4,10 @@ using UnityEngine.InputSystem;
 
 public class CinemachineCameraManager : MonoBehaviour
 {
-    public CinemachineCamera Cam;
+    [SerializeField] CinemachineCamera _cam;
     int _tileHovered;
 
     float _zoomStartMultiplier = 7f;
-
     float _minX;
     float _maxX;
     float _minY;
@@ -41,8 +40,9 @@ public class CinemachineCameraManager : MonoBehaviour
         _tileHovered = id;
     }
 
-    public void Init(int x, int y, float tileScale)
+    public void Init(GridManager grid)
     {
+        (int x, int y, float tileScale) = grid.GetSize();
         _minX = 0;
         _minY = 0;
         _maxX = 10 * (x - 1) * tileScale;
@@ -51,8 +51,8 @@ public class CinemachineCameraManager : MonoBehaviour
         _maxZoom = Mathf.Max(x, y) * tileScale * _zoomStartMultiplier * 2f;
         _zoomMultiplier = (_maxZoom / _minZoom) * tileScale / 2f;
         
-        Cam.Lens.OrthographicSize = Mathf.Max(x, y) * tileScale * _zoomStartMultiplier;
-        _zoom = Cam.Lens.OrthographicSize;
+        _cam.Lens.OrthographicSize = Mathf.Max(x, y) * tileScale * _zoomStartMultiplier;
+        _zoom = _cam.Lens.OrthographicSize;
         transform.position = Util.Get2DWorldPos(new Vector3Int(x/2, y/2, 0), tileScale);
     }
 
@@ -93,7 +93,7 @@ public class CinemachineCameraManager : MonoBehaviour
         {
             _zoom -= _scrollAmount * _zoomMultiplier;
             _zoom = Mathf.Clamp(_zoom, _minZoom, _maxZoom);
-            Cam.Lens.OrthographicSize = Mathf.Lerp(Cam.Lens.OrthographicSize, _zoom, Time.deltaTime * 10f);
+            _cam.Lens.OrthographicSize = Mathf.Lerp(_cam.Lens.OrthographicSize, _zoom, Time.deltaTime * 10f);
         }
     }
 }

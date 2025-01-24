@@ -4,28 +4,26 @@ using UnityEngine.UI;
 
 public class GameInfoDisplay : MonoBehaviour
 {
-    public TextMeshProUGUI PlayerTurn;
-    public TextMeshProUGUI MovePoints;
-    public TextMeshProUGUI Mana;
-    public Button EndTurn;
-
-    public GridManager Grid;
+    [SerializeField] private TextMeshProUGUI PlayerTurn;
+    [SerializeField] private TextMeshProUGUI MovePoints;
+    [SerializeField] private TextMeshProUGUI Mana;
+    [SerializeField] private Button EndTurn;
 
     // Update is called once per frame
     void Start()
     {
         EndTurn.onClick.AddListener(() => {
-            Grid.NextTurn();
+            EventManager.Singleton.StartGameInfoDisplayEndTurnEvent();
         });
     }
 
-    public void UpdateDisplay()
+    public void UpdateDisplay(GridManager grid)
     {
-        PlayerTurn.text = "Player " + Grid.PlayerTurn + " Turn";
-        Player player = Grid.GetActivePlayer();
+        PlayerTurn.text = "Player " + grid.PlayerTurn + " Turn";
+        Player player = grid.GetActivePlayer();
         int movePoints = player != null ? player.MovePoints : 0;
         int mana = player != null ? player.Mana : 0;
-        MovePoints.text = movePoints + "/" + Grid.Prep.MovePoints;
-        Mana.text = mana + "/" + Grid.Prep.Mana;
+        MovePoints.text = movePoints + "/" + grid.MovePoints;
+        Mana.text = mana + "/" + grid.Mana;
     }
 }

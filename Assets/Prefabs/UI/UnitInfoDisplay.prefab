@@ -1159,9 +1159,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be289597bbb1745ba81ff35aca158b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitImage: {fileID: 8217647997211984139}
-  MoveButton: {fileID: 4757050612293748350}
-  Skill1Button: {fileID: 2765753448747228219}
-  Skill2Button: {fileID: 8115071936337378093}
-  Container: {fileID: 3881043213344457441}
-  Grid: {fileID: 0}
+  _unitImage: {fileID: 8217647997211984139}
+  _moveButton: {fileID: 4757050612293748350}
+  _skill1Button: {fileID: 2765753448747228219}
+  _skill2Button: {fileID: 8115071936337378093}
+  _container: {fileID: 3881043213344457441}

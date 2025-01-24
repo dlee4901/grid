@@ -6,23 +6,18 @@ public enum TileState { Default, Hovered, Selected }
 
 public class Tile : MonoBehaviour
 {
-    SpriteRenderer _spriteRenderer;
-    BoxCollider2D _boxCollider;
+    private SpriteRenderer _spriteRenderer;
+    private BoxCollider2D _boxCollider;
     //TileTerrain _terrain;
 
-    Color _colorDefault = new Color(1.0f, 1.0f, 1.0f);
-    Color _colorHovered = new Color(0.7f, 0.7f, 0.7f);
-    Color _colorUnselectable = new Color(0.4f, 0.4f, 0.4f);
-    Color _colorSelected = new Color(1.0f, 1.0f, 0f);
-    Color _colorPlayer1 = new Color(1.0f, 0.7f, 0.7f);
-    Color _colorPlayer2 = new Color(0.7f, 0.7f, 1.0f);
+    private Color _colorDefault = new Color(1.0f, 1.0f, 1.0f);
+    private Color _colorHovered = new Color(0.7f, 0.7f, 0.7f);
+    private Color _colorUnselectable = new Color(0.4f, 0.4f, 0.4f);
+    private Color _colorSelected = new Color(1.0f, 1.0f, 0f);
+    private Color _colorPlayer1 = new Color(1.0f, 0.7f, 0.7f);
+    private Color _colorPlayer2 = new Color(0.7f, 0.7f, 1.0f);
 
-    int _id;
-    public int Id
-    {
-        get { return _id; }
-        set { _id = value; }
-    }
+    public int Id { get; private set; }
 
     bool _selectable;
     public bool Selectable
@@ -30,7 +25,6 @@ public class Tile : MonoBehaviour
         get { return _selectable; }
         set { _selectable = value; OnPropertyChanged("Selectable"); }
     }
-
     int _team;
     public int Team
     {
@@ -44,16 +38,7 @@ public class Tile : MonoBehaviour
         get { return _state; }
         set { _state = value; OnPropertyChanged("State"); }
     }
-
-    void Awake()
-    {
-
-    }
-
-    void Update()
-    {
-    }
-
+    
     public void Init(Sprite sprite, float tileScale, int positionIdx=0)
     {
         _spriteRenderer = gameObject.AddComponent<SpriteRenderer>();

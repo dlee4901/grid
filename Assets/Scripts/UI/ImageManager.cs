@@ -3,13 +3,18 @@ using UnityEngine.UI;
 
 public class ImageManager : MonoBehaviour
 {
-    public Image Image;
+    [SerializeField] private Image _image;
 
     public void Init(string name, Sprite sprite, Transform parent)
     {
-        Image = gameObject.AddComponent<Image>();
+        _image = gameObject.AddComponent<Image>();
         gameObject.name = name;
-        Image.sprite = sprite;
+        _image.sprite = sprite;
         gameObject.transform.SetParent(parent);
+    }
+
+    public void SetColor(Color color)
+    {
+        _image.color = color;
     }
 }

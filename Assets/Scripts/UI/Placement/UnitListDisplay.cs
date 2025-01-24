@@ -4,12 +4,12 @@ using UnityEngine.UI;
 
 public class UnitListDisplay : MonoBehaviour
 {
-    public ScrollRect ScrollView;
-    public GridLayoutGroup Container;
+    [SerializeField] private ScrollRect _scrollView;
+    [SerializeField] private GridLayoutGroup _container;
 
-    List<GridLayoutGroup> _containers;
-    List<List<UnitUIManager>> _unitsList;
-    int _activePlayerList;
+    private List<GridLayoutGroup> _containers;
+    private List<List<UnitUIManager>> _unitsList;
+    private int _activePlayerList;
 
     void Start()
     {
@@ -19,13 +19,13 @@ public class UnitListDisplay : MonoBehaviour
 
     void InitPlayers(int numPlayers)
     {
-        _containers = new List<GridLayoutGroup>{Container};
+        _containers = new List<GridLayoutGroup>{_container};
         _unitsList = new List<List<UnitUIManager>>();
         for (int player = 1; player <= numPlayers; player++)
         {
             List<UnitUIManager> unitManagerList = new List<UnitUIManager>();
             _unitsList.Add(unitManagerList);
-            GridLayoutGroup obj = Instantiate(Container, ScrollView.transform);
+            GridLayoutGroup obj = Instantiate(_container, _scrollView.transform);
             _containers.Add(obj);
             InitPlayerContainer(player);
         }
@@ -47,19 +47,19 @@ public class UnitListDisplay : MonoBehaviour
         _containers[playerController].gameObject.SetActive(false);
     }
 
+    void UnitUIUpdate(int playerController, int listUIPosition, bool placed)
+    {
+        _unitsList[playerController-1][listUIPosition].IsPlaced = placed;
+    }
+
     public void SetActivePlayerList(int playerController)
     {
         if (playerController < _containers.Count)
         {
             _containers[_activePlayerList].gameObject.SetActive(false);
-            ScrollView.content = _containers[playerController].GetComponent<RectTransform>();
+            _scrollView.content = _containers[playerController].GetComponent<RectTransform>();
             _containers[playerController].gameObject.SetActive(true);
             _activePlayerList = playerController;
         }
-    }
-
-    void UnitUIUpdate(int playerController, int listUIPosition, bool placed)
-    {
-        _unitsList[playerController-1][listUIPosition].IsPlaced = placed;
     }
 }

@@ -6,11 +6,11 @@ public class UnitList : MonoBehaviour
 {
     public static UnitList Singleton;
 
-    public List<Unit> Units;
+    [field: SerializeField] public List<Unit> Units { get; private set; }
 
     [Header("Unit Prefabs")]
-    public List<Unit> UnitPrefabs1Indexed;
-    public UnitHealthCounter UnitHealthCounterPrefab;
+    [SerializeField] private List<Unit> UnitPrefabs1Indexed;
+    [SerializeField] private UnitHealthCounter UnitHealthCounterPrefab;
     
     void Awake()
     {

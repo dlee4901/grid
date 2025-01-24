@@ -10,6 +10,9 @@ public class EventManager : MonoBehaviour
     public event Action<Unit> UnitPlaceEvent;
     public event Action<int, int, bool> UnitUIUpdateEvent;
 
+    public event Action GameInfoDisplayEndTurnEvent;
+    public event Action UnitInfoDisplayMoveEvent;
+
     void Awake()
     {
         if (Singleton == null)
@@ -41,5 +44,15 @@ public class EventManager : MonoBehaviour
     public void StartUnitUIUpdateEvent(int playerController, int listUIPosition, bool placed)
     {
         UnitUIUpdateEvent?.Invoke(playerController, listUIPosition, placed);
+    }
+
+    public void StartGameInfoDisplayEndTurnEvent()
+    {
+        GameInfoDisplayEndTurnEvent?.Invoke();
+    }
+
+    public void StartUnitInfoDisplayMoveEvent()
+    {
+        UnitInfoDisplayMoveEvent?.Invoke();
     }
 }

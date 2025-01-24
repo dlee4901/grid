@@ -2,30 +2,30 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public LocalTest LocalTest;
-    public UnitListDisplay UnitListDisplay;
+    [SerializeField] private LocalTest _localTest;
+    [SerializeField] private UnitListDisplay _unitListDisplay;
     
-    public GameInfoDisplay GameInfoDisplay;
-    public UnitInfoDisplay UnitInfoDisplay;
+    [SerializeField] private GameInfoDisplay _gameInfoDisplay;
+    [SerializeField] private UnitInfoDisplay _unitInfoDisplay;
 
     void Awake()
     {
-        LocalTest.gameObject.SetActive(true);
-        UnitListDisplay.gameObject.SetActive(true);
-        GameInfoDisplay.gameObject.SetActive(false);
-        UnitInfoDisplay.gameObject.SetActive(false);
+        _localTest.gameObject.SetActive(true);
+        _unitListDisplay.gameObject.SetActive(true);
+        _gameInfoDisplay.gameObject.SetActive(false);
+        _unitInfoDisplay.gameObject.SetActive(false);
     }
 
     public void StartPlacement(int playerController)
     {
-        UnitListDisplay.SetActivePlayerList(playerController);
+        _unitListDisplay.SetActivePlayerList(playerController);
     }
 
     public void StartGame()
     {
-        LocalTest.gameObject.SetActive(false);
-        UnitListDisplay.gameObject.SetActive(false);
-        GameInfoDisplay.gameObject.SetActive(true);
-        UnitInfoDisplay.gameObject.SetActive(true);
+        _localTest.gameObject.SetActive(false);
+        _unitListDisplay.gameObject.SetActive(false);
+        _gameInfoDisplay.gameObject.SetActive(true);
+        _unitInfoDisplay.gameObject.SetActive(true);
     }
 }

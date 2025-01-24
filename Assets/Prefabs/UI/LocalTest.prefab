@@ -49,10 +49,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3acafcf5cbbb764c9021706174c9ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startGame: {fileID: 7280851211284925458}
-  player1: {fileID: 3849626678870341547}
-  player2: {fileID: 6408199951840972601}
-  gameManager: {fileID: 0}
+  _startGame: {fileID: 7280851211284925458}
+  _player1: {fileID: 3849626678870341547}
+  _player2: {fileID: 6408199951840972601}
+  _gameManager: {fileID: 0}
 --- !u!1 &1499436213594697149
 GameObject:
   m_ObjectHideFlags: 0

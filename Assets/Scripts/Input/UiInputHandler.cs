@@ -6,7 +6,7 @@ public class UiInputHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 {
     //public bool IsMouseOver;
 
-    UnitUIManager _unitUIManager;
+    private UnitUIManager _unitUIManager;
 
     void Start()
     {

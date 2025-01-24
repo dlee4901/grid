@@ -2,10 +2,11 @@ using System.Collections.Generic;
 
 public class PlayerManager
 {
-    List<Player> _players;
-    public int NumPlayers;
-    public int MovePoints;
-    public int Mana;
+    private List<Player> _players;
+    
+    public int NumPlayers { get; private set; }
+    public int MovePoints { get; private set; }
+    public int Mana { get; private set; }
 
     public PlayerManager(int numPlayers, int movePoints, int mana)
     {

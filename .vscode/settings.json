@@ -57,5 +57,6 @@
         "Temp/": true
     },
     "dotnet.defaultSolution": "grid.sln",
-    "editor.acceptSuggestionOnCommitCharacter": false
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "editor.useTabStops": true
 }

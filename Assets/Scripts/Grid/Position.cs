@@ -5,10 +5,10 @@ using UnityEngine;
 // 1-based index
 public class Position<T>
 {
-    List<T> _list;
-    int _x;
-    int _y;
-    int _z;
+    private List<T> _list;
+    private int _x;
+    private int _y;
+    private int _z;
 
     public Position(int x, int y, int z=1)
     {
