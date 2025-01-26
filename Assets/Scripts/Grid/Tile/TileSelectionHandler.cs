@@ -19,7 +19,37 @@ public class TileSelectionHandler
         if (distance == -1) distance = Math.Max(x, y);
         if (tileSelection.Direction == Direction.step || tileSelection.Direction == Direction.stride)
         {
-
+            Dictionary<Vector2Int, bool> visitedTiles = new();
+            for (int i = 0; i < tiles.Count(); i++) visitedTiles[tiles.GetVector2(i)] = false;
+            List<Vector2Int> checkTiles = new() {origin};
+            for (int i = 0; i <= distance; i++)
+            {
+                List<Vector2Int> nextTiles = new();
+                foreach (Vector2Int tilePosition in checkTiles)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        if (tileSelection.Direction == Direction.step && j % 2 == 1) continue;
+                        Vector2Int startPosition = tilePosition;
+                        Vector2Int targetPosition = startPosition + unitVectors[j];
+                        if (visitedTiles[tilePosition] || tiles.Get(targetPosition) == null) continue;
+                        Entity entityColliding = entities.Get(targetPosition);
+                        if (entityColliding != null)
+                        {
+                            if (tileSelection.Passthrough == 0
+                                || (tileSelection.Passthrough == Team.Ally && !entityColliding.SameController(unit))
+                                || (tileSelection.Passthrough == Team.Enemy && entityColliding.SameController(unit)))
+                            {
+                                continue;
+                            }
+                        }
+                        nextTiles.Add(targetPosition);
+                    }
+                    visitedTiles[tilePosition] = true;
+                }
+                selectableTiles.AddRange(checkTiles);
+                checkTiles = nextTiles;
+            }
         }
         else
         {
@@ -37,7 +67,8 @@ public class TileSelectionHandler
                     Vector2Int targetPosition = startPosition + unitVectors[j];
                     bool targetPositionValid = true;
                     if (tiles.Get(targetPosition) == null) targetPositionValid = false;
-                    else {
+                    else 
+                    {
                         Entity entityColliding = entities.Get(targetPosition);
                         if (entityColliding != null)
                         {
@@ -54,7 +85,7 @@ public class TileSelectionHandler
                 }
             }
         }
-        return tiles.GetIndices(selectableTiles);
+        return tiles.GetIndicesHashSet(selectableTiles);
     }
 
     public List<Vector2Int> GetUnitVectors(TileSelection tileSelection, Unit unit)

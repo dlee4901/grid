@@ -122,23 +122,31 @@ public class Position<T>
         return vectors;
     }
 
-    public HashSet<int> GetIndices(HashSet<Vector2Int> vectors)
+    public HashSet<int> GetIndicesHashSet(HashSet<Vector2Int> vectors)
     {
         HashSet<int> indices = new();
-        foreach (Vector2Int vec in vectors)
-        {
-            indices.Add(GetIndex(vec));
-        }
+        foreach (Vector2Int vec in vectors) indices.Add(GetIndex(vec));
         return indices;
     }
 
-    public HashSet<int> GetIndices(List<Vector2Int> vectors)
+    public HashSet<int> GetIndicesHashSet(List<Vector2Int> vectors)
     {
         HashSet<int> indices = new();
-        foreach (Vector2Int vec in vectors)
-        {
-            indices.Add(GetIndex(vec));
-        }
+        foreach (Vector2Int vec in vectors) indices.Add(GetIndex(vec));
+        return indices;
+    }
+
+    public List<int> GetIndicesList(HashSet<Vector2Int> vectors)
+    {
+        List<int> indices = new();
+        foreach (Vector2Int vec in vectors) indices.Add(GetIndex(vec));
+        return indices;
+    }
+
+    public List<int> GetIndicesList(List<Vector2Int> vectors)
+    {
+        List<int> indices = new();
+        foreach (Vector2Int vec in vectors) indices.Add(GetIndex(vec));
         return indices;
     }
 
