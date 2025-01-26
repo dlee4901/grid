@@ -4,24 +4,24 @@ using UnityEngine.InputSystem;
 
 public class CinemachineCameraManager : MonoBehaviour
 {
-    [SerializeField] CinemachineCamera _cam;
-    int _tileHovered;
+    [SerializeField] private CinemachineCamera _cam;
+    private int _tileHovered;
 
-    float _zoomStartMultiplier = 7f;
-    float _minX;
-    float _maxX;
-    float _minY;
-    float _maxY;
-    float _minZoom;
-    float _maxZoom;
-    float _zoomMultiplier;
+    private float _zoomStartMultiplier = 7f;
+    private float _minX;
+    private float _maxX;
+    private float _minY;
+    private float _maxY;
+    private float _minZoom;
+    private float _maxZoom;
+    private float _zoomMultiplier;
 
-    bool _isDragging;
-    bool _tileClicked;
-    float _zoom;
-    float _scrollAmount;
-    Vector3 _origin;
-    Vector3 _difference;
+    private bool _isDragging;
+    private bool _tileClicked;
+    private float _zoom;
+    private float _scrollAmount;
+    private Vector3 _origin;
+    private Vector3 _difference;
 
     void Start()
     {

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7748377085850913129}
   - component: {fileID: 2570987491617025027}
-  - component: {fileID: -4263861672484718170}
   m_Layer: 0
   m_Name: Unit1
   m_TagString: Untagged
@@ -53,21 +52,8 @@ MonoBehaviour:
   DamageDelta: 0
   Counters: 
   Properties: {fileID: 11400000, guid: 03a6c1fbafa5948339ec813100105415, type: 2}
-  Moves:
-  - {fileID: 11400000, guid: 567cdd06ec7062d4a92ff2aa3302ee6f, type: 2}
-  Move: {fileID: -4263861672484718170}
+  Move: {fileID: 648380987628005643, guid: 02628474d283047feae7616ee1afa75a, type: 3}
+  Skill1: {fileID: 0}
+  Skill2: {fileID: 0}
+  Passive: {fileID: 0}
   ListUIPosition: 0
---- !u!114 &-4263861672484718170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3911324792696548490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd21d0c745d7443e18d19e0792656e44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Moves:
-  - {fileID: 11400000, guid: 567cdd06ec7062d4a92ff2aa3302ee6f, type: 2}

@@ -20,8 +20,8 @@ public class GridManager : MonoBehaviour
     private int _tileHovered;
     private int _tileSelected;
 
-    public PlayerManager PlayerManager { get; set; }
-    public int PlayerTurn { get; set; }
+    public PlayerManager PlayerManager { get; private set; }
+    public int PlayerTurn { get; private set; }
 
     [Header("Size")]
     [SerializeField] private int _x;

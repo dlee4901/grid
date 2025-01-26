@@ -7,10 +7,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GridManager _grid;
     [SerializeField] private UIManager _uiManager;
 
-    List<Player> _players;
-    List<float> _times;
-    int _turn;
-    int _timeControl;
+    private List<Player> _players;
+    private List<float> _times;
+    private int _turn;
+    private int _timeControl;
 
     void Awake()
     {
