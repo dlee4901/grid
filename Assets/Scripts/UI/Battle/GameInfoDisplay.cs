@@ -10,7 +10,7 @@ public class GameInfoDisplay : MonoBehaviour
     [SerializeField] private Button EndTurn;
 
     // Update is called once per frame
-    void Start()
+    private void Start()
     {
         EndTurn.onClick.AddListener(() => {
             EventManager.Singleton.StartGameInfoDisplayEndTurnEvent();

@@ -8,7 +8,7 @@ public class UiInputHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private UnitUIManager _unitUIManager;
 
-    void Start()
+    private void Start()
     {
         if (gameObject.tag == "UI Unit")
         {

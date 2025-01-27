@@ -12,7 +12,7 @@ public class UnitList : MonoBehaviour
     [SerializeField] private List<Unit> UnitPrefabs1Indexed;
     [SerializeField] private UnitHealthCounter UnitHealthCounterPrefab;
     
-    void Awake()
+    private void Awake()
     {
         Units = new List<Unit>();
 
@@ -28,7 +28,7 @@ public class UnitList : MonoBehaviour
         InitFromUnitPrefabs();
     }
 
-    void InitFromUnitPrefabs()
+    private void InitFromUnitPrefabs()
     {
         foreach (Unit unitPrefab in UnitPrefabs1Indexed)
         {

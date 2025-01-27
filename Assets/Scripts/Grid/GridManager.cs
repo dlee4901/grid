@@ -41,7 +41,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private UnitInfoDisplay UnitInfoDisplay;
 
     // Start is called before the first frame update
-    void Start()
+   private void Start()
     {
         EventManager.Singleton.TileHoverEvent += TileHover;
         EventManager.Singleton.UnitPlaceEvent += UnitPlace;
@@ -51,13 +51,13 @@ public class GridManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         HandleUnitDrag();
         _stateMachine.OnLogic();
     }
 
-    void Init()
+    private void Init()
     {
         _tiles ??= new Position<Tile>(_x, _y);
         _entities ??= new Position<Entity>(_x, _y);
@@ -74,7 +74,7 @@ public class GridManager : MonoBehaviour
         CreateTiles();
     }
 
-    void InitStateMachine()
+    private void InitStateMachine()
     {
         _stateMachine = new StateMachine();
         _stateMachine.AddState("Idle", onEnter => StateOnEnterIdle());
@@ -86,7 +86,7 @@ public class GridManager : MonoBehaviour
         _stateMachine.Init();
     }
 
-    void CreateTiles()
+    private void CreateTiles()
     {
         Tile tileGO = Util.CreateGameObject<Tile>();
         for (int j = 1; j <= _y; j++)
@@ -102,12 +102,12 @@ public class GridManager : MonoBehaviour
         Destroy(tileGO.gameObject);
     }
 
-    void TileHover(int id)
+    private void TileHover(int id)
     {
         _tileHovered = id;
     }
 
-    void UnitPlace(Unit unit)
+    private void UnitPlace(Unit unit)
     {
         _unitDragging = null;
         EventManager.Singleton.StartUnitUIUpdateEvent(unit.PlayerController, unit.ListUIPosition, PlaceEntity(unit, _tileHovered));
@@ -236,18 +236,18 @@ public class GridManager : MonoBehaviour
         return (_x, _y, _tileScale);
     }
 
-    void StateOnEnterIdle()
+    private void StateOnEnterIdle()
     {
         Debug.Log("StateOnEnterIdle");
         SetSelectableTilesAll();
     }
 
-    void StateOnEnterTileSelected()
+    private void StateOnEnterTileSelected()
     {
         Debug.Log("StateOnEnterTileSelected");
     }
 
-    void StateOnEnterMoveSelected()
+    private void StateOnEnterMoveSelected()
     {
         Debug.Log("StateOnEnterMoveSelected");
         Entity entity = _entities.Get(_tileSelected);
@@ -265,7 +265,7 @@ public class GridManager : MonoBehaviour
         //
     }
 
-    void HandleUnitPlacement()
+    private void HandleUnitPlacement()
     {
         Entity entity = _entities.Get(_tileHovered);
         Debug.Log("HandleUnitPlacement");
@@ -276,7 +276,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void SetTileSelected(int index)
+    private void SetTileSelected(int index)
     {
         Tile prevTileSelected = _tiles.Get(_tileSelected);
         if (prevTileSelected != null) prevTileSelected.State = TileState.Default;
@@ -289,7 +289,7 @@ public class GridManager : MonoBehaviour
         UnitInfoDisplay.UpdateDisplay(this, entity);
     }
 
-    void HandleTileSelect()
+    private void HandleTileSelect()
     {
         Tile tile = _tiles.Get(_tileHovered);
         if (tile != null)
@@ -299,7 +299,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void HandleMoveSelect()
+    private void HandleMoveSelect()
     {
         Tile tile = _tiles.Get(_tileHovered);
         if (tile != null)
@@ -309,7 +309,7 @@ public class GridManager : MonoBehaviour
         SetTileSelected(0);
     }
 
-    void HandleUnitDrag()
+    private void HandleUnitDrag()
     {
         if (_unitDragging != null)
         {
@@ -319,7 +319,7 @@ public class GridManager : MonoBehaviour
     }
 
     // Helper Methods
-    void SetSelectableTiles(HashSet<int> tiles, bool selectable=true)
+    private void SetSelectableTiles(HashSet<int> tiles, bool selectable=true)
     {
         for (int i = 1; i < _tiles.Count(); i++)
         {
@@ -329,7 +329,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void SetSelectableTilesAll(bool selectable=true, bool setEntityTiles=true)
+    private void SetSelectableTilesAll(bool selectable=true, bool setEntityTiles=true)
     {
         for (int i = 1; i < _tiles.Count(); i++)
         {
@@ -338,7 +338,7 @@ public class GridManager : MonoBehaviour
         if (setEntityTiles) SetEntityTiles();
     }
 
-    void SetEntityTiles()
+    private void SetEntityTiles()
     {
         for (int i = 1; i < _entities.Count(); i++)
         {
@@ -348,7 +348,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    bool PlaceEntity(Entity entity, int index)
+    private bool PlaceEntity(Entity entity, int index)
     {
         if (!_tiles.IsValidIndex(index))
         {
@@ -382,7 +382,7 @@ public class GridManager : MonoBehaviour
         return true;
     }
 
-    void SetEntityGridPosition(Entity entity, int index)
+    private void SetEntityGridPosition(Entity entity, int index)
     {
         if (_entities.Set(index, entity)) 
         {
@@ -392,7 +392,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void DeleteEntity(int index)
+    private void DeleteEntity(int index)
     {
         Entity entity = _entities.Get(index);
         if (entity != null) 
@@ -401,14 +401,14 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void DeleteEntity(Entity entity)
+    private void DeleteEntity(Entity entity)
     {
         Debug.Log("DeleteEntity");
         if (entity is Unit) PlayerManager.DeletePlayerUnit((Unit)entity);
         Destroy(entity.gameObject);
     }
 
-    void MoveEntity(int srcIndex, int dstIndex)
+    private void MoveEntity(int srcIndex, int dstIndex)
     {
         Entity entity = _entities.Get(srcIndex);
         if (entity != null)

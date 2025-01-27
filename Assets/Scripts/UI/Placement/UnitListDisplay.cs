@@ -11,13 +11,13 @@ public class UnitListDisplay : MonoBehaviour
     private List<List<UnitUIManager>> _unitsList;
     private int _activePlayerList;
 
-    void Start()
+    private void Start()
     {
         EventManager.Singleton.UnitUIUpdateEvent += UnitUIUpdate;
         InitPlayers(2);
     }
 
-    void InitPlayers(int numPlayers)
+    private void InitPlayers(int numPlayers)
     {
         _containers = new List<GridLayoutGroup>{_container};
         _unitsList = new List<List<UnitUIManager>>();
@@ -31,7 +31,7 @@ public class UnitListDisplay : MonoBehaviour
         }
     }
 
-    void InitPlayerContainer(int playerController)
+    private void InitPlayerContainer(int playerController)
     {
         int listUIPosition = 0;
         foreach (Unit unit in UnitList.Singleton.Units)
@@ -47,7 +47,7 @@ public class UnitListDisplay : MonoBehaviour
         _containers[playerController].gameObject.SetActive(false);
     }
 
-    void UnitUIUpdate(int playerController, int listUIPosition, bool placed)
+    private void UnitUIUpdate(int playerController, int listUIPosition, bool placed)
     {
         _unitsList[playerController-1][listUIPosition].IsPlaced = placed;
     }

@@ -13,7 +13,7 @@ public class EventManager : MonoBehaviour
     public event Action GameInfoDisplayEndTurnEvent;
     public event Action UnitInfoDisplayMoveEvent;
 
-    void Awake()
+    private void Awake()
     {
         if (Singleton == null)
         {

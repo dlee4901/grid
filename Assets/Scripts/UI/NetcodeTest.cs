@@ -7,7 +7,7 @@ public class NetcodeTest : MonoBehaviour
     [SerializeField] private Button _startHostButton;
     [SerializeField] private Button _startClientButton;
 
-    void Awake()
+    private void Awake()
     {
         _startHostButton.onClick.AddListener(() =>
         {

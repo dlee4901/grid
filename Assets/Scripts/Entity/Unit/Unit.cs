@@ -31,7 +31,7 @@ public class Unit : Entity
         if (unitHealthCounterPrefab != null) InitHealthCounter(unitHealthCounterPrefab);
     }
 
-    void InitHealthCounter(UnitHealthCounter unitHealthCounterPrefab)
+    private void InitHealthCounter(UnitHealthCounter unitHealthCounterPrefab)
     {
         _healthCounter = Instantiate(unitHealthCounterPrefab, transform);
         _healthCounter.transform.localPosition = new Vector3(1, 1, 0);

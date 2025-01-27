@@ -19,13 +19,13 @@ public class Tile : MonoBehaviour
 
     public int Id { get; private set; }
 
-    bool _selectable;
+    private bool _selectable;
     public bool Selectable
     {
         get { return _selectable; }
         set { _selectable = value; OnPropertyChanged("Selectable"); }
     }
-    int _team;
+    private int _team;
     public int Team
     {
         get { return _team; }
@@ -55,7 +55,7 @@ public class Tile : MonoBehaviour
         State = TileState.Default;
     }
 
-    void OnPropertyChanged(string property)
+    private void OnPropertyChanged(string property)
     {
         if (property == "Selectable")
         {
@@ -81,25 +81,25 @@ public class Tile : MonoBehaviour
         }
     }
 
-    void SetColor(Color color)
+    private void SetColor(Color color)
     {
         _spriteRenderer.color = color;
     }
 
-    void SetTeamColor(Color color)
+    private void SetTeamColor(Color color)
     {
         if (_team == 1)      SetColor(_colorPlayer1);
         else if (_team == 2) SetColor(_colorPlayer2);
         else                 SetColor(color);
     }
     
-    void OnMouseEnter()
+    private void OnMouseEnter()
     {
         if (Selectable && State != TileState.Selected) State = TileState.Hovered;
         EventManager.Singleton.StartTileHoverEvent(Id);
     }
 
-    void OnMouseExit()
+    private void OnMouseExit()
     {
         if (Selectable && State != TileState.Selected) State = TileState.Default;
         EventManager.Singleton.StartTileHoverEvent(0);

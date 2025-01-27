@@ -10,7 +10,7 @@ public class UnitUIManager : MonoBehaviour
     private int _playerController;
     private int _listUIPosition;
 
-    bool _isPlaced;
+    private bool _isPlaced;
     public bool IsPlaced
     {
         get { return _isPlaced; }

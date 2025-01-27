@@ -9,7 +9,7 @@ public class LocalTest : MonoBehaviour
     [SerializeField] private GameManager _gameManager;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _startGame.onClick.AddListener(() => {
             Debug.Log("Start Game Clicked");
@@ -27,11 +27,11 @@ public class LocalTest : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
     }
 
-    void OnClick()
+    private void OnClick()
     {
 
     }

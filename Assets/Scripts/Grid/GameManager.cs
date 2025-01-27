@@ -12,19 +12,19 @@ public class GameManager : MonoBehaviour
     private int _turn;
     private int _timeControl;
 
-    void Awake()
+    private void Awake()
     {
         Init();
     }
 
-    void Update()
+    private void Update()
     {
         // PlaceUnits();
         // StartTurn();
         
     }
 
-    void Init()
+    private void Init()
     {
         _cam.Init(_grid);
     }

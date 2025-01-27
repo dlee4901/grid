@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameInfoDisplay _gameInfoDisplay;
     [SerializeField] private UnitInfoDisplay _unitInfoDisplay;
 
-    void Awake()
+    private void Awake()
     {
         _localTest.gameObject.SetActive(true);
         _unitListDisplay.gameObject.SetActive(true);

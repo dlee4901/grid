@@ -23,19 +23,19 @@ public class CinemachineCameraManager : MonoBehaviour
     private Vector3 _origin;
     private Vector3 _difference;
 
-    void Start()
+    private void Start()
     {
         EventManager.Singleton.TileHoverEvent += TileHover;
         _tileHovered = 0;
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         HandleCameraMovement();
         HandleCameraZoom();
     }
 
-    void TileHover(int id)
+    private void TileHover(int id)
     {
         _tileHovered = id;
     }
@@ -69,7 +69,7 @@ public class CinemachineCameraManager : MonoBehaviour
         _scrollAmount = ctx.ReadValue<float>();
     }
 
-    void HandleCameraMovement()
+    private void HandleCameraMovement()
     {
         if (_isDragging && _tileClicked)
         {
@@ -87,7 +87,7 @@ public class CinemachineCameraManager : MonoBehaviour
         }
     }
 
-    void HandleCameraZoom()
+    private void HandleCameraZoom()
     {
         if (_tileHovered != 0)
         {

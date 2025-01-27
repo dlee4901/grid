@@ -11,7 +11,7 @@ public class UnitInfoDisplay : MonoBehaviour
 
     private UiInputHandler _uiInputHandler;
 
-    void Start()
+    private void Start()
     {
         _moveButton.onClick.AddListener(() => {
             EventManager.Singleton.StartUnitInfoDisplayMoveEvent();
