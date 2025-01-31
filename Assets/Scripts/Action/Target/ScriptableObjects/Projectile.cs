@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "TargetProjectile")]
+[CreateAssetMenu(menuName = "ScriptableObjects/TargetProjectile")]
 public class Projectile : TargetBase
 {
     [Header("Projectile")]

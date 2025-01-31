@@ -37,8 +37,8 @@ public class GridManager : MonoBehaviour
     [field: SerializeField] public int Mana { get; private set; } // 3
 
     [Header("UI References")]
-    [SerializeField] private GameInfoDisplay GameInfoDisplay;
-    [SerializeField] private UnitInfoDisplay UnitInfoDisplay;
+    [SerializeField] private GameInfoDisplay _gameInfoDisplay;
+    [SerializeField] private UnitInfoDisplay _unitInfoDisplay;
 
     // Start is called before the first frame update
    private void Start()
@@ -145,8 +145,8 @@ public class GridManager : MonoBehaviour
         }
         SetTileSelected(0);
         PlayerManager.ResetPlayerPoints(PlayerTurn);
-        GameInfoDisplay.UpdateDisplay(this);
-        UnitInfoDisplay.UpdateDisplay(this);
+        _gameInfoDisplay.UpdateDisplay(this);
+        _unitInfoDisplay.UpdateDisplay(this);
     }
 
     public void OnSelect(InputAction.CallbackContext ctx) 
@@ -286,7 +286,7 @@ public class GridManager : MonoBehaviour
         if (newTileSelected != null) newTileSelected.State = TileState.Selected;
 
         Entity entity = _entities.Get(_tileSelected);
-        UnitInfoDisplay.UpdateDisplay(this, entity);
+        _unitInfoDisplay.UpdateDisplay(this, entity);
     }
 
     private void HandleTileSelect()
@@ -417,7 +417,7 @@ public class GridManager : MonoBehaviour
             SetEntityGridPosition(entity, dstIndex);
             SetEntityTiles();
             PlayerManager.UpdatePlayerMovePoints(PlayerTurn, -1);
-            GameInfoDisplay.UpdateDisplay(this);
+            _gameInfoDisplay.UpdateDisplay(this);
         }
     }
 }

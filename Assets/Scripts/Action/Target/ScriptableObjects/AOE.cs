@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "TargetAOE")]
+[CreateAssetMenu(menuName = "ScriptableObjects/TargetAOE")]
 public class AOE : TargetBase
 {
     [Header("AOE")]

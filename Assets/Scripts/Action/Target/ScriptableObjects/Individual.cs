@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "TargetIndividual")]
+[CreateAssetMenu(menuName = "ScriptableObjects/TargetIndividual")]
 public class Individual : TargetBase
 {
     [Header("Individual")]

@@ -6,7 +6,7 @@ public enum DirectionCardinal {N, NE, E, SE, S, SW, W, NW}
 public enum DirectionFacing {N, E, S, W}
 [Flags] public enum Team {Neutral=1, Ally=2, Enemy=4}
 
-[CreateAssetMenu(menuName = "TileSelection")]
+[CreateAssetMenu(menuName = "ScriptableObjects/TileSelection")]
 public class TileSelection : ScriptableObject
 {
     public Direction Direction;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "TargetBeam")]
+[CreateAssetMenu(menuName = "ScriptableObjects/TargetBeam")]
 public class Beam : TargetBase
 {
     [Header("Beam")]

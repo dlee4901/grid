@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TargetBase : ScriptableObject
 {
-    [Header("Target")]
+    [Header("ScriptableObjects/Target")]
     public Team Team;
     public int Selections;
 }

@@ -28,6 +28,8 @@ public class UnitUIManager : MonoBehaviour
         _unitID = unitID;
         _playerController = playerController;
         _listUIPosition = listUIPosition;
+
+        transform.localScale = new Vector3(1, 1, 1);
     }
 
     public void OnPropertyChanged(string property)
