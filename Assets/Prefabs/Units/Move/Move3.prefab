@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 771477017791524482}
   - component: {fileID: 7030044787576207638}
   m_Layer: 0
-  m_Name: MoveStep
+  m_Name: Move3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,4 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moves:
-  - {fileID: 11400000, guid: a874175299c8340ab9b12ea56a5a812f, type: 2}
+  - {fileID: 11400000, guid: 9c9a1c9ee917f435796b1cc71c01b15a, type: 2}

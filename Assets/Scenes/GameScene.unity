@@ -323,10 +323,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1907368032}
-  - {fileID: 243860393}
   - {fileID: 4941664909960165012}
   - {fileID: 8362480757712431634}
+  - {fileID: 243860393}
+  - {fileID: 1907368032}
   - {fileID: 785578451}
   - {fileID: 465007896}
   m_Father: {fileID: 0}
@@ -2423,8 +2423,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e57e2a2d554d49819d02dc0d0bfe302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _x: 8
-  _y: 8
+  _x: 12
+  _y: 12
   _tileScale: 2
   _tileSprite: {fileID: 21300000, guid: 1949357f414774d1c9f709b9af44f344, type: 3}
   _numSpawnRows: 2
@@ -2432,8 +2432,8 @@ MonoBehaviour:
   _numPlayers: 2
   <MovePoints>k__BackingField: 2
   <Mana>k__BackingField: 3
-  GameInfoDisplay: {fileID: 6223911044332916321}
-  UnitInfoDisplay: {fileID: 8362480757712431635}
+  _gameInfoDisplay: {fileID: 6223911044332916321}
+  _unitInfoDisplay: {fileID: 8362480757712431635}
 --- !u!4 &1836856061
 Transform:
   m_ObjectHideFlags: 0
@@ -2787,6 +2787,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitListDisplay
       objectReference: {fileID: 0}
+    - target: {fileID: 157015893035828449, guid: 72cff95855cb52a4f9b7168a81e83c4e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4550869992842835385, guid: 72cff95855cb52a4f9b7168a81e83c4e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2951,6 +2955,10 @@ PrefabInstance:
     - target: {fileID: 5921224621251120194, guid: 90a8e6c36bb1041e8b869480b50dfccf, type: 3}
       propertyPath: m_Name
       value: GameInfoDisplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 5921224621251120194, guid: 90a8e6c36bb1041e8b869480b50dfccf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6832622285238812684, guid: 90a8e6c36bb1041e8b869480b50dfccf, type: 3}
       propertyPath: m_Pivot.x
@@ -3160,6 +3168,10 @@ PrefabInstance:
     - target: {fileID: 1370564276686818558, guid: 5c0aa07481b3d45fb9e5e46f03995400, type: 3}
       propertyPath: m_Name
       value: LocalTest
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370564276686818558, guid: 5c0aa07481b3d45fb9e5e46f03995400, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2692928699702399450, guid: 5c0aa07481b3d45fb9e5e46f03995400, type: 3}
       propertyPath: m_AnchorMax.y

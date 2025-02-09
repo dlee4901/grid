@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Direction: 8
   Passthrough: 0
-  Distance: 4
+  Distance: 3
   Exact: 0
   RelativeFacing: 0
   Chain: {fileID: 0}

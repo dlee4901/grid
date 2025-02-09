@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51d5f1f2a8d084986bdd048590681d93, type: 3}
-  m_Name: Unit2Properties
+  m_Script: {fileID: 11500000, guid: 5d534193066924e32a2e9cbaeab75d82, type: 3}
+  m_Name: MoveStraight
   m_EditorClassIdentifier: 
-  Id: 2
-  Name: everything
-  Sprite: {fileID: 21300000, guid: bbf8638a8a75d9c42b93639213c92c9b, type: 3}
-  Cost: 2
-  StartingHealth: 2
+  Direction: 12
+  Passthrough: 0
+  Distance: 4
+  Exact: 1
+  RelativeFacing: 0
+  Chain: {fileID: 0}
