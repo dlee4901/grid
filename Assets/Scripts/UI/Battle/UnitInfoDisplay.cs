@@ -14,14 +14,14 @@ public class UnitInfoDisplay : MonoBehaviour
     private void Start()
     {
         _moveButton.onClick.AddListener(() => {
-            EventManager.Singleton.StartUnitInfoDisplayMoveEvent();
+            EventManager.Singleton.StartUnitInfoDisplayMove();
             //_grid.DisplayAction(UnitAction.Move);
         });
         _container.gameObject.SetActive(false);
         _uiInputHandler = gameObject.AddComponent<UiInputHandler>();
     }
 
-    public void UpdateDisplay(GridManager grid, Entity entity=null)       
+    public void UpdateDisplay(SquareGrid grid, Entity entity=null)       
     {
         Unit unit = null;
         if (entity is Unit) unit = (Unit)entity;

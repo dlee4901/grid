@@ -28,4 +28,10 @@ public class UIManager : MonoBehaviour
         _gameInfoDisplay.gameObject.SetActive(true);
         _unitInfoDisplay.gameObject.SetActive(true);
     }
+
+    public void UpdateGridDisplays(SquareGrid grid, Entity entity=null)
+    {
+        _gameInfoDisplay.UpdateDisplay(grid);
+        _unitInfoDisplay.UpdateDisplay(grid, entity);
+    }
 }

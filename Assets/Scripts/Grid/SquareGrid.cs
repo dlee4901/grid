@@ -7,22 +7,8 @@ using UnityHFSM;
 
 public enum GridPhase {Placement, Battle}
 
-public class GridManager : MonoBehaviour
+public class SquareGrid : MonoBehaviour
 {
-    private Position<Tile> _tiles;
-    private Position<Entity> _entities;
-    private InputHandler _inputHandlerDragDrop;
-    
-    private StateMachine _stateMachine;
-
-    private GridPhase _gridPhase;
-    private Unit _unitDragging;
-    private int _tileHovered;
-    private int _tileSelected;
-
-    public PlayerManager PlayerManager { get; private set; }
-    public int PlayerTurn { get; private set; }
-
     [Header("Size")]
     [SerializeField] private int _x;
     [SerializeField] private int _y;
@@ -36,18 +22,46 @@ public class GridManager : MonoBehaviour
     [field: SerializeField] public int MovePoints { get; private set; } // 2
     [field: SerializeField] public int Mana { get; private set; } // 3
 
-    [Header("UI References")]
-    [SerializeField] private GameInfoDisplay _gameInfoDisplay;
-    [SerializeField] private UnitInfoDisplay _unitInfoDisplay;
+    public PlayerManager PlayerManager { get; private set; }
+    public int PlayerTurn { get; private set; }
+
+    private UIManager _uiManager;
+
+    private Position<Tile> _tiles;
+    private Position<Entity> _entities;
+    private InputHandler _inputHandler;
+    //private InputHandler _inputHandlerDragDrop;
+    
+    private StateMachine _stateMachine;
+
+    private GridPhase _gridPhase;
+    private Unit _unitDragging;
+    private int _tileHovered;
+    private int _tileSelected;
 
     // Start is called before the first frame update
-   private void Start()
+    private void Start()
     {
-        EventManager.Singleton.TileHoverEvent += TileHover;
-        EventManager.Singleton.UnitPlaceEvent += UnitPlace;
-        EventManager.Singleton.GameInfoDisplayEndTurnEvent += NextTurn;
-        EventManager.Singleton.UnitInfoDisplayMoveEvent += DisplayMove;
-        Init();
+        _tiles = new Position<Tile>(_x, _y);
+        _entities = new Position<Entity>(_x, _y);
+        //_inputHandlerDragDrop ??= new InputHandler(InputActionPreset.DragDrop);
+        _inputHandler = new InputHandler();
+        PlayerManager = new PlayerManager(_numPlayers, MovePoints, Mana);
+
+        _gridPhase = GridPhase.Placement;
+        _unitDragging = null;
+        _tileHovered = 0;
+        _tileSelected = 0;
+        PlayerTurn = 0;
+
+        EventManager.Singleton.TileHover += OnEventTileHover;
+        EventManager.Singleton.UnitPlace += OnEventUnitPlace;
+        EventManager.Singleton.GameInfoDisplayEndTurn += OnEventGameInfoDisplayEndTurn;
+        EventManager.Singleton.UnitInfoDisplayMove += OnEventUnitInfoDisplayMove;
+        _inputHandler.SelectPerformed += OnInputSelectPerformed;
+        
+        CreateTiles();
+        InitStateMachine();
     }
 
     // Update is called once per frame
@@ -57,22 +71,92 @@ public class GridManager : MonoBehaviour
         _stateMachine.OnLogic();
     }
 
-    private void Init()
+    public void Init(UIManager uiManager)
     {
-        _tiles ??= new Position<Tile>(_x, _y);
-        _entities ??= new Position<Entity>(_x, _y);
-        _inputHandlerDragDrop ??= new InputHandler(InputActionPreset.DragDrop);
-        PlayerManager = new PlayerManager(_numPlayers, MovePoints, Mana);
-        InitStateMachine();
-
-        _gridPhase = GridPhase.Placement;
-        _unitDragging = null;
-        _tileHovered = 0;
-        _tileSelected = 0;
-        PlayerTurn = 0;
+        _uiManager = uiManager;
         
-        CreateTiles();
     }
+
+    private void OnEventTileHover(int id)
+    {
+        _tileHovered = id;
+    }
+
+    private void OnEventUnitPlace(Unit unit)
+    {
+        _unitDragging = null;
+        EventManager.Singleton.StartUnitUIUpdate(unit.PlayerController, unit.ListUIPosition, PlaceEntity(unit, _tileHovered));
+    }
+
+    private void OnEventGameInfoDisplayEndTurn()
+    {
+        NextTurn();
+    }
+
+    private void OnEventUnitInfoDisplayMove()
+    {
+        if (GetEntity(_tileSelected) == null)
+        {
+            SetSelectableTilesAll();
+            _stateMachine.RequestStateChange("Idle");
+        }
+        else
+        {
+            if (_stateMachine.ActiveStateName == "MoveSelected")
+            {
+                SetTileSelected(0);
+            }
+            else
+            {
+                _stateMachine.RequestStateChange("MoveSelected");
+            }
+        }
+    }
+
+    private void OnInputSelectPerformed()
+    {
+        if (_tileHovered != 0)
+        {
+            if (_gridPhase == GridPhase.Placement)
+            {
+                HandleUnitPlacement();
+            }
+            else if (_gridPhase == GridPhase.Battle)
+            {
+                if (_stateMachine.ActiveStateName == "MoveSelected")
+                {
+                    HandleMoveSelect();
+                }
+                else
+                {
+                    HandleTileSelect();
+                }
+            }
+        }
+    }
+
+    // public void OnSelect(InputAction.CallbackContext ctx) 
+    // {
+    //     // On Mouse Press on Grid
+    //     if (ctx.started && _tileHovered != 0)
+    //     {
+    //         if (_gridPhase == GridPhase.Placement)
+    //         {
+    //             HandleUnitPlacement();
+    //         }
+    //         else if (_gridPhase == GridPhase.Battle)
+    //         {
+    //             if (_stateMachine.ActiveStateName == "MoveSelected")
+    //             {
+    //                 HandleMoveSelect();
+    //             }
+    //             else
+    //             {
+    //                 HandleTileSelect();
+    //             }
+    //         }
+    //     }
+    // }
 
     private void InitStateMachine()
     {
@@ -102,38 +186,14 @@ public class GridManager : MonoBehaviour
         Destroy(tileGO.gameObject);
     }
 
-    private void TileHover(int id)
+    public void StartGame()
     {
-        _tileHovered = id;
+        _gridPhase = GridPhase.Battle;
+        SetSelectableTilesAll();
+        NextTurn();
     }
 
-    private void UnitPlace(Unit unit)
-    {
-        _unitDragging = null;
-        EventManager.Singleton.StartUnitUIUpdateEvent(unit.PlayerController, unit.ListUIPosition, PlaceEntity(unit, _tileHovered));
-    }
-
-    public void DisplayMove()
-    {
-        if (GetEntity(_tileSelected) == null)
-        {
-            SetSelectableTilesAll();
-            _stateMachine.RequestStateChange("Idle");
-        }
-        else
-        {
-            if (_stateMachine.ActiveStateName == "MoveSelected")
-            {
-                SetTileSelected(0);
-            }
-            else
-            {
-                _stateMachine.RequestStateChange("MoveSelected");
-            }
-        }
-    }
-
-    public void NextTurn()
+    private void NextTurn()
     {
         if (PlayerTurn == 0 || PlayerTurn >= _numPlayers)
         {
@@ -145,38 +205,7 @@ public class GridManager : MonoBehaviour
         }
         SetTileSelected(0);
         PlayerManager.ResetPlayerPoints(PlayerTurn);
-        _gameInfoDisplay.UpdateDisplay(this);
-        _unitInfoDisplay.UpdateDisplay(this);
-    }
-
-    public void OnSelect(InputAction.CallbackContext ctx) 
-    {
-        // On Mouse Press on Grid
-        if (ctx.started && _tileHovered != 0)
-        {
-            if (_gridPhase == GridPhase.Placement)
-            {
-                HandleUnitPlacement();
-            }
-            else if (_gridPhase == GridPhase.Battle)
-            {
-                if (_stateMachine.ActiveStateName == "MoveSelected")
-                {
-                    HandleMoveSelect();
-                }
-                else
-                {
-                    HandleTileSelect();
-                }
-            }
-        }
-    }
-
-    public void StartGame()
-    {
-        _gridPhase = GridPhase.Battle;
-        SetSelectableTilesAll();
-        NextTurn();
+        _uiManager.UpdateGridDisplays(this);
     }
 
     // public void DisplayAction(UnitAction action)
@@ -268,7 +297,6 @@ public class GridManager : MonoBehaviour
     private void HandleUnitPlacement()
     {
         Entity entity = _entities.Get(_tileHovered);
-        Debug.Log("HandleUnitPlacement");
         if (entity != null && _tiles.Get(_tileHovered).Selectable && entity is Unit)
         {
             _entities.Set(_tileHovered, null);
@@ -286,7 +314,7 @@ public class GridManager : MonoBehaviour
         if (newTileSelected != null) newTileSelected.State = TileState.Selected;
 
         Entity entity = _entities.Get(_tileSelected);
-        _unitInfoDisplay.UpdateDisplay(this, entity);
+        _uiManager.UpdateGridDisplays(this, entity);
     }
 
     private void HandleTileSelect()
@@ -311,9 +339,14 @@ public class GridManager : MonoBehaviour
 
     private void HandleUnitDrag()
     {
+        // if (_unitDragging != null)
+        // {
+        //     CommandBase command = _inputHandlerDragDrop.HandleInput();
+        //     command?.Execute(_unitDragging.gameObject);
+        // }
         if (_unitDragging != null)
         {
-            CommandBase command = _inputHandlerDragDrop.HandleInput();
+            CommandBase command = _inputHandler.GetCommand(CommandPreset.DragDrop);
             command?.Execute(_unitDragging.gameObject);
         }
     }
@@ -417,7 +450,7 @@ public class GridManager : MonoBehaviour
             SetEntityGridPosition(entity, dstIndex);
             SetEntityTiles();
             PlayerManager.UpdatePlayerMovePoints(PlayerTurn, -1);
-            _gameInfoDisplay.UpdateDisplay(this);
+            _uiManager.UpdateGridDisplays(this);
         }
     }
 }

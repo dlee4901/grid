@@ -13,11 +13,11 @@ public class GameInfoDisplay : MonoBehaviour
     private void Start()
     {
         EndTurn.onClick.AddListener(() => {
-            EventManager.Singleton.StartGameInfoDisplayEndTurnEvent();
+            EventManager.Singleton.StartGameInfoDisplayEndTurn();
         });
     }
 
-    public void UpdateDisplay(GridManager grid)
+    public void UpdateDisplay(SquareGrid grid)
     {
         PlayerTurn.text = "Player " + grid.PlayerTurn + " Turn";
         Player player = grid.GetActivePlayer();

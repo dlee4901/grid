@@ -352,7 +352,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &346102128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -428,7 +428,7 @@ MonoBehaviour:
     m_ActionName: 'Player/ZoomCamera[/Mouse/scroll/y]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 3f7b55b2-7db5-43b4-972b-787803727039
+    m_ActionId: 8fe0cdd4-528e-45a5-bc83-51ae95d170d2
     m_ActionName: 'UI/Select[/Mouse/leftButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
@@ -680,9 +680,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7682527ca1e0491ab00e03f8bf198e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cam: {fileID: 2018813911}
-  _grid: {fileID: 1836856060}
+  _camera: {fileID: 2018813911}
   _uiManager: {fileID: 414075991}
+  _grid: {fileID: 1836856060}
 --- !u!4 &571050661
 Transform:
   m_ObjectHideFlags: 0
@@ -2405,7 +2405,7 @@ GameObject:
   - component: {fileID: 1836856061}
   - component: {fileID: 1836856060}
   m_Layer: 0
-  m_Name: GridManager
+  m_Name: SquareGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2432,8 +2432,6 @@ MonoBehaviour:
   _numPlayers: 2
   <MovePoints>k__BackingField: 2
   <Mana>k__BackingField: 3
-  _gameInfoDisplay: {fileID: 6223911044332916321}
-  _unitInfoDisplay: {fileID: 8362480757712431635}
 --- !u!4 &1836856061
 Transform:
   m_ObjectHideFlags: 0
@@ -2580,7 +2578,7 @@ GameObject:
   - component: {fileID: 2018813910}
   - component: {fileID: 2018813911}
   m_Layer: 0
-  m_Name: CinemachineCameraManager
+  m_Name: CinemachineCameraController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2613,7 +2611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d20f7696cd43344a966cfb5f39711a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cam: {fileID: 797648476}
+  _camera: {fileID: 797648476}
 --- !u!1001 &203990392516702411
 PrefabInstance:
   m_ObjectHideFlags: 0

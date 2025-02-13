@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -18,6 +19,17 @@ public static class Util
         float x = vec.x * scale / 0.1f;
         float y = vec.y * scale / 0.1f;
         return new Vector3(x, y, 0);
+    }
+
+    public static IEnumerator LerpTransform(Transform transform, Vector3 src, Vector3 dst, float overTime)
+    {
+        float startTime = Time.time;
+        while (Time.time < startTime + overTime)
+        {
+            transform.position = Vector3.Lerp(src, dst, (Time.time - startTime) / overTime);
+            yield return null;
+        }
+        transform.position = dst;
     }
 
     public static T CreateGameObject<T>() where T : MonoBehaviour

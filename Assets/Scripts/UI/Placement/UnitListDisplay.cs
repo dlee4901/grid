@@ -13,7 +13,7 @@ public class UnitListDisplay : MonoBehaviour
 
     private void Start()
     {
-        EventManager.Singleton.UnitUIUpdateEvent += UnitUIUpdate;
+        EventManager.Singleton.UnitUIUpdate += OnEventUnitUIUpdate;
         InitPlayers(2);
     }
 
@@ -47,7 +47,7 @@ public class UnitListDisplay : MonoBehaviour
         _containers[playerController].gameObject.SetActive(false);
     }
 
-    private void UnitUIUpdate(int playerController, int listUIPosition, bool placed)
+    private void OnEventUnitUIUpdate(int playerController, int listUIPosition, bool placed)
     {
         _unitsList[playerController-1][listUIPosition].IsPlaced = placed;
     }

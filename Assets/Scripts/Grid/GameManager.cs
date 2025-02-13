@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private CinemachineCameraManager _cam;
-    [SerializeField] private GridManager _grid;
+    [SerializeField] private CinemachineCameraController _camera;
     [SerializeField] private UIManager _uiManager;
+    [SerializeField] private SquareGrid _grid;
 
     private List<Player> _players;
     private List<float> _times;
@@ -26,7 +26,8 @@ public class GameManager : MonoBehaviour
 
     private void Init()
     {
-        _cam.Init(_grid);
+        _grid.Init(_uiManager);
+        _camera.Init(_grid);
     }
 
     public void StartPlacement(int playerController)

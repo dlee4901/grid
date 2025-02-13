@@ -1,5 +1,5 @@
 {
-    "name": "InputActions",
+    "name": "PlayerInputActions",
     "maps": [
         {
             "name": "Player",
@@ -71,12 +71,12 @@
         },
         {
             "name": "UI",
-            "id": "2aafcc3c-c040-42d6-ba9f-8e161d75ee88",
+            "id": "6e2ac14d-d524-4a72-a79e-cac1a08317d0",
             "actions": [
                 {
                     "name": "Select",
                     "type": "Button",
-                    "id": "3f7b55b2-7db5-43b4-972b-787803727039",
+                    "id": "8fe0cdd4-528e-45a5-bc83-51ae95d170d2",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -86,7 +86,7 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "38ea8c91-0d9b-4ea3-8bfd-c3a6d1db287e",
+                    "id": "f1ec5881-d43b-4907-a94f-a62606edefe7",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",

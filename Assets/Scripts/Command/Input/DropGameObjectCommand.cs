@@ -9,7 +9,7 @@ public class DropGameObjectCommand : CommandBase
         Unit unit = gameObj.GetComponent<Unit>();
         if (unit != null)
         {
-            EventManager.Singleton.StartUnitPlaceEvent(unit);
+            EventManager.Singleton.StartUnitPlace(unit);
         }
     }
 

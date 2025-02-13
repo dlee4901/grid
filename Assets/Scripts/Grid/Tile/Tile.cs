@@ -96,12 +96,12 @@ public class Tile : MonoBehaviour
     private void OnMouseEnter()
     {
         if (Selectable && State != TileState.Selected) State = TileState.Hovered;
-        EventManager.Singleton.StartTileHoverEvent(Id);
+        EventManager.Singleton.StartTileHover(Id);
     }
 
     private void OnMouseExit()
     {
         if (Selectable && State != TileState.Selected) State = TileState.Default;
-        EventManager.Singleton.StartTileHoverEvent(0);
+        EventManager.Singleton.StartTileHover(0);
     }
 }

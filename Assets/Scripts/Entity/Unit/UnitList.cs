@@ -32,7 +32,6 @@ public class UnitList : MonoBehaviour
     {
         foreach (Unit unitPrefab in UnitPrefabs1Indexed)
         {
-            Debug.Log(unitPrefab);
             if (unitPrefab == null) 
             {
                 Units.Add(null);

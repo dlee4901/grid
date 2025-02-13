@@ -5,13 +5,13 @@ public class EventManager : MonoBehaviour
 {
     public static EventManager Singleton;
 
-    public event Action<int> TileHoverEvent;
-    public event Action<Unit> UnitDragEvent;
-    public event Action<Unit> UnitPlaceEvent;
-    public event Action<int, int, bool> UnitUIUpdateEvent;
+    public event Action<int> TileHover;
+    public event Action<Unit> UnitDrag;
+    public event Action<Unit> UnitPlace;
+    public event Action<int, int, bool> UnitUIUpdate;
 
-    public event Action GameInfoDisplayEndTurnEvent;
-    public event Action UnitInfoDisplayMoveEvent;
+    public event Action GameInfoDisplayEndTurn;
+    public event Action UnitInfoDisplayMove;
 
     private void Awake()
     {
@@ -26,33 +26,33 @@ public class EventManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void StartTileHoverEvent(int id)
+    public void StartTileHover(int id)
     {
-        TileHoverEvent?.Invoke(id);
+        TileHover?.Invoke(id);
     }
 
-    public void StartUnitDragPlacement(Unit unit)
+    public void StartUnitDrag(Unit unit)
     {
-        UnitDragEvent?.Invoke(unit);
+        UnitDrag?.Invoke(unit);
     }
 
-    public void StartUnitPlaceEvent(Unit unit)
+    public void StartUnitPlace(Unit unit)
     {
-        UnitPlaceEvent?.Invoke(unit);
+        UnitPlace?.Invoke(unit);
     }
 
-    public void StartUnitUIUpdateEvent(int playerController, int listUIPosition, bool placed)
+    public void StartUnitUIUpdate(int playerController, int listUIPosition, bool placed)
     {
-        UnitUIUpdateEvent?.Invoke(playerController, listUIPosition, placed);
+        UnitUIUpdate?.Invoke(playerController, listUIPosition, placed);
     }
 
-    public void StartGameInfoDisplayEndTurnEvent()
+    public void StartGameInfoDisplayEndTurn()
     {
-        GameInfoDisplayEndTurnEvent?.Invoke();
+        GameInfoDisplayEndTurn?.Invoke();
     }
 
-    public void StartUnitInfoDisplayMoveEvent()
+    public void StartUnitInfoDisplayMove()
     {
-        UnitInfoDisplayMoveEvent?.Invoke();
+        UnitInfoDisplayMove?.Invoke();
     }
 }

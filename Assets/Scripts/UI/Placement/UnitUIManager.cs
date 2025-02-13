@@ -2,14 +2,6 @@ using UnityEngine;
 
 public class UnitUIManager : MonoBehaviour
 {
-    private ImageManager _imageManager;
-    private UiInputHandler _uiInputHandler;
-    private InputHandler _inputHandlerDragDrop;
-    private Unit _unit;
-    private int _unitID;
-    private int _playerController;
-    private int _listUIPosition;
-
     private bool _isPlaced;
     public bool IsPlaced
     {
@@ -17,13 +9,23 @@ public class UnitUIManager : MonoBehaviour
         set { _isPlaced = value; OnPropertyChanged("IsPlaced"); }
     }
 
+    private ImageManager _imageManager;
+    private UiInputHandler _uiInputHandler;
+    //private InputHandler _inputHandlerDragDrop;
+    private InputHandler _inputHandler;
+    private Unit _unit;
+    private int _unitID;
+    private int _playerController;
+    private int _listUIPosition;
+
     public void Init(string name, Sprite sprite, Transform parent, int unitID, int playerController, int listUIPosition)
     {
         tag = "UI Unit";
         _imageManager = gameObject.AddComponent<ImageManager>();
         _imageManager.Init(name, sprite, parent);
         _uiInputHandler = gameObject.AddComponent<UiInputHandler>();
-        _inputHandlerDragDrop = new InputHandler(InputActionPreset.DragDrop);
+        //_inputHandlerDragDrop = new InputHandler(InputActionPreset.DragDrop);
+        _inputHandler = new InputHandler();
         _unit = null;
         _unitID = unitID;
         _playerController = playerController;
@@ -54,10 +56,15 @@ public class UnitUIManager : MonoBehaviour
 
     public void UnitDrag()
     {   
+        // if (!IsPlaced && _unit != null)
+        // {
+        //     CommandBase command = _inputHandlerDragDrop.HandleInput();
+        //     if (command != null) command.Execute(_unit.gameObject);
+        // }
         if (!IsPlaced && _unit != null)
         {
-            CommandBase command = _inputHandlerDragDrop.HandleInput();
-            if (command != null) command.Execute(_unit.gameObject);
+            CommandBase command = _inputHandler.GetCommand(CommandPreset.DragDrop);
+            command?.Execute(_unit.gameObject);
         }
     }
 }

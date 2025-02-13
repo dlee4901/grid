@@ -2,12 +2,80 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static PlayerInputActions;
 
-public enum InputActionPreset {DragDrop}
-public enum InputActionMethod {IsPressed, WasPerformedThisFrame, WasPressedThisFrame, WasReleasedThisFrame}
+public enum CommandPreset {DragDrop}
+// public enum InputActionMethod {IsPressed, WasPressedThisFrame, WasReleasedThisFrame, WasPerformedThisFrame, WasCompletedThisFrame}
 
-public class InputHandler
+public class InputHandler : IPlayerActions, IUIActions
 {
+    public bool IsSelectPressed => _playerInputActions.Player.Select.IsPressed();
+    //public bool IsSelectPressedThisFrame => _playerInputActions.Player.Select.WasPressedThisFrame();
+    public bool IsSelectReleasedThisFrame => _playerInputActions.Player.Select.WasReleasedThisFrame();
+    //public bool IsSelectPerformedThisFrame => _playerInputActions.Player.Select.WasPerformedThisFrame();
+    //public bool IsSelectCompletedThisFrame => _playerInputActions.Player.Select.WasCompletedThisFrame();
+
+    public bool IsMoveCameraPressed => _playerInputActions.Player.MoveCamera.IsPressed();
+
+    //public bool IsUISelectPressed => _playerInputActions.UI.Select.IsPressed();
+    //public bool IsUISelectPressedThisFrame => _playerInputActions.UI.Select.WasPressedThisFrame();
+    //public bool IsUISelectReleasedThisFrame => _playerInputActions.UI.Select.WasReleasedThisFrame();
+    //public bool IsUISelectPerformedThisFrame => _playerInputActions.UI.Select.WasPerformedThisFrame();
+    //public bool IsUISelectCompletedThisFrame => _playerInputActions.UI.Select.WasCompletedThisFrame();
+
+    public event Action SelectPerformed;
+    public event Action SelectCanceled;
+    public event Action MoveCameraPerformed;
+    public event Action<float> ZoomCameraPerformed;
+
+    private PlayerInputActions _playerInputActions;
+
+    public InputHandler()
+    {
+        if (_playerInputActions == null)
+        {
+            _playerInputActions = new PlayerInputActions();
+            _playerInputActions.Player.AddCallbacks(this);
+        }
+        
+        _playerInputActions.Player.Enable();
+    }
+
+    public void OnSelect(InputAction.CallbackContext context)
+    {
+        switch (context.phase)
+        {
+            case InputActionPhase.Performed:
+                SelectPerformed?.Invoke();
+                break;
+            case InputActionPhase.Canceled:
+                SelectCanceled?.Invoke();
+                break;
+        }
+    }
+
+    public void OnMoveCamera(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed) MoveCameraPerformed?.Invoke();
+    }
+
+    public void OnZoomCamera(InputAction.CallbackContext context)
+    {
+        Debug.Log("OnZoomCamera");
+        if (context.phase == InputActionPhase.Performed) ZoomCameraPerformed?.Invoke(context.ReadValue<float>());
+    }
+
+    public CommandBase GetCommand(CommandPreset commandPreset)
+    {
+        if (commandPreset == CommandPreset.DragDrop)
+        {
+            if (IsSelectPressed) return new DragGameObjectCommand();
+            if (IsSelectReleasedThisFrame) return new DropGameObjectCommand();
+        }
+        return null;
+    }
+
+    /*
     protected Dictionary<string, Tuple<InputAction, InputActionMethod, CommandBase>> InputActionMap;
 
     public InputHandler() 
@@ -68,4 +136,5 @@ public class InputHandler
         }
         return null;
     }
+    */
 }
